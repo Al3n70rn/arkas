@@ -1,0 +1,10 @@
+Package: aRtemis
+Type: Package
+Title: various utility functions for fast, informative RNAseq analysis
+Version: 0.1
+Date: 2015-05-13
+Author: Tim Triche, Jr.
+Depends: rhdf5, ssizeRNA, GenomicRanges, limma, ReactomePA, parallel
+Maintainer: Tim Triche, Jr. <tim.triche@gmail.com>
+Description: utility functions for Artemis (hunting companion of Kallisto)
+License: GPL (>= 2)
