@@ -7,7 +7,8 @@ annotateEnsembl <- function(tpm, txome) {
   txmap <- txmap[which(txmap$tx_id %in% rownames(tpm) & txmap$entrezid != ""),]
   ## toss out ENSEMBL genes that map to multiple Entrez genes
   txmap <- txmap[grep(";", txmap$entrezid, invert=T), ] 
-  results <- list(tpmByGene=tapply(tpm[txmap$tx_id], txmap$entrezid, sum),
+  mapByGene <- function(x) tapply(x[txmap$tx_id], txmap$entrezid, sum)
+  results <- list(tpmByGene=do.call(cbind, apply(tpm, 2, mapByGene)),
                   tpmByTranscript=tpm, 
                   txome=txome,
                   txmap=txmap)
