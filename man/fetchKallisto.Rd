@@ -5,14 +5,10 @@
 \title{fetch one sample's worth of Kallisto estimates (ignores bootstraps)
 if a txome is specified, annotate and collapse TPM by EGID as well as by tx}
 \usage{
-fetchKallisto(hdf5File, txome = NULL, flat = FALSE, ...)
+fetchKallisto(hdf5File, ...)
 }
 \arguments{
 \item{hdf5File}{the file to read}
-
-\item{txome}{an optional transcriptome name (e.g. "EnsDb.Hsapiens.v79")}
-
-\item{flat}{return the TPMs flat (for downstream processing) or in a list?}
 }
 \description{
 fetch one sample's worth of Kallisto estimates (ignores bootstraps)

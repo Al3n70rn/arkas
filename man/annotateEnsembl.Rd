@@ -4,10 +4,10 @@
 \alias{annotateEnsembl}
 \title{annotate a pile of TPMs against an Ensembl transcriptome (via EnsDb)}
 \usage{
-annotateEnsembl(tpm, txome)
+annotateEnsembl(res, txome)
 }
 \arguments{
-\item{tpm}{a matrix of transcripts per million estimates}
+\item{res}{a list of results (counts, effective_lengths) from mergeKallisto}
 
 \item{txome}{a character string naming the txome, e.g. "EnsDb.Hsapiens.v79"}
 }
