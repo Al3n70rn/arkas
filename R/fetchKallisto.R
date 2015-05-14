@@ -14,7 +14,7 @@ fetchKallisto <- function(hdf5File, txome=NULL, flat=FALSE, ...) {
   tpm <- h5read(hdf5File, "est_counts") / efflen
   names(tpm) <- h5read(hdf5File, "aux/ids")
   if (!is.null(txome)) {
-    return(annotateEnsembl(tpm, txome))
+    return(annotateEnsembl(matrix(tpm, ncol=1), txome))
   } else if (flat == FALSE) { 
     return(list(tpmByTranscript=tpm))
   } else { 
