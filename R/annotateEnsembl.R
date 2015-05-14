@@ -10,7 +10,7 @@ annotateEnsembl <- function(res, txome) {
   library(txome, character.only=TRUE)
   ## e.g. library(EnsDb.Hsapiens.v79)
 
-  res$tpm <- res$counts / res$efflen
+  tpm <- res$counts / res$efflen
   txmap <- transcripts(get(txome), columns=c("tx_id","tx_biotype","entrezid"))
   txmap <- txmap[which(txmap$tx_id %in% rownames(tpm) & txmap$entrezid != "")]
   txmap <- txmap[!grepl(";", txmap$entrezid)] ## toss out multi-mapped ENSGs
