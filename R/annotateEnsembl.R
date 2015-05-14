@@ -18,7 +18,8 @@ annotateEnsembl <- function(res, txome) {
   mapByGene <- function(x) tapply(x[txmap$tx_id], txmap$entrezid, sum)
   countsByGene <- apply(res$counts, 2, mapByGene) ## this is pretty fast, but
   txsByGene <- GRangesList(split(txmap, txmap$entrezid)) ## why so slow?!
-  results <- list(summarized=SummarizedExperiment(countsByGene, txsByGene),
+  results <- list(SE=SummarizedExperiment(SimpleList(counts=countsByGene), 
+                                          rowRanges=txsByGene),
                   tpmByTranscript=tpm, 
                   txome=txome)
   return(results)
