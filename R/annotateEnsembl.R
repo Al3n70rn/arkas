@@ -19,8 +19,10 @@ annotateEnsembl <- function(tpm, txome) {
   mapByGene <- function(x) tapply(x[txmap$tx_id], txmap$entrezid, sum)
   GRList <- GRangesList(split(txmap, txmap$entrezid)) ## why is this so slow?!
   tpmByGene <- apply(tpm, 2, mapByGene) ## this is fast as hell by comparison 
-  SummarizedExperiment(assays=SimpleList(tpm=tpmByGene), rowRanges=GRList)
-  results <- list(tpmByGene=tpmByGene, tpmByTranscript=tpm, txome=txome)
+  results <- list(tpmByGene=SummarizedExperiment(SimpleList(tpm=tpmByGene), 
+                                                 rowRanges=GRList),
+                  tpmByTranscript=tpm, 
+                  txome=txome)
   return(results)
 
 }
