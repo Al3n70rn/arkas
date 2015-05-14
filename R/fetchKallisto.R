@@ -1,10 +1,11 @@
 #'
 #' fetch one sample's worth of Kallisto estimates (ignores bootstraps)
+#' if a txome is specified, annotate and collapse TPM by EGID as well as by tx
 #'
 #' @param hdf5File the file to read
 #' @param txome an optional transcriptome name (e.g. "EnsDb.Hsapiens.v79")
+#' @param flat return the TPMs flat (for downstream processing) or in a list?
 #'
-#' if a txome is specified, annotate and collapse TPM by EGID as well as by tx
 #'
 fetchKallisto <- function(hdf5File, txome=NULL, flat=FALSE, ...) {
 
