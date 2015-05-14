@@ -12,7 +12,7 @@ annotateEnsembl <- function(tpm, txome) {
 
   txmap <- transcripts(get(txome), columns=c("tx_id","tx_biotype","entrezid"))
   txmap <- txmap[which(txmap$tx_id %in% rownames(tpm) & txmap$entrezid != "")]
-  txmap <- txmap[grep(";", txmap$entrezid, invert=T)] ## toss out multi-maps
+  txmap <- txmap[!grepl(";", txmap$entrezid)] ## toss out multi-mapped ENSGs
   mapByGene <- function(x) tapply(x[txmap$tx_id], txmap$entrezid, sum)
   tpmByGene <- SummarizedExperiment(SimpleList(tpm=apply(tpm, 2, mapByGene)),
                                     rowRanges=split(txmap, txmap$entrezid))
