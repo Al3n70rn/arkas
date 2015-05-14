@@ -1,7 +1,7 @@
 Package: aRtemis
 Type: Package
 Title: various utility functions for fast, informative RNAseq analysis
-Version: 0.1
+Version: 0.1.1
 Date: 2015-05-13
 Author: Tim Triche, Jr.
 Depends: rhdf5, ssizeRNA, GenomicRanges, limma, ReactomePA, parallel
