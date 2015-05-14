@@ -10,7 +10,7 @@ fetchKallisto <- function(hdf5File, txome=NULL, ...) {
 
   ## e.g. if hdf5File="abundance.h5", h5ls(hdf5File) will print its structure
   txids <- h5read(hdf5File, "aux/ids")
-  efflen <- h5read(hdf5File, "aux/eff_len")
+  efflen <- h5read(hdf5File, "aux/eff_lengths")
   tpm <- h5read(hdf5File, "est_counts") / efflen
   names(tpm) <- h5read(hdf5File, "aux/ids")
   if (!is.null(txome)) {
