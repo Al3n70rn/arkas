@@ -5,6 +5,7 @@ Version: 0.1.7
 Date: 2015-05-13
 Author: Tim Triche, Jr.
 Depends: rhdf5, limma, ssizeRNA, SummarizedExperiment, ReactomePA, parallel
+Suggests: roxygen2
 Maintainer: Tim Triche, Jr. <tim.triche@gmail.com>
 Description: utility functions for Artemis (hunting companion of Kallisto)
 License: GPL (>= 2)
