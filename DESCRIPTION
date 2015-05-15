@@ -1,11 +1,11 @@
 Package: aRtemis
 Type: Package
 Title: various utility functions for fast, informative RNAseq analysis
-Version: 0.1.10
-Date: 2015-05-13
+Version: 0.1.11
+Date: 2015-05-14
 Author: Tim Triche, Jr.
-Depends: rhdf5, ssizeRNA, limma, clusterProfiler, ReactomePA, parallel
-Imports: SummarizedExperiment 
+Depends: rhdf5, ssizeRNA, limma, ReactomePA
+Imports: SummarizedExperiment, parallel, structSSI
 Suggests: roxygen2
 Maintainer: Tim Triche, Jr. <tim.triche@gmail.com>
 Description: utility functions for Artemis (hunting companion of Kallisto)
