@@ -1,0 +1,8 @@
+{
+	"n_targets": 211222,
+	"n_bootstraps": 100,
+	"kallisto_version": "0.42.1",
+	"index_version": 9,
+	"start_time": "Wed May 13 07:27:21 2015",
+	"call": "kallisto quant -i spikeInsPlusEnsembl79cDNAPlusNcRNAPlusRepBase20_04.fa.idx -o /home/tim/Dropbox/transcriptomes/kallisto_hdf5/normalVsSenescent -b 100 n1.R1.fq n1.R2.fq n2.R1.fq n2.R2.fq n4.R1.fq n4.R2.fq s1.R1.fq s1.R2.fq s2.R1.fq s2.R2.fq s4.R1.fq s4.R2.fq"
+}
