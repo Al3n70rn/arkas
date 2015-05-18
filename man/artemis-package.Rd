@@ -1,6 +1,6 @@
-\name{aRtemis-package}
-\alias{aRtemis-package}
-\alias{aRtemis}
+\name{artemis-package}
+\alias{artemis-package}
+\alias{artemis}
 \docType{package}
 \title{
   various utility functions for fast, informative RNAseq analysis
@@ -9,7 +9,7 @@
   utility functions for Artemis (hunting companion of Kallisto)
 }
 \details{
-  Forthcoming.
+  Forthcoming; see references for some background.
 }
 \author{
   Tim Triche, Jr. <tim.triche@gmail.com>
@@ -22,5 +22,14 @@
 }
 \keyword{ package }
 \examples{
-  # Optional simple examples of the most important functions
+
+  ## a single Kallisto run with bootstraps 
+  h5 <- system.file("extdata", "abundance.h5", package="artemis", mustWork=T)
+  results <- fetchKallisto(h5)
+  ri <- system.file("extdata", "run_info.json", package="artemis", mustWork=T)
+  runinfo <- fetchRunInfo(ri)
+
+  ## an experiment with multiple replicates per condition
+
+
 }
