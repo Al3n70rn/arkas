@@ -1,13 +1,15 @@
 #'
-#' fetch one sample's worth of Kallisto estimates (ignores bootstraps)
-#' if a txome is specified, annotate and collapse TPM by EGID as well as by tx
+#' fetch one sample's worth of Kallisto estimates, perhaps with bootstraps
 #'
-#' @param hdf5File the file to read
+#' @import Matrix
+#' @import jsonlite 
+#' @import matrixStats
 #'
-fetchKallisto <- function(hdf5File, ...) {
-  txids <- h5read(hdf5File, "aux/ids")
-  counts <- h5read(hdf5File, "est_counts") 
-  efflen <- h5read(hdf5File, "aux/eff_lengths")
-  names(counts) <- h5read(hdf5File, "aux/ids")
-  return(list(counts=counts, efflen=efflen))
+#' @param h5file          character string: the file to read
+#' @param checkRunInfo    boolean: check run_info.json against the hdf5 call?
+#'
+fetchKallisto <- function(hdf5File, checkRunInfo=TRUE, ...) {
+
+  
+
 }
