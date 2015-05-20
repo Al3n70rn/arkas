@@ -10,7 +10,7 @@ geneWiseAnalysis <- function(res, categories=10, k=2, p.cutoff=0.05) {
 
   p.cutoff <- 0.1
   fold.cutoff <- 1
-  top <- topTable(fit, coef=2, p=p.cutoff, n=nrow(SE))
+  top <- topTable(fit, coef=2, p=p.cutoff, n=nrow(assay))
   top <- top[ abs(top$logFC) >= fold.cutoff, ] ## per SEQC recommendations
 
   ## ReactomePA for pathway analysis 
