@@ -1,0 +1,17 @@
+indexKallisto <- function(fastaFiles, fastaPath="/data/fasta") { 
+
+  oldwd <- getwd()
+  setwd(fastaPath)
+  cleanNames <- function(x) sub("\\.fa", "", sub("\\.gz", "", x))
+  indexName <- paste0(paste(cleanNames(fastaFiles), collapse="_"),".fa.idx")
+  command <- paste(c("kallisto index -i", indexName, fastaFiles), collapse=" ")
+  retval <- system(command=command)
+  setwd(oldwd)
+  if (retval == 0) {
+    res <- list(fastaFiles=fastaFiles, indexName=indexName, fastaPath=fastaPath)
+    return(res)
+  } else { 
+    stop("Index generation failed.")
+  }
+
+}

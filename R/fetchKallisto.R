@@ -5,18 +5,18 @@
 #' @import jsonlite 
 #' @import matrixStats
 #'
-#' @param path            character string: the path to h5/json files 
+#' @param sampleDir       character string: the path to h5/json files 
 #' @param h5file          character string: the file to read
 #' @param checkRunInfo    boolean: check run_info.json against the hdf5 call?
 #'
-fetchKallisto <- function(path=".", h5file="abundance.h5", checkRunInfo=TRUE) {
+fetchKallisto <- function(sampleDir=".", h5file="abundance.h5", checkRunInfo=T){
 
-  hdf5 <- paste0(path.expand(path), "/", h5file) 
+  hdf5 <- paste0(path.expand(sampleDir), "/", h5file) 
   bootstraps <- h5read(hdf5, "aux/num_bootstrap")
   ## if bootstraps are found, summarize them...
   
   if (bootstraps > 0) { 
-    message("Found ", bootstraps, " bootstraps for ", path, ", summarizing...")
+    message("Found ", sampleDir, " bootstraps, summarizing...")
     boots <- do.call(cbind, h5read(hdf5, "bootstrap"))
     res <- Matrix(cbind(rowMedians(boots), 
                         rowMads(boots),
@@ -24,7 +24,7 @@ fetchKallisto <- function(path=".", h5file="abundance.h5", checkRunInfo=TRUE) {
                   dimnames=list(transcript=h5read(hdf5, "aux/ids"),
                                 c("est_count", "eff_length", "est_count_mad")))
   } else {
-    message("No bootstraps found for ", path, ", using recorded est_counts...")
+    message("No bootstraps found for ", sampleDir, ", using est_counts...")
     res <- Matrix(cbind(h5read(hdf5, "est_counts"),
                         h5read(hdf5, "aux/eff_lengths")),
                   dimnames=list(transcript=h5read(hdf5, "aux/ids"),
