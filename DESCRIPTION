@@ -4,8 +4,8 @@ Title: various utility functions for fast, informative RNAseq analysis
 Version: 0.1.20
 Date: 2015-05-20
 Author: Tim Triche, Jr.
-Depends: rhdf5, ssizeRNA, limma, ReactomePA, Matrix, jsonlite
-Imports: SummarizedExperiment, parallel, structSSI, matrixStats
+Depends: rhdf5, ssizeRNA, limma, ReactomePA, Matrix, jsonlite, parallel
+Imports: SummarizedExperiment, structSSI, matrixStats
 Suggests: roxygen2, EnsDb.Hsapiens.v79
 Maintainer: Tim Triche, Jr. <tim.triche@gmail.com>
 Description: utility functions for Artemis (hunting companion of Kallisto)
