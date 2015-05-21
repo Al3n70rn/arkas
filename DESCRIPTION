@@ -1,8 +1,8 @@
 Package: artemis
 Type: Package
 Title: various utility functions for fast, informative RNAseq analysis
-Version: 0.1.19
-Date: 2015-05-19
+Version: 0.1.20
+Date: 2015-05-20
 Author: Tim Triche, Jr.
 Depends: rhdf5, ssizeRNA, limma, ReactomePA, Matrix, jsonlite
 Imports: SummarizedExperiment, parallel, structSSI, matrixStats
