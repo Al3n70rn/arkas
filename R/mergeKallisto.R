@@ -20,12 +20,10 @@ mergeKallisto <- function(sampleDirs,
 
   res <- mclapply(targets, fetchKallisto)
   cols <- do.call(rbind, lapply(res, colnames))
-  if (!all(apply(cols, 2, function(x) length(unique(x)) == 1))) {
-    stop("Some of your Kallisto runs have bootstraps and some don't. Exiting.")
-  } 
   cnames <- apply(cols, 2, unique)
   names(cnames) <- cnames
   asys <- lapply(cnames, function(x) do.call(cbind, lapply(res, `[`, j=x)))
+  asys <- lapply(asys, Matrix)
 
   if (value == "SummarizedExperiment") {
     if(length(txomes) > 0) {

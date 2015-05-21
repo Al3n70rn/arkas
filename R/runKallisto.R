@@ -24,15 +24,18 @@ runKallisto <- function(sampleDir,
   ## rack up all the paired FASTQ files for a sample 
   samplePath <- paste0(fastqPath, "/", sampleDir)
   sampleFiles <- paste(pairFastqFiles(samplePath), collapse=" ")
-  outputPath <- paste0(outputPath, "/", sampleDir)
+  outputDir <- paste0(outputPath, "/", sampleDir)
   if (!dir.exists(outputPath)) dir.create(outputPath)
 
   ## run kallisto quant
-  command <- paste("kallisto quant -i", indexFile, "-o", outputPath, 
-                   "-b", bootstraps, sampleFiles)
+  command <- paste("kallisto quant", 
+                   "-i", indexFile, 
+                   "-o", outputDir, 
+                   "-b", bootstraps, 
+                   sampleFiles)
   retval <- system(command)
   res <- list(command=command, outputPath=outputPath, bootstraps=bootstraps)
-  if (retval == 0 && file.exists(paste0(outputPath, "/abundance.h5"))) {
+  if (retval == 0 && file.exists(paste0(outputDir, "/abundance.h5"))) {
     return(res)
   } else { 
     stop(paste("Quantification failed; command",command,"did not produce hdf5"))
