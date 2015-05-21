@@ -1,21 +1,21 @@
 #' merge multiple Kallisto results, by default yielding a SummarizedExperiment 
 #'
-#' @param resultDirs  character vector: directory names holding Kallisto results
-#' @param basePath    character string: base path to resultPaths, default "."
+#' @param sampleDirs  character vector: directory names holding Kallisto results
+#' @param outputPath  character string: base path to the sampleDirs, default "."
 #' @param txomes      character vector: the target transcriptome(s)/repeatome(s)
 #' @param value       character string: return a SummarizedExperiment or a list?
 #'
-mergeKallisto <- function(resultDirs,
-                          basePath=".",
+mergeKallisto <- function(sampleDirs,
+                          outputPath=".",
                           txomes=c(), 
 #                         txomes=c("ERCC", 
-#                                  "EnsDb.Hsapiens.v79", 
-#                                  "RepBase.Hsapiens.20_04"),
+#                                  "EnsDb.Hsapiens.v80", 
+#                                  "RepBase.Hsapiens.v2004"),
                           value=c("SummarizedExperiment", "list"), ...) {
  
-  targets <- paste0(path.expand(basePath), "/", resultDirs)
-  stopifnot(all(targets %in% list.dirs(basePath)))
-  names(targets) <- resultDirs
+  targets <- paste0(path.expand(outputPath), "/", sampleDirs)
+  stopifnot(all(targets %in% list.dirs(outputPath)))
+  names(targets) <- sampleDirs
   value <- match.arg(value)
 
   res <- mclapply(targets, fetchKallisto)
