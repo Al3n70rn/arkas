@@ -10,18 +10,15 @@ annotateEnsembl <- function(res, txome) {
   library(txome, character.only=TRUE)
   ## e.g. library(EnsDb.Hsapiens.v79)
 
-  tpm <- res$counts / res$efflen
-  txmap <- transcripts(get(txome), columns=c("tx_id","tx_biotype","entrezid"))
-  txmap <- txmap[which(txmap$tx_id %in% rownames(tpm) & txmap$entrezid != "")]
-  txmap <- txmap[!grepl(";", txmap$entrezid)] ## toss out multi-mapped ENSGs
-  names(txmap) <- txmap$tx_id ## so that the GRangesList makes sense later
+  ## so for ERCC spike-ins, repeats, and ENSEMBL transcripts, we can use (e.g.)
+  ## c("bundle", "name", "biotype") and always have something useful to offer.
+  txmap <- transcripts(get(txome), ## why I so love ENSEMBL: symbols AND ids
+                       columns=c("gene_id","gene_name","tx_biotype"))
+  names(mcols(txmap)) <- c("bundle", "name", "biotype")
+  
+
+  ## this should go elsewhere
   mapByGene <- function(x) tapply(x[txmap$tx_id], txmap$entrezid, sum)
-  countsByGene <- apply(res$counts, 2, mapByGene) ## this is pretty fast, but
-  txsByGene <- GRangesList(split(txmap, txmap$entrezid)) ## why so slow?!
-  results <- list(SE=SummarizedExperiment(SimpleList(counts=countsByGene), 
-                                          rowRanges=txsByGene),
-                  tpmByTranscript=tpm, 
-                  txome=txome)
   return(results)
 
 }

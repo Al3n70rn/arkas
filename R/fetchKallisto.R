@@ -17,9 +17,7 @@ fetchKallisto <- function(path=".", h5file="abundance.h5", checkRunInfo=TRUE) {
   
   if (bootstraps > 0) { 
     message("Found ", bootstraps, " bootstraps for ", path, ", summarizing...")
-    # grab a column vector for each bootstrap, then bind them all into a Matrix
-    bsidx <- paste0("bootstrap/bs", seq(0, bootstraps - 1))
-    boots <- do.call(cbind, lapply(bsidx, function(bs) h5read(hdf5, bs)))
+    boots <- do.call(cbind, h5read(hdf5, "bootstrap"))
     res <- Matrix(cbind(rowMedians(boots), 
                         rowMads(boots),
                         h5read(hdf5, "aux/eff_lengths")),

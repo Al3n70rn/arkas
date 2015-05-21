@@ -26,11 +26,16 @@ mergeKallisto <- function(resultDirs,
   cnames <- apply(cols, 2, unique)
   names(cnames) <- cnames
   asys <- lapply(cnames, function(x) do.call(cbind, lapply(res, `[`, j=x)))
-  
+
   if (value == "SummarizedExperiment") {
-    res <- SummarizedExperiment(assays=asys, 
-                                metadata=list(source="Kallisto (via Artemis)"))
-    if(length(txomes) > 0) res <- annotateBundles(res, txomes)
+    if(length(txomes) > 0) {
+      txmaps <- do.call(c, annotateBundles(res, txomes))
+      res <- SummarizedExperiment(assays=asys, rowRanges=txmaps,
+                                  metadata=list(source="Kallisto via Artemis"))
+    } else {
+      res <- SummarizedExperiment(assays=asys, 
+                                  metadata=list(source="Kallisto via Artemis"))
+    }
   }
   return(res)
 
