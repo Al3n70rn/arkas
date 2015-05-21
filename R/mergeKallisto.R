@@ -23,7 +23,6 @@ mergeKallisto <- function(sampleDirs,
   cnames <- apply(cols, 2, unique)
   names(cnames) <- cnames
   asys <- lapply(cnames, function(x) do.call(cbind, lapply(res, `[`, j=x)))
-  asys <- lapply(asys, Matrix)
 
   if (value == "SummarizedExperiment") {
     if(length(txomes) > 0) {
