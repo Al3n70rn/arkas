@@ -12,6 +12,7 @@ outputPath <- unique(unlist(lapply(results, `[`, "outputPath")))
 
 ## merge 'em
 merged <- mergeKallisto(samples, outputPath=outputPath)
+tpm <- assays(merged)$est_count / assays(merged)$eff_length
 
 ## look for gene-level differences 
 ## reactome analysis on gene-level differences
