@@ -1,4 +1,4 @@
-#' run kallisto with an existing index on arbitrarily paired fastq.gz files
+#' run kallisto with fastq.gz files on freshly generated or existing index
 #' 
 #' @param sampleDir   character, subdirectory for sample's FASTQ files 
 #' @param indexName   character or NULL, optional name of the index
