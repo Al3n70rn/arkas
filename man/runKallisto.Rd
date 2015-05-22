@@ -2,7 +2,7 @@
 % Please edit documentation in R/runKallisto.R
 \name{runKallisto}
 \alias{runKallisto}
-\title{run kallisto with an existing index on arbitrarily paired fastq.gz files}
+\title{run kallisto with fastq.gz files on freshly generated or existing index}
 \usage{
 runKallisto(sampleDir, indexName = NULL, fastaPath = "/data/fasta",
   fastaFiles = NULL, fastqPath = "/data/input/samples",
@@ -24,6 +24,6 @@ runKallisto(sampleDir, indexName = NULL, fastaPath = "/data/fasta",
 \item{bootstraps}{integer, how many bootstrap replicates to run? (100)}
 }
 \description{
-run kallisto with an existing index on arbitrarily paired fastq.gz files
+run kallisto with fastq.gz files on freshly generated or existing index
 }
 
