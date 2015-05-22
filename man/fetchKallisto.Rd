@@ -2,16 +2,18 @@
 % Please edit documentation in R/fetchKallisto.R
 \name{fetchKallisto}
 \alias{fetchKallisto}
-\title{fetch one sample's worth of Kallisto estimates (ignores bootstraps)
-if a txome is specified, annotate and collapse TPM by EGID as well as by tx}
+\title{fetch one sample's worth of Kallisto estimates, perhaps with bootstraps}
 \usage{
-fetchKallisto(hdf5File, ...)
+fetchKallisto(sampleDir = ".", h5file = "abundance.h5", checkRunInfo = T)
 }
 \arguments{
-\item{hdf5File}{the file to read}
+\item{sampleDir}{character string: the path to h5/json files}
+
+\item{h5file}{character string: the file to read}
+
+\item{checkRunInfo}{boolean: check run_info.json against the hdf5 call?}
 }
 \description{
-fetch one sample's worth of Kallisto estimates (ignores bootstraps)
-if a txome is specified, annotate and collapse TPM by EGID as well as by tx
+fetch one sample's worth of Kallisto estimates, perhaps with bootstraps
 }
 

@@ -1,3 +1,8 @@
+#'
+#' annotate spike-in controls for normalization (Life Tech annotations built in)
+#'
+#' @param res a SummarizedExperiment resulting from mergeKallisto
+#'
 annotateErcc <- function(res) {
   
   ## so for ERCC spike-ins, repeats, and ENSEMBL transcripts, we can use (e.g.)

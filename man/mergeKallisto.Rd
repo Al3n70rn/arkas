@@ -2,16 +2,21 @@
 % Please edit documentation in R/mergeKallisto.R
 \name{mergeKallisto}
 \alias{mergeKallisto}
-\title{merge several samples' results from Kallisto}
+\title{merge multiple Kallisto results, by default yielding a SummarizedExperiment}
 \usage{
-mergeKallisto(mergePath, txome = "EnsDb.Hsapiens.v79", ...)
+mergeKallisto(sampleDirs, outputPath = ".", txomes = c(),
+  value = c("SummarizedExperiment", "list"), ...)
 }
 \arguments{
-\item{mergePath}{where the files are}
+\item{sampleDirs}{character vector: directory names holding Kallisto results}
 
-\item{txome}{a character string specifying the target Ensembl transcriptome}
+\item{outputPath}{character string: base path to the sampleDirs, default "."}
+
+\item{txomes}{character vector: the target transcriptome(s)/repeatome(s)}
+
+\item{value}{character string: return a SummarizedExperiment or a list?}
 }
 \description{
-merge several samples' results from Kallisto
+merge multiple Kallisto results, by default yielding a SummarizedExperiment
 }
 

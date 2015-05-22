@@ -1,7 +1,11 @@
-## limma-trans for gene-wise DE (like voom but with less bullshit & more auto)
-##
-## This should make use of Harold's bootstrapping and structSSI to control FDR
-## 
+#' limma-trans for gene-wise DE (like voom but with less bullshit & more auto)
+#' This should make use of Harold's bootstrapping and structSSI to control FDR
+#'
+#' @param res         a SummarizedExperiment from mergeKallisto
+#' @param categories  how many categories for ReactomeDB enrichment plots 
+#' @param k           how many gene clusters to construct for comparison
+#' @param p.cutoff    where to set the p-value cutoff for such plots 
+#'
 geneWiseAnalysis <- function(res, categories=10, k=2, p.cutoff=0.05) {
 
   ## swap out for limma-trans or similar
@@ -18,12 +22,11 @@ geneWiseAnalysis <- function(res, categories=10, k=2, p.cutoff=0.05) {
   topGenes <- rownames(top)
   topGenes <- topGenes[topGenes %in% keys(Homo.sapiens, "ENTREZID")]
 
-  ## overall:
+  ## overall
   enriched <- enrichPathway(gene=topGenes, 
                             qvalueCutoff=p.cutoff, 
                             readable=TRUE) 
   barplot(enriched, showCategory=10, title="Overall Reactome enrichment")
-
 
   ## cluster profiling within Reactome and/or GO 
   scaledExprs <- t(scale(t(voomed$E[ topGenes, ])))
