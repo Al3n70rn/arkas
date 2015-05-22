@@ -18,9 +18,9 @@ fetchKallisto <- function(sampleDir=".", h5file="abundance.h5", checkRunInfo=T){
   if (bootstraps > 0) { 
     message("Found ", sampleDir, " bootstraps, summarizing...")
     boots <- do.call(cbind, h5read(hdf5, "bootstrap"))
-    res <- Matrix(cbind(round(rowMedians(boots), 6), 
-                        h5read(hdf5, "aux/eff_lengths")),
-                        round(rowMads(boots), 6),
+    res <- Matrix(cbind(rowMedians(boots),
+                        h5read(hdf5, "aux/eff_lengths"),
+                        rowMads(boots)),
                   dimnames=list(transcript=h5read(hdf5, "aux/ids"),
                                 c("est_count", "eff_length", "est_count_mad")))
   } else {
