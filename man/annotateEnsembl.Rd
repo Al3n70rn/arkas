@@ -7,7 +7,7 @@
 annotateEnsembl(res, txome)
 }
 \arguments{
-\item{res}{a list of results (counts, effective_lengths) from mergeKallisto}
+\item{res}{a SummarizedExperiment with results from mergeKallisto}
 
 \item{txome}{a character string naming the txome, e.g. "EnsDb.Hsapiens.v79"}
 }

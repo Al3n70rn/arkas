@@ -1,7 +1,7 @@
 #'
 #' annotate a pile of TPMs against a transcriptome bundle (via e.g. EnsDb)
 #' 
-#' @param res a list of results (counts, effective_lengths) from mergeKallisto
+#' @param res a SummarizedExperiment from mergeKallisto
 #' @param txome a character string naming the txome, e.g. "EnsDb.Hsapiens.v79"
 #'
 annotateBundles <- function(res, txome) {

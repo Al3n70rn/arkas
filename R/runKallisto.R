@@ -1,4 +1,13 @@
-## run kallisto with an existing index on arbitrarily paired fastq.gz files
+#' run kallisto with an existing index on arbitrarily paired fastq.gz files
+#' 
+#' @param sampleDir   character, subdirectory for sample's FASTQ files 
+#' @param indexName   character or NULL, optional name of the index
+#' @param fastaPath   character, where FASTA files are ("/data/fasta")
+#' @param fastaFiles  character vector of FASTA transcriptomes, or NULL
+#' @param fastqPath   character, where sampleDir is ("/data/input/samples")
+#' @param outputPath  character, output in outputPath/sampleDir ("/data/output")
+#' @param bootstraps  integer, how many bootstrap replicates to run? (100)
+#'
 runKallisto <- function(sampleDir, 
                         indexName=NULL, 
                         fastaPath="/data/fasta",

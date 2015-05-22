@@ -1,7 +1,7 @@
 #'
 #' annotate a pile of TPMs against an Ensembl transcriptome (via EnsDb)
 #' 
-#' @param res a list of results (counts, effective_lengths) from mergeKallisto
+#' @param res a SummarizedExperiment with results from mergeKallisto
 #' @param txome a character string naming the txome, e.g. "EnsDb.Hsapiens.v79"
 #'
 annotateEnsembl <- function(res, txome) {
