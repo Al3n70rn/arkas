@@ -26,7 +26,7 @@ annotateBundles <- function(res, txome) {
   countsByGene <- apply(res$counts, 2, mapByGene) ## this is pretty fast, but
   txsByGene <- GRangesList(split(txmap, txmap$entrezid)) ## why so slow?!
   results <- list(SE=SummarizedExperiment(SimpleList(counts=countsByGene), 
-                                          rowRanges=txsByGene),
+                                          rowData=txsByGene),
                   tpmByTranscript=tpm, 
                   txome=txome)
   return(results)
