@@ -28,11 +28,9 @@ mergeKallisto <- function(sampleDirs,
     if(length(txomes) > 0) {
       txmaps <- do.call(c, annotateBundles(res, txomes))
       res <- GenomicRanges::SummarizedExperiment(assays=asys, 
-                                  rowData=txmaps,
-                                  exptData=List(source="Kallisto/Artemis"))
+                                  rowData=txmaps)
     } else {
-      res <- GenomicRanges::SummarizedExperiment(assays=asys, 
-                                  exptData=List(source="Kallisto/Artemis"))
+      res <- GenomicRanges::SummarizedExperiment(assays=asys) 
     }
   }
   return(res)
