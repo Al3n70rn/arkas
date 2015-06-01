@@ -27,11 +27,12 @@ mergeKallisto <- function(sampleDirs,
   if (value == "SummarizedExperiment") {
     if(length(txomes) > 0) {
       txmaps <- do.call(c, annotateBundles(res, txomes))
-      res <- SummarizedExperiment(assays=asys, rowRanges=txmaps,
-                                  metadata=list(source="Kallisto via Artemis"))
+      res <- SummarizedExperiment(assays=asys, 
+                                  rowData=txmaps,
+                                  exptData=List(source="Kallisto/Artemis"))
     } else {
       res <- SummarizedExperiment(assays=asys, 
-                                  metadata=list(source="Kallisto via Artemis"))
+                                  exptData=List(source="Kallisto/Artemis"))
     }
   }
   return(res)

@@ -12,6 +12,5 @@ annotateErcc <- function(res) {
   ERCC$name <- rownames(ERCC)
   ERCC$biotype <- "SpikeIns"
   stop("Not done yet...")
-#  mcols(rowRanges(res))[match(rownames(ERCC), rownames(res)) ] <- 
 
 }
