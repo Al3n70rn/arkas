@@ -1,6 +1,8 @@
 # artemis
 an R package with support functions and utilities for RNAseq analysis
 
+[![Travis-CI Build Status](https://travis-ci.org/RamsinghLab/artemis.svg?branch=master)](https://travis-ci.org/RamsinghLab/artemis)
+
 raw reads to pathway analysis and transcript-level quantification, typically in a few minutes
 
 ```R
