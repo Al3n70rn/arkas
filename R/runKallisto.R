@@ -10,10 +10,10 @@
 #'
 runKallisto <- function(sampleDir, 
                         indexName=NULL, 
-                        fastaPath="/data/fasta",
+                        fastaPath,
                         fastaFiles=NULL,
-                        fastqPath="/data/input/samples",
-                        outputPath="/data/output",
+                        fastqPath,
+                        outputPath,
                         bootstraps=100) {
 
   if (is.null(indexName) && is.null(fastaFiles)) {
