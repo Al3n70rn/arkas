@@ -10,10 +10,10 @@
 #'
 runKallisto <- function(sampleDir, 
                         indexName=NULL, 
-                        fastaPath,
+                        fastaPath="/Users/anthonycolombo60/Documents/Keck_Leukemia_Aging_Project/kallisto/dockerfile-directory/non-indexed-transx",
                         fastaFiles=NULL,
-                        fastqPath,
-                        outputPath,
+                        fastqPath="/Users/anthonycolombo60/Documents/Keck_Leukemia_Aging_Project/kallisto/input",
+                        outputPath="/Users/anthonycolombo60/Documents/Keck_Leukemia_Aging_Project/kallisto/data/output_kallisto_quant",
                         bootstraps=100) {
 
   if (is.null(indexName) && is.null(fastaFiles)) {
