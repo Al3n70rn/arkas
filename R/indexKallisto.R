@@ -3,7 +3,7 @@
 #' @param fastaFiles  a character string or vector of source transcriptomes
 #' @param fastaPath   where to find the preceding FASTA files 
 #' 
-indexKallisto <- function(fastaFiles, fastaPath) { 
+indexKallisto <- function(fastaFiles, fastaPath="/Users/anthonycolombo60/Documents/Keck_Leukemia_Aging_Project/kallisto/dockerfile-directory/non-indexed-transx") { 
 
   oldwd <- getwd()
   setwd(fastaPath)
