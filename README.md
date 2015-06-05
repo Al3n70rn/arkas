@@ -1,11 +1,7 @@
 # artemis
-an R package with support functions and utilities for RNAseq analysis  
-raw reads to pathway analysis and transcript-level quantification, typically in a few minutes  
+an R package with support functions and utilities for RNAseq analysis
 
-[![DOI](https://zenodo.org/badge/12352/RamsinghLab/artemis.svg)](http://dx.doi.org/10.5281/zenodo.18242)
-[![Travis-CI Build Status](https://travis-ci.org/RamsinghLab/artemis.svg?branch=master)](https://travis-ci.org/RamsinghLab/artemis)
-
-# package demo 
+raw reads to pathway analysis and transcript-level quantification, typically in a few minutes
 
 ```R
 library(artemis)

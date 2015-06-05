@@ -5,9 +5,7 @@
 #' @param readPrefix  usually pairs are _R1_/_R2_, so this defaults to "R"
 #'
 pairFastqFiles <- function(path=".", extension=".fastq.gz", readPrefix="R") {
-  #allFiles <- list.files(path, pattern=paste0(extension, "$")) #omitted the "$" extensions
-  
-  allFiles<-list.files(path)
+  allFiles <- list.files(path, pattern=paste0(extension, "$"))
   forwardFiles <- unique(sub(paste0(readPrefix, "2"), 
                              paste0(readPrefix, "1"),
                              allFiles))
