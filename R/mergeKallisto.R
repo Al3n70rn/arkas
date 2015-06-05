@@ -6,7 +6,7 @@
 #' @param value       character string: return a SummarizedExperiment or a list?
 #'
 mergeKallisto <- function(sampleDirs,
-                          outputPath=outputPath,
+                          outputPath=".",
                           txomes=c(), 
 #                         txomes=c("ERCC", 
 #                                  "EnsDb.Hsapiens.v80", 
