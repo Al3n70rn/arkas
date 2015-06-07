@@ -1,12 +1,18 @@
-#' limma-trans for gene-wise DE (like voom but with less bullshit & more auto)
-#' This should make use of Harold's bootstrapping and structSSI to control FDR
+#' This should use structSSI to control the FDR, but not step on Harold's toes
 #'
 #' @param res         a SummarizedExperiment from mergeKallisto
 #' @param categories  how many categories for ReactomeDB enrichment plots 
 #' @param k           how many gene clusters to construct for comparison
 #' @param p.cutoff    where to set the p-value cutoff for such plots 
+#' @param ERCC        perform ERCC spike-in analysis as well? (default: TRUE)
 #'
-geneWiseAnalysis <- function(res, categories=10, k=2, p.cutoff=0.05) {
+geneWiseAnalysis <- function(res, categories=10, k=2, p.cutoff=0.05, ERCC=TRUE){
+
+  ## pull in erccdashboard if ERCC spike-ins were run
+  if (ERCC) {
+    library(erccdashboard)
+    # ...
+  }
 
   ## swap out for limma-trans or similar
   voomed <- voom(assay, design)
