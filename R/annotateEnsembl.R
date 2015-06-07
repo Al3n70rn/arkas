@@ -14,7 +14,9 @@ annotateEnsembl <- function(res, txome) {
   ## c("bundle", "name", "biotype") and always have something useful to offer.
   txmap <- transcripts(get(txome), ## why I so love ENSEMBL: symbols AND ids
                        columns=c("gene_id","gene_name","tx_biotype"))
-  names(mcols(txmap)) <- c("bundle", "name", "biotype")
+
+  ## don't do this, it breaks the EnsemblDb class for some reason
+  ## names(mcols(txmap)) <- c("bundle", "name", "biotype")
   
 
   ## this should go elsewhere

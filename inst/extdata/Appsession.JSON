@@ -1,0 +1,11 @@
+{
+  "fastaFiles": [
+    "ERCC.fa.gz",
+    "Homo_sapiens.RepBase.v20_05.humrep.fa.gz"
+  ],
+  "bootstraps": 0,
+  "fastaPath": "/Package_data/transcriptomes",
+  "fastqPath": "/data/APPSESSION/data/input/samples",
+  "outputPath": "/data/APPSESSION/data/output/appresults",
+  "AppsessionID": 25951648
+}
