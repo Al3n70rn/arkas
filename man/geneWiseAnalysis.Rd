@@ -2,10 +2,10 @@
 % Please edit documentation in R/geneWiseAnalysis.R
 \name{geneWiseAnalysis}
 \alias{geneWiseAnalysis}
-\title{limma-trans for gene-wise DE (like voom but with less bullshit & more auto)
-This should make use of Harold's bootstrapping and structSSI to control FDR}
+\title{This should use structSSI to control the FDR, but not step on Harold's toes}
 \usage{
-geneWiseAnalysis(res, categories = 10, k = 2, p.cutoff = 0.05)
+geneWiseAnalysis(res, categories = 10, k = 2, p.cutoff = 0.05,
+  ERCC = TRUE)
 }
 \arguments{
 \item{res}{a SummarizedExperiment from mergeKallisto}
@@ -15,9 +15,10 @@ geneWiseAnalysis(res, categories = 10, k = 2, p.cutoff = 0.05)
 \item{k}{how many gene clusters to construct for comparison}
 
 \item{p.cutoff}{where to set the p-value cutoff for such plots}
+
+\item{ERCC}{perform ERCC spike-in analysis as well? (default: TRUE)}
 }
 \description{
-limma-trans for gene-wise DE (like voom but with less bullshit & more auto)
-This should make use of Harold's bootstrapping and structSSI to control FDR
+This should use structSSI to control the FDR, but not step on Harold's toes
 }
 
