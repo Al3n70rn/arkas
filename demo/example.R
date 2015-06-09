@@ -26,3 +26,8 @@ results <- mclapply(samples,
 merged <- mergeKallisto(samples, outputPath=appSession$outputPath)
 message("AppSession variables:")
 for (i in names(appSession)) message("appSession$", i, " = ", appSession[[i]])
+
+## discarded this by accident
+tpm <- assays(merged)$est_count / assays(merged)$eff_length
+colnames(tpm) <- sub("Mr", "", colnames(tpm))
+heatmap(tpm[ rev(order(rowSds(tpm)))[1:100], ], 
