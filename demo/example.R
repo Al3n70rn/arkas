@@ -28,3 +28,6 @@ tpm <- assays(merged)$est_count / assays(merged)$eff_length
 colnames(tpm) <- sub("Mr", "", colnames(tpm))
 heatmap(tpm[ rev(order(rowSds(tpm)))[1:100], ], 
         main="Repeat transcription, teratoma vs. normal")
+
+message("AppSession variables:")
+for (i in names(appSession)) message("appSession$", i, " = ", appSession[[i]])
