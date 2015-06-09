@@ -39,6 +39,7 @@ mergeKallisto <- function(sampleDirs,
                                                  colData=coldat)
     }
   }
+  colnames(res) <- colData(res)$ID ## force the issue, for now...
   return(res)
 
 }
