@@ -9,8 +9,8 @@ mergeKallisto <- function(sampleDirs,
                           outputPath=".",
                           txomes=c(), 
 #                         txomes=c("ERCC", 
-#                                  "EnsDb.Hsapiens.v80", 
-#                                  "RepBase.Hsapiens.v2004"),
+#                                  "EnsDb.Hsapiens.v79", 
+#                                  "RepBase.Hsapiens.v2005"),
                           value=c("SummarizedExperiment", "list"), ...) {
  
   targets <- paste0(path.expand(outputPath), "/", sampleDirs)
@@ -27,10 +27,11 @@ mergeKallisto <- function(sampleDirs,
   if (value == "SummarizedExperiment") {
     if(length(txomes) > 0) {
       txmaps <- do.call(c, annotateBundles(res, txomes))
-      res <- GenomicRanges::SummarizedExperiment(assays=asys, 
-                                  rowData=txmaps)
+      res <- GenomicRanges::SummarizedExperiment(assays=SimpleList(asys), 
+                                                 rowData=txmaps)
     } else {
-      res <- GenomicRanges::SummarizedExperiment(assays=asys) 
+      asys<-lapply(SimpleList(asys),function(x) {rownames(x)<-NULL;x})
+      res <- GenomicRanges::SummarizedExperiment(assays=SimpleList(asys))
     }
   }
   return(res)

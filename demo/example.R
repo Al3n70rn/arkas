@@ -21,8 +21,30 @@ outputPath <- unique(unlist(lapply(results, `[`, "outputPath")))
 merged <- mergeKallisto(samples, outputPath=outputPath)
 tpm <- assays(merged)$est_count / assays(merged)$eff_length
 colnames(tpm) <- sub("Mr", "", colnames(tpm))
-png(file="container_example.png")
+png(file="test.png")
 heatmap(tpm[ rev(order(rowSds(tpm)))[1:100], ], 
         main="Repeat transcription, teratoma vs. normal")
 dev.off()
 
+
+
+
+
+merged <- mergeKallisto(Samples, outputPath=outputPath)
+
+
+
+
+
+
+biocLite( pkgs=c(“rhdf5”,“ssizeRNA”, “limma”, “ReactomePA”, “jsonlite”,“matrixStats” ,“structSSI”,“GenomicRanges”),suppressUpdates=FALSE,suppressAutoUPackage: artemis
+Type: Package
+Title: various utility functions for fast, informative RNAseq analysis
+Version: 0.1.27
+Date: 2015-06-01
+Author: Tim Triche, Jr.
+Depends: rhdf5, ssizeRNA, limma, ReactomePA, Matrix, jsonlite, parallel, matrixStats, structSSI, GenomicRanges
+Suggests: roxygen2, EnsDb.Hsapiens.v79, RepBase.Hsapiens.v2004
+Maintainer: Tim Triche, Jr. <tim.triche@gmail.com>
+Description: utility functions for Artemis (hunting companion of Kallisto)
+License: GPL (>= 2)pdate=FALSE, ask=FALSE)
