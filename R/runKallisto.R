@@ -14,7 +14,7 @@ runKallisto <- function(sampleDir,
                         fastaFiles=NULL,
                         fastqPath=fastqPath,
                         outputPath=outputPath,
-                        bootstraps=100) {
+                        bootstraps=bootstrapValue) {
 
   if (is.null(indexName) && is.null(fastaFiles)) {
     stop("Exactly one of indexName or fastaFiles must be non-null to run.")
