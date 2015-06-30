@@ -1,45 +1,50 @@
-#' merge multiple Kallisto results, by default yielding a SummarizedExperiment 
+#' merge multiple Kallisto results, yielding a KallistoExperiment 
 #'
-#' @param sampleDirs  character vector: directory names holding Kallisto results
-#' @param outputPath  character string: base path to the sampleDirs, default "."
-#' @param txomes      character vector: the target transcriptome(s)/repeatome(s)
-#' @param value       character string: return a SummarizedExperiment or a list?
+#' @param sampleDirs  character: directory names holding Kallisto results (NULL)
+#' @param outputPath  character: base path to the sampleDirs (default is .)
+#' @param covariates  data.frame or DataFrame: per-sample covariates (NULL)
+#' @param txome       character: target transcriptome (EnsDb.Hsapiens.v80)
+#' @param parallel    boolean: try to run the merge in parallel? (TRUE)
 #'
-mergeKallisto <- function(sampleDirs,
+#' @export
+mergeKallisto <- function(sampleDirs=NULL,
                           outputPath=".",
-                          txomes=c(), 
-#                         txomes=c("ERCC", 
-#                                  "EnsDb.Hsapiens.v80", 
-#                                  "RepBase.Hsapiens.v2005"),
-                          value=c("SummarizedExperiment", "list"), ...) {
- 
+                          covariates=NULL,
+                          txome="EnsDb.Hsapiens.v80",
+                          parallel=TRUE,
+                          ...) { 
+
+  if (is.null(sampleDirs) & is.null(covariates)) {
+    stop("At least one of sampleDirs or covariates must be non-null to proceed")
+  } 
+
   targets <- paste0(path.expand(outputPath), "/", sampleDirs)
   stopifnot(all(targets %in% list.dirs(outputPath)))
   names(targets) <- sampleDirs
-  value <- match.arg(value)
 
-  res <- mclapply(targets, fetchKallisto)
+  if (parallel == TRUE) { 
+    res <- mclapply(targets, fetchKallisto)
+  } else {
+    res <- lapply(targets, fetchKallisto)
+  }
   cols <- do.call(rbind, lapply(res, colnames))
   cnames <- apply(cols, 2, unique)
   names(cnames) <- cnames
   asys <- lapply(cnames, function(x) do.call(cbind, lapply(res, `[`, j=x)))
 
-  if (value == "SummarizedExperiment") {
-    stopifnot(all(sapply(asys, is, "matrix")))
-    stopifnot(identical(colnames(asys[[1]]), colnames(asys[[2]])))
-    ## this seems to be required?!?
-    coldat <- DataFrame(ID=colnames(asys[[1]]))
-    if(length(txomes) > 0) {
-      txmaps <- do.call(c, annotateBundles(res, txomes))
-      res <- GenomicRanges::SummarizedExperiment(assays=SimpleList(asys), 
-                                                 colData=coldat,
-                                                 rowData=txmaps)
-    } else {
-      res <- GenomicRanges::SummarizedExperiment(assays=SimpleList(asys),
-                                                 colData=coldat)
-    }
+  stopifnot(all(sapply(asys, is, "matrix")))
+  stopifnot(identical(colnames(asys[[1]]), colnames(asys[[2]])))
+  coldat <- DataFrame(ID=colnames(asys[[1]]))
+  if(!is.null(txome)) {
+    rowdat <- annotateBundles(res, txome)
+  } else {
+    rowdat <- GRangesList()
   }
-  colnames(res) <- colData(res)$ID ## force the issue, for now...
+
+  res <- KallistoExperiment(assays=SimpleList(asys), 
+                            covariates=coldat,
+                            features=rowdat)
+  colnames(res) <- covariates(res)$ID 
   return(res)
 
 }

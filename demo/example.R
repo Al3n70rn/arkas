@@ -12,17 +12,17 @@ names(samples) <- samples ## so that the column names get set
 # with(appSession, show(fastaPath))
 # [1] "/Package_data/transcriptomes"
 #
-indexName <- with(appSession, 
-                  indexKallisto(fastaFiles=fastaFiles, 
-                                fastaPath=fastaPath)$indexName)
+indexName <- indexKallisto(fastaFiles=appSession$fastaFiles, 
+                           fastaPath=appSession$fastaPath)$indexName
 
 ## since these are lightweight runs, run them in parallel!
-results <- mclapply(samples, 
-                    runKallisto,
-                    indexName=indexName,
-                    fastqPath=appSession$fastqPath,
-                    bootstraps=appSession$bootstraps, 
-                    outputPath=appSession$outputPath)
+results <- lapply(samples, 
+                  runKallisto,
+                  indexName=indexName,
+                  fastqPath=appSession$fastqPath,
+                  fastaPath=appSession$fastaPath,
+                  bootstraps=appSession$bootstraps, 
+                  outputPath=appSession$outputPath)
 merged <- mergeKallisto(samples, outputPath=appSession$outputPath)
 message("AppSession variables:")
 for (i in names(appSession)) message("appSession$", i, " = ", appSession[[i]])
@@ -30,4 +30,7 @@ for (i in names(appSession)) message("appSession$", i, " = ", appSession[[i]])
 ## discarded this by accident
 tpm <- assays(merged)$est_count / assays(merged)$eff_length
 colnames(tpm) <- sub("Mr", "", colnames(tpm))
+png(file="test.png")
 heatmap(tpm[ rev(order(rowSds(tpm)))[1:100], ], 
+        main="Repeat transcription, teratoma vs. normal")
+dev.off()
