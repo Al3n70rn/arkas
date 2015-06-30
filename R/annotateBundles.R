@@ -1,22 +1,22 @@
 #'
 #' annotate a pile of TPMs against a transcriptome bundle (via e.g. EnsDb)
 #' 
-#' @param res a SummarizedExperiment from mergeKallisto
-#' @param txome a character string naming the txome, e.g. "EnsDb.Hsapiens.v79"
+#' @param res     a SummarizedExperiment from mergeKallisto
+#' @param txome   a character string naming the txome, e.g. "EnsDb.Hsapiens.v79"
+#' @param cols    names of columns that must be present in order to proceed
 #'
-annotateBundles <- function(res, txome) {
+annotateBundles <- function(res, txome, 
+                            cols=c("bundle","name","egid","biotype")) {
 
-  if (!(grepl("ERCC", txome) | 
+  if (txome == "ERCC") {
+    annotateErcc
+  } else if (!(grepl("ERCC", txome) | 
         grepl("EnsDb", txome) | 
         grepl("RepBase", txome))) {
-    stop("Don't know how to process these transcriptome bundle annotations...")
+    stop(paste("Don't know how to process ", txome, " bundle annotations..."))
   } else { 
-    ## autoload from BioC if not found?
     library(txome, character.only=TRUE)
-    ## e.g. library(EnsDb.Hsapiens.v79) or library(RepBase.Hsapiens.20_04)
   }
-
-  stop("Revamp this to handle the reality of bundle dependence w/structSSI!")
 
   txmap <- transcripts(get(txome), columns=c("tx_id","tx_biotype","entrezid"))
   txmap <- txmap[which(txmap$tx_id %in% rownames(tpm) & txmap$entrezid != "")]

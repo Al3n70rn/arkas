@@ -7,9 +7,12 @@
 #'
 #' @param sampleDir       character string: the path to h5/json files 
 #' @param h5file          character string: the file to read
-#' @param checkRunInfo    boolean: check run_info.json against the hdf5 call?
+#' @param txome           character string: package to bundle transcripts (NULL)
+#' @param bundleID        character string: column with tx bundle ID ("gene_id")
+#' @param checkRunInfo    boolean: check run_info.json against HDF5 call? (TRUE)
 #'
-fetchKallisto <- function(sampleDir=".", h5file="abundance.h5", checkRunInfo=T){
+fetchKallisto <- function(sampleDir=".", h5file="abundance.h5", txome=NULL, 
+                          bundleID="gene_id", checkRunInfo=T){
 
   hdf5 <- paste0(path.expand(sampleDir), "/", h5file) 
   bootstraps <- h5read(hdf5, "aux/num_bootstrap")
@@ -18,6 +21,12 @@ fetchKallisto <- function(sampleDir=".", h5file="abundance.h5", checkRunInfo=T){
   if (bootstraps > 0) { 
     message("Found ", sampleDir, " bootstraps, summarizing...")
     boots <- do.call(cbind, h5read(hdf5, "bootstrap"))
+    colnames(boots) <- paste0("boot", 1:ncol(boots))
+    rownames(boots) <- h5read(hdf5, "aux/ids")
+    if (!is.null(txome)) {
+      ## bundle them all and compute xmeans
+      clustered <- clusterBundles(boots, txome, bundleID)
+    }
     res <- Matrix(cbind(rowMedians(boots),
                         h5read(hdf5, "aux/eff_lengths"),
                         rowMads(boots)),
