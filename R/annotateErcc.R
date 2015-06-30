@@ -1,16 +1,19 @@
 #'
 #' annotate spike-in controls for normalization (Life Tech annotations built in)
 #'
-#' @param res a SummarizedExperiment resulting from mergeKallisto
+#' @param res   a KallistoExperiment resulting from mergeKallisto
+#' @param cols  a character vector listing the metadata columns to pass through 
 #'
-annotateErcc <- function(res) {
+annotateErcc <- function(res, 
+                         cols=c("bundle","name","egid","biotype")) {
   
-  ## so for ERCC spike-ins, repeats, and ENSEMBL transcripts, we can use (e.g.)
-  ## c("bundle", "name", "biotype") and always have something useful to offer.
   data(ERCC)
   names(ERCC)[1] <- c("bundle")
   ERCC$name <- rownames(ERCC)
+  ERCC$egid <- rep(NA, nrow(ERCC))
   ERCC$biotype <- "SpikeIns"
-  stop("Not done yet...")
+  rDat <- GRangesList(apply(ERCC, 1, function(x) GRanges()))
+  mcols(rDat) <- ERCC[, cols]
+  
 
 }

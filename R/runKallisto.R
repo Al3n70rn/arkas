@@ -2,22 +2,30 @@
 #' 
 #' @param sampleDir   character, subdirectory for sample's FASTQ files 
 #' @param indexName   character or NULL, optional name of the index
-#' @param fastaPath   character, where FASTA files are ("/data/fasta")
+#' @param fastaPath   character, where FASTA files are underneath (".")
 #' @param fastaFiles  character vector of FASTA transcriptomes, or NULL
-#' @param fastqPath   character, where sampleDir is ("/data/input/samples")
-#' @param outputPath  character, output in outputPath/sampleDir ("/data/output")
-#' @param bootstraps  integer, how many bootstrap replicates to run? (100)
+#' @param fastqPath   character, where sampleDir is located under (".")
+#' @param outputPath  character, output in outputPath/sampleDir (".")
+#' @param bootstraps  integer, how many bootstrap replicates to run? (0)
 #'
+#' @export
 runKallisto <- function(sampleDir, 
                         indexName=NULL, 
-                        fastaPath=fastaPath,
+                        fastaPath=".",
                         fastaFiles=NULL,
-                        fastqPath=fastqPath,
-                        outputPath=outputPath,
-                        bootstraps=100) {
+                        fastqPath=".",
+                        outputPath=".",
+                        bootstraps=0) {
 
   if (is.null(indexName) && is.null(fastaFiles)) {
     stop("Exactly one of indexName or fastaFiles must be non-null to run.")
+  }
+  if (is.list(indexName) && "indexName" %in% names(indexName)) {
+    fastaPath <- indexName$fastaPath
+    indexName <- indexName$indexName
+  }
+  if (is.null(outputPath)) {
+    outputPath <- sampleDir
   }
 
   ## create an index if needed 
