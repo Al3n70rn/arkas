@@ -3,7 +3,8 @@
 #'
 #' @import Matrix
 #' @import jsonlite 
-#' @import matrixStats
+#' @importFrom matrixStats rowMads
+#' @importFrom matrixStats rowMedians
 #'
 #' @param sampleDir       character string: the path to h5/json files 
 #' @param h5file          character string: the file to read
@@ -23,10 +24,6 @@ fetchKallisto <- function(sampleDir=".", h5file="abundance.h5", txome=NULL,
     boots <- do.call(cbind, h5read(hdf5, "bootstrap"))
     colnames(boots) <- paste0("boot", 1:ncol(boots))
     rownames(boots) <- h5read(hdf5, "aux/ids")
-    if (!is.null(txome)) {
-      ## bundle them all and compute xmeans
-      clustered <- clusterBundles(boots, txome, bundleID)
-    }
     res <- Matrix(cbind(rowMedians(boots),
                         h5read(hdf5, "aux/eff_lengths"),
                         rowMads(boots)),

@@ -1,7 +1,9 @@
 #' A SummarizedExperiment subclass that stores multiple Kallisto runs 
 #' 
 #' FIXME: add RUVg-derived ERCC-calibrated normalization factors in metadata
-#' FIXME: add validity functions that match up colnames to metadata elements
+#'
+#' @slot transcriptomes   Transcriptomes against which reads were pseudoaligned
+#' @slot kallistoVersion  The version of Kallisto used to pseudoalign the reads
 #'
 #' @export
 setClass("KallistoExperiment",

@@ -4,24 +4,23 @@
 \alias{runKallisto}
 \title{run kallisto with fastq.gz files on freshly generated or existing index}
 \usage{
-runKallisto(sampleDir, indexName = NULL, fastaPath = "/data/fasta",
-  fastaFiles = NULL, fastqPath = "/data/input/samples",
-  outputPath = "/data/output", bootstraps = 100)
+runKallisto(sampleDir, indexName = NULL, fastaPath = ".",
+  fastaFiles = NULL, fastqPath = ".", outputPath = ".", bootstraps = 0)
 }
 \arguments{
 \item{sampleDir}{character, subdirectory for sample's FASTQ files}
 
 \item{indexName}{character or NULL, optional name of the index}
 
-\item{fastaPath}{character, where FASTA files are ("/data/fasta")}
+\item{fastaPath}{character, where FASTA files are underneath (".")}
 
 \item{fastaFiles}{character vector of FASTA transcriptomes, or NULL}
 
-\item{fastqPath}{character, where sampleDir is ("/data/input/samples")}
+\item{fastqPath}{character, where sampleDir is located under (".")}
 
-\item{outputPath}{character, output in outputPath/sampleDir ("/data/output")}
+\item{outputPath}{character, output in outputPath/sampleDir (".")}
 
-\item{bootstraps}{integer, how many bootstrap replicates to run? (100)}
+\item{bootstraps}{integer, how many bootstrap replicates to run? (0)}
 }
 \description{
 run kallisto with fastq.gz files on freshly generated or existing index

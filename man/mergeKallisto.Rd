@@ -2,21 +2,23 @@
 % Please edit documentation in R/mergeKallisto.R
 \name{mergeKallisto}
 \alias{mergeKallisto}
-\title{merge multiple Kallisto results, by default yielding a SummarizedExperiment}
+\title{merge multiple Kallisto results, yielding a KallistoExperiment}
 \usage{
-mergeKallisto(sampleDirs, outputPath = ".", txomes = c(),
-  value = c("SummarizedExperiment", "list"), ...)
+mergeKallisto(sampleDirs = NULL, outputPath = ".", covariates = NULL,
+  txome = "EnsDb.Hsapiens.v80", parallel = TRUE, ...)
 }
 \arguments{
-\item{sampleDirs}{character vector: directory names holding Kallisto results}
+\item{sampleDirs}{character: directory names holding Kallisto results (NULL)}
 
-\item{outputPath}{character string: base path to the sampleDirs, default "."}
+\item{outputPath}{character: base path to the sampleDirs (default is .)}
 
-\item{txomes}{character vector: the target transcriptome(s)/repeatome(s)}
+\item{covariates}{data.frame or DataFrame: per-sample covariates (NULL)}
 
-\item{value}{character string: return a SummarizedExperiment or a list?}
+\item{txome}{character: target transcriptome (EnsDb.Hsapiens.v80)}
+
+\item{parallel}{boolean: try to run the merge in parallel? (TRUE)}
 }
 \description{
-merge multiple Kallisto results, by default yielding a SummarizedExperiment
+merge multiple Kallisto results, yielding a KallistoExperiment
 }
 
