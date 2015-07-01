@@ -1,6 +1,6 @@
-#' This should use structSSI to control the FDR, but not step on Harold's toes
+#' Pathway analysis and other similar downstream functions
 #'
-#' @param res         a SummarizedExperiment from mergeKallisto
+#' @param res         a KallistoExperiment from mergeKallisto
 #' @param categories  how many categories for ReactomeDB enrichment plots 
 #' @param k           how many gene clusters to construct for comparison
 #' @param p.cutoff    where to set the p-value cutoff for such plots 
@@ -9,9 +9,10 @@
 geneWiseAnalysis <- function(res, categories=10, k=2, p.cutoff=0.05, ERCC=TRUE){
 
   ## pull in erccdashboard if ERCC spike-ins were run
-  if (ERCC) {
+  if (ERCC == TRUE) {
     library(erccdashboard)
-    # ...
+    ERCC_counts <- counts(ERCC(res))
+    ## plot them
   }
 
   ## swap out for limma-trans or similar
@@ -57,13 +58,13 @@ geneWiseAnalysis <- function(res, categories=10, k=2, p.cutoff=0.05, ERCC=TRUE){
 
   for (i in names(genes)) {
     barplot(enrichedGO[[i]], showCategory=10, title=paste("Gene ontologies", i))
-    if (nrow(summary(enrichedRx[[i]])) > 0)
+    if (nrow(summary(enrichedRx[[i]])) > 0) {
       barplot(enrichedRx[[i]], showCategory=10, title=paste("Reactome", i))
+    }
   }
 
   ## GSEA
-  gse <- gsePathway(topGenes)
-  ## NULL
+
 
   return(top)
 

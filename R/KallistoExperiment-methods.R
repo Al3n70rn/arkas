@@ -1,98 +1,102 @@
-#' methods for the KallistoExperiment class:
+#' @describeIn KallistoExperiment 
+#' @param object: A KallistoExperiment from which to retrieve counts
 #'
-#' counts()
-#' covariates()
-#' features()
-#' TPM()
-#' ERCC()
-#' eff_length()
-#' transcriptomes()
-#' kallistoVersion()
-#' 
-setMethod("counts", 
-          signature(object = "KallistoExperiment"),
-          function (object) {
-            return(assays(object)$est_counts)
-          })
+setMethod("counts", "KallistoExperiment",
+          function (object) return(assays(object)$est_counts))
 
-if (!isGeneric("covariates")) { 
-  setGeneric("covariates", function(x) standardGeneric("covariates"))
-}
+setGeneric("covariates", function(object) standardGeneric("covariates"))
+setGeneric("covariates<-", 
+           function(object, value) standardGeneric("covariates<-"))
 
-setMethod("covariates", 
-          signature(object = "KallistoExperiment"),
-          function (object) {
-            return(colData(object))
-          })
+#' @describeIn KallistoExperiment 
+#' @param object: A KallistoExperiment from which to retrieve covariates
+#'
+setMethod("covariates", "KallistoExperiment",
+          function (object) return(colData(object)))
 
+#' @describeIn KallistoExperiment 
+#' @param object: A KallistoExperiment to which covariates should be assigned
+#' @param value: A DataFrame containing the covariates
+#' @return the KallistoExperiment object, with updated covariates
+#'
 setReplaceMethod("covariates", c("KallistoExperiment", "DataFrame"),
-                 function(x, ..., value)
-                 {
-                   colData(x) <- value
-                   return(x)
+                 function(object, value) {
+                   colData(object) <- value
+                   return(object)
                  })
 
+#' @describeIn KallistoExperiment 
+#' @param object: A KallistoExperiment to which covariates should be assigned
+#' @param value: A data.frame containing the covariates
+#' @return the KallistoExperiment object, with updated covariates
+#'
 setReplaceMethod("covariates", c("KallistoExperiment", "data.frame"),
-                 function(x, ..., value)
-                 {
-                   colData(x) <- DataFrame(value)
-                   return(x)
+                 function(object, value) {
+                   colData(object) <- DataFrame(value)
+                   return(object)
                  })
 
-if (!isGeneric("features")) { 
-  setGeneric("features", function(x) standardGeneric("features"))
-}
+setGeneric("features", function(object) standardGeneric("features"))
+setGeneric("features<-", 
+           function(object, value) standardGeneric("features<-"))
 
-setMethod("features", 
-          signature(object = "KallistoExperiment"),
-          function (object) {
-            return(rowData(object))
-          })
+#' @describeIn KallistoExperiment 
+#' @param object: A KallistoExperiment from which features should be obtained
+#' @return a GRanges or GRangesList of feature annotations
+#'
+setMethod("features", "KallistoExperiment",
+          function (object) return(rowData(object)))
 
+#' @describeIn KallistoExperiment 
+#' @param object: A KallistoExperiment from which features should be obtained
+#' @param value: A GenomicRanges instance containing feature annotations
+#' @return the KallistoExperiment object, with updated feature annotations
+#'
 setReplaceMethod("features", c("KallistoExperiment", "GenomicRanges"),
-                 function(x, ..., value)
-                 {
-                   rowData(x) <- value
-                   return(x)
+                 function(object, value) {
+                   rowData(object) <- value
+                   return(object)
                  })
 
+#' @describeIn KallistoExperiment 
+#' @param object: A KallistoExperiment from which features should be obtained
+#' @param value: A GRangesList instance containing feature annotations
+#' @return the KallistoExperiment object, with updated feature annotations
+#'
 setReplaceMethod("features", c("KallistoExperiment", "GRangesList"),
-                 function(x, ..., value)
-                 {
-                   rowData(x) <- value
-                   return(x)
+                 function(object, value) {
+                   rowData(object) <- value
+                   return(object)
                  })
 
-setMethod("eff_length", 
-          signature(object = "KallistoExperiment"),
-          function (object) {
-            return(assays(object)$eff_length)
-          })
+# eff_length generic 
+setGeneric("eff_length", function(object) standardGeneric("eff_length"))
 
-setMethod("TPM", 
-          signature(object = "KallistoExperiment"),
-          function (object) {
-            return(counts(object) / eff_length(object))
-          })
+#' @describeIn KallistoExperiment 
+#' @param object: A KallistoExperiment with effective transcript lengths
+#' @return a matrix of effective transcript lengths
+#'
+setMethod("eff_length", "KallistoExperiment",
+          function (object) return(assays(object)$eff_length))
 
-setMethod("ERCC", 
-          signature(object = "KallistoExperiment"),
-          function (object) {
-            return(object[ grep("^ERCC", rownames(object)), ])
-          })
+# TPM generic 
+setGeneric("TPM", function(object) standardGeneric("TPM"))
 
-# FIXME: map to libraries
-setMethod("transcriptomes", 
-          signature(object = "KallistoExperiment"),
-          function(object) {
-            return(object@transcriptomes)
-          })
+#' @describeIn KallistoExperiment 
+#' @param object: A KallistoExperiment with estimated counts & effective lengths
+#' @return a matrix of TPMs (transcripts per million)
+#'
+setMethod("TPM", "KallistoExperiment",
+          function (object) return(counts(object) / eff_length(object)))
 
-# FIXME: verify that it exists
-setMethod("kallistoVersion", 
-          signature(object = "KallistoExperiment"),
-          function(object) {
-            return(object@kallistoVersion)
-          })
+# ERCC generic 
+setGeneric("ERCC", function(object) standardgeneric("ERCC"))
+
+#' @describeIn KallistoExperiment 
+#' @param object: A KallistoExperiment with ERCC spike-in control counts
+#' @return a subsetted KallistoExperiment with just the ERCC features 
+#'
+setMethod("ERCC", "KallistoExperiment",
+          function (object) return(object[ grep("^ERCC", rownames(object)), ]))
 
 # FIXME: add method to retrieve normalization factors if ERCC spike-ins used 

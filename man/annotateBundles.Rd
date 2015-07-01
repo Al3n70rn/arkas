@@ -4,12 +4,14 @@
 \alias{annotateBundles}
 \title{annotate a pile of TPMs against a transcriptome bundle (via e.g. EnsDb)}
 \usage{
-annotateBundles(res, txome)
+annotateBundles(res, txome, cols = c("bundle", "name", "egid", "biotype"))
 }
 \arguments{
 \item{res}{a SummarizedExperiment from mergeKallisto}
 
 \item{txome}{a character string naming the txome, e.g. "EnsDb.Hsapiens.v79"}
+
+\item{cols}{names of columns that must be present in order to proceed}
 }
 \description{
 annotate a pile of TPMs against a transcriptome bundle (via e.g. EnsDb)

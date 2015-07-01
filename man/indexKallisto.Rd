@@ -4,7 +4,7 @@
 \alias{indexKallisto}
 \title{index a transcriptome or transcriptomes}
 \usage{
-indexKallisto(fastaFiles, fastaPath = "/data/fasta")
+indexKallisto(fastaFiles, fastaPath)
 }
 \arguments{
 \item{fastaFiles}{a character string or vector of source transcriptomes}

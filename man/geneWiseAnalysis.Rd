@@ -2,13 +2,13 @@
 % Please edit documentation in R/geneWiseAnalysis.R
 \name{geneWiseAnalysis}
 \alias{geneWiseAnalysis}
-\title{This should use structSSI to control the FDR, but not step on Harold's toes}
+\title{Pathway analysis and other similar downstream functions}
 \usage{
 geneWiseAnalysis(res, categories = 10, k = 2, p.cutoff = 0.05,
   ERCC = TRUE)
 }
 \arguments{
-\item{res}{a SummarizedExperiment from mergeKallisto}
+\item{res}{a KallistoExperiment from mergeKallisto}
 
 \item{categories}{how many categories for ReactomeDB enrichment plots}
 
@@ -19,6 +19,6 @@ geneWiseAnalysis(res, categories = 10, k = 2, p.cutoff = 0.05,
 \item{ERCC}{perform ERCC spike-in analysis as well? (default: TRUE)}
 }
 \description{
-This should use structSSI to control the FDR, but not step on Harold's toes
+Pathway analysis and other similar downstream functions
 }
 

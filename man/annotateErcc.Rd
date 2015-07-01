@@ -4,10 +4,12 @@
 \alias{annotateErcc}
 \title{annotate spike-in controls for normalization (Life Tech annotations built in)}
 \usage{
-annotateErcc(res)
+annotateErcc(res, cols = c("bundle", "name", "egid", "biotype"))
 }
 \arguments{
-\item{res}{a SummarizedExperiment resulting from mergeKallisto}
+\item{res}{a KallistoExperiment resulting from mergeKallisto}
+
+\item{cols}{a character vector listing the metadata columns to pass through}
 }
 \description{
 annotate spike-in controls for normalization (Life Tech annotations built in)
