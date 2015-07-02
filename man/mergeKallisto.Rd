@@ -5,16 +5,16 @@
 \title{merge multiple Kallisto results, yielding a KallistoExperiment}
 \usage{
 mergeKallisto(sampleDirs = NULL, outputPath = ".", covariates = NULL,
-  txome = "EnsDb.Hsapiens.v80", parallel = TRUE, ...)
+  transcriptome = "EnsDb.Hsapiens.v80", parallel = TRUE, ...)
 }
 \arguments{
-\item{sampleDirs}{character: directory names holding Kallisto results (NULL)}
+\item{sampleDirs}{character: directories holding Kallisto results (NULL)}
 
 \item{outputPath}{character: base path to the sampleDirs (default is .)}
 
 \item{covariates}{data.frame or DataFrame: per-sample covariates (NULL)}
 
-\item{txome}{character: target transcriptome (EnsDb.Hsapiens.v80)}
+\item{transcriptome}{character: target transcriptome (EnsDb.Hsapiens.v80)}
 
 \item{parallel}{boolean: try to run the merge in parallel? (TRUE)}
 }
