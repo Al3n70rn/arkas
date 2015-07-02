@@ -5,7 +5,7 @@
 \title{Pathway analysis and other similar downstream functions}
 \usage{
 geneWiseAnalysis(res, categories = 10, k = 2, p.cutoff = 0.05,
-  ERCC = TRUE)
+  ERCC = TRUE, species = c("Homo.sapiens", "Mus.musculus"))
 }
 \arguments{
 \item{res}{a KallistoExperiment from mergeKallisto}
@@ -17,6 +17,8 @@ geneWiseAnalysis(res, categories = 10, k = 2, p.cutoff = 0.05,
 \item{p.cutoff}{where to set the p-value cutoff for such plots}
 
 \item{ERCC}{perform ERCC spike-in analysis as well? (default: TRUE)}
+
+\item{species}{which species? (Homo.sapiens; FIX: get from transcriptome)}
 }
 \description{
 Pathway analysis and other similar downstream functions
