@@ -29,7 +29,7 @@ KallistoExperiment <- function(est_counts=NULL,
   assays <- assays[!sapply(assays, is.null)] 
 
   new("KallistoExperiment", 
-      assays=assays, 
+      assays=Assays(assays),
       colData=covariates,
       rowData=features,
       kallistoVersion=kallistoVersion,
