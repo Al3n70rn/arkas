@@ -1,10 +1,4 @@
-#'
 #' fetch one sample's worth of Kallisto estimates, perhaps with bootstraps
-#'
-#' @import Matrix
-#' @import jsonlite 
-#' @importFrom matrixStats rowMads
-#' @importFrom matrixStats rowMedians
 #'
 #' @param sampleDir       character string: the path to h5/json files 
 #' @param h5file          character string: the file to read
@@ -12,6 +6,12 @@
 #' @param bundleID        character string: column with tx bundle ID ("gene_id")
 #' @param checkRunInfo    boolean: check run_info.json against HDF5 call? (TRUE)
 #'
+#' @import Matrix
+#' @import jsonlite 
+#' @importFrom matrixStats rowMads
+#' @importFrom matrixStats rowMedians
+#'
+#' @export
 fetchKallisto <- function(sampleDir=".", h5file="abundance.h5", txome=NULL, 
                           bundleID="gene_id", checkRunInfo=T){
 
