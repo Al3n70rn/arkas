@@ -23,9 +23,9 @@ KallistoExperiment <- function(est_counts=NULL,
   if (length(transcriptomes) > 1) 
     transcriptomes <- paste(transcriptomes, collapse=", ")
     
-  assays <- SimpleList(est_counts=est_counts, 
-                       est_counts_mad=est_counts_mad, 
-                       eff_length=eff_length)
+  assays <- list(est_counts=est_counts, 
+                 eff_length=eff_length,
+                 est_counts_mad=est_counts_mad) 
   assays <- assays[!sapply(assays, is.null)] 
 
   new("KallistoExperiment", 
