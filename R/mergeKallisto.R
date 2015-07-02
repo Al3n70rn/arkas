@@ -7,6 +7,7 @@
 #' @param parallel    boolean: try to run the merge in parallel? (TRUE)
 #'
 #' @export
+#'
 mergeKallisto <- function(sampleDirs=NULL,
                           outputPath=".",
                           covariates=NULL,

@@ -5,6 +5,7 @@
 #' @param txome   a character string naming the txome, e.g. "EnsDb.Hsapiens.v79"
 #' @param cols    names of columns that must be present in order to proceed
 #'
+#' @export
 annotateBundles <- function(res, txome, 
                             cols=c("bundle","name","egid","biotype")) {
 
