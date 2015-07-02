@@ -2,7 +2,8 @@
 #' 
 #' @param fastaFiles  a character string or vector of source transcriptomes
 #' @param fastaPath   where to find the preceding FASTA files 
-#' 
+#'
+#' @export
 indexKallisto <- function(fastaFiles, fastaPath) { 
 
   oldwd <- getwd()

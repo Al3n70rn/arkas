@@ -1,5 +1,7 @@
 #' merge multiple Kallisto results, yielding a KallistoExperiment 
 #'
+#' FIXME: automatically determine which transcriptomes were used 
+#'
 #' @param sampleDirs    character: directories holding Kallisto results (NULL)
 #' @param outputPath    character: base path to the sampleDirs (default is .)
 #' @param covariates    data.frame or DataFrame: per-sample covariates (NULL)
@@ -30,11 +32,21 @@ mergeKallisto <- function(sampleDirs=NULL,
   stopifnot(all(targets %in% list.dirs(outputPath)))
   names(targets) <- sampleDirs
 
+
   if (parallel == TRUE) { 
     res <- mclapply(targets, fetchKallisto)
   } else {
     res <- lapply(targets, fetchKallisto)
   }
+ 
+  ## check and make sure all the results came from the same Kallisto version,
+  kversion <- sapply(res, attr, "kallisto_version")
+  if (length(unique(kversion)) > 1) {
+    stop("Your runs are from different Kallisto versions! Aborting merge.")
+  } else {
+    kallistoVersion <- unique(kversion)
+  } 
+
   cols <- do.call(rbind, lapply(res, colnames))
   cnames <- apply(cols, 2, unique)
   names(cnames) <- cnames
@@ -43,8 +55,19 @@ mergeKallisto <- function(sampleDirs=NULL,
   stopifnot(all(sapply(asys, is, "matrix")))
   stopifnot(identical(colnames(asys[[1]]), colnames(asys[[2]])))
   coldat <- DataFrame(ID=colnames(asys[[1]]))
-  if(!is.null(txome)) {
-    rowdat <- annotateBundles(res, txome)
+  
+  ## FIXME: ensure they all nused the same transcriptome
+  ## ktxs <- sapply(res, extractTranscriptomeFromCall)
+  ## 
+  ## if (length(unique(ktxs)) > 1) {
+  ##   stop("Your runs are against different transcriptomes! Aborting merge.")
+  ## } else {
+  ##   message("Setting transcriptome automatically from Kallisto call string.")
+  ##   transcriptome <- matchTranscriptome(unique(ktxs))
+  ## }
+  ##
+  if(!is.null(transcriptome)) {
+    rowdat <- annotateBundles(res, transcriptome)
   } else {
     rowdat <- GRangesList()
   }
@@ -52,6 +75,7 @@ mergeKallisto <- function(sampleDirs=NULL,
   res <- KallistoExperiment(est_counts=asys$est_counts,
                             eff_length=asys$eff_length,
                             transcriptomes=transcriptome,
+                            kallistoVersion=kallistoVersion,
                             covariates=coldat,
                             features=rowdat,
                             ...)

@@ -2,8 +2,6 @@
 #'
 #' @param sampleDir       character string: the path to h5/json files 
 #' @param h5file          character string: the file to read
-#' @param txome           character string: package to bundle transcripts (NULL)
-#' @param bundleID        character string: column with tx bundle ID ("gene_id")
 #' @param checkRunInfo    boolean: check run_info.json against HDF5 call? (TRUE)
 #'
 #' @import rhdf5 
@@ -13,8 +11,7 @@
 #' @importFrom matrixStats rowMedians
 #'
 #' @export
-fetchKallisto <- function(sampleDir=".", h5file="abundance.h5", txome=NULL, 
-                          bundleID="gene_id", checkRunInfo=T){
+fetchKallisto <- function(sampleDir=".", h5file="abundance.h5", checkRunInfo=T){
 
   hdf5 <- paste0(path.expand(sampleDir), "/", h5file) 
   bootstraps <- h5read(hdf5, "aux/num_bootstrap")
@@ -43,6 +40,10 @@ fetchKallisto <- function(sampleDir=".", h5file="abundance.h5", txome=NULL,
     runinfo <- fetchRunInfo(sub("abundance.h5", "run_info.json", hdf5))
     if (runinfo$call != h5read(hdf5, "aux/call")) {
       stop("JSON run_info does not match hdf5 file! Something is likely wrong.")
+    }
+    ## for sanity checking in mergeKallisto
+    for (i in names(runinfo)) {
+      attr(res, i) <- runinfo[[i]]
     }
   }
 

@@ -19,6 +19,6 @@ mergeKallisto(sampleDirs = NULL, outputPath = ".", covariates = NULL,
 \item{parallel}{boolean: try to run the merge in parallel? (TRUE)}
 }
 \description{
-merge multiple Kallisto results, yielding a KallistoExperiment
+FIXME: automatically determine which transcriptomes were used
 }
 

@@ -4,17 +4,12 @@
 \alias{fetchKallisto}
 \title{fetch one sample's worth of Kallisto estimates, perhaps with bootstraps}
 \usage{
-fetchKallisto(sampleDir = ".", h5file = "abundance.h5", txome = NULL,
-  bundleID = "gene_id", checkRunInfo = T)
+fetchKallisto(sampleDir = ".", h5file = "abundance.h5", checkRunInfo = T)
 }
 \arguments{
 \item{sampleDir}{character string: the path to h5/json files}
 
 \item{h5file}{character string: the file to read}
-
-\item{txome}{character string: package to bundle transcripts (NULL)}
-
-\item{bundleID}{character string: column with tx bundle ID ("gene_id")}
 
 \item{checkRunInfo}{boolean: check run_info.json against HDF5 call? (TRUE)}
 }
