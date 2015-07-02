@@ -6,6 +6,7 @@
 #' @param bundleID        character string: column with tx bundle ID ("gene_id")
 #' @param checkRunInfo    boolean: check run_info.json against HDF5 call? (TRUE)
 #'
+#' @import rhdf5 
 #' @import Matrix
 #' @import jsonlite 
 #' @importFrom matrixStats rowMads
@@ -28,13 +29,13 @@ fetchKallisto <- function(sampleDir=".", h5file="abundance.h5", txome=NULL,
                         h5read(hdf5, "aux/eff_lengths"),
                         rowMads(boots)),
                   dimnames=list(transcript=h5read(hdf5, "aux/ids"),
-                                c("est_count", "eff_length", "est_count_mad")))
+                                c("est_counts","eff_length","est_counts_mad")))
   } else {
     message("No bootstraps found for ", sampleDir, ", using est_counts...")
     res <- Matrix(cbind(h5read(hdf5, "est_counts"),
                         h5read(hdf5, "aux/eff_lengths")),
                   dimnames=list(transcript=h5read(hdf5, "aux/ids"),
-                                c("est_count", "eff_length")))
+                                c("est_counts", "eff_length")))
   }
 
   ## ensure the information in run_info.json matches the hdf5 call

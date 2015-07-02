@@ -1,17 +1,17 @@
 #' merge multiple Kallisto results, yielding a KallistoExperiment 
 #'
-#' @param sampleDirs  character: directory names holding Kallisto results (NULL)
-#' @param outputPath  character: base path to the sampleDirs (default is .)
-#' @param covariates  data.frame or DataFrame: per-sample covariates (NULL)
-#' @param txome       character: target transcriptome (EnsDb.Hsapiens.v80)
-#' @param parallel    boolean: try to run the merge in parallel? (TRUE)
+#' @param sampleDirs    character: directories holding Kallisto results (NULL)
+#' @param outputPath    character: base path to the sampleDirs (default is .)
+#' @param covariates    data.frame or DataFrame: per-sample covariates (NULL)
+#' @param transcriptome character: target transcriptome (EnsDb.Hsapiens.v80)
+#' @param parallel      boolean: try to run the merge in parallel? (TRUE)
 #'
 #' @export
 #'
 mergeKallisto <- function(sampleDirs=NULL,
                           outputPath=".",
                           covariates=NULL,
-                          txome="EnsDb.Hsapiens.v80",
+                          transcriptome="EnsDb.Hsapiens.v80",
                           parallel=TRUE,
                           ...) { 
 
@@ -19,6 +19,13 @@ mergeKallisto <- function(sampleDirs=NULL,
     stop("At least one of sampleDirs or covariates must be non-null to proceed")
   } 
 
+  if (is.null(sampleDirs)) {
+    if (!"sampleDir" %in% names(covariates)) { 
+      stop("Your covariates need to have a column $sampleDir for each sample")
+    } else { 
+      sampleDirs <- covariates$sampleDir
+    }
+  }
   targets <- paste0(path.expand(outputPath), "/", sampleDirs)
   stopifnot(all(targets %in% list.dirs(outputPath)))
   names(targets) <- sampleDirs
@@ -42,9 +49,12 @@ mergeKallisto <- function(sampleDirs=NULL,
     rowdat <- GRangesList()
   }
 
-  res <- KallistoExperiment(assays=SimpleList(asys), 
+  res <- KallistoExperiment(est_counts=asys$est_counts,
+                            eff_length=asys$eff_length,
+                            transcriptomes=transcriptome,
                             covariates=coldat,
-                            features=rowdat)
+                            features=rowdat,
+                            ...)
   colnames(res) <- covariates(res)$ID 
   return(res)
 
