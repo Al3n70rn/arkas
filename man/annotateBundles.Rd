@@ -4,12 +4,15 @@
 \alias{annotateBundles}
 \title{annotate a pile of TPMs against a transcriptome bundle (via e.g. EnsDb)}
 \usage{
-annotateBundles(res, txome, ...)
+annotateBundles(res, transcriptome, ...)
 }
 \arguments{
-\item{res}{a SummarizedExperiment from mergeKallisto}
+\item{res}{a list of matrices from mergeKallisto}
 
-\item{txome}{a character string naming the txome, e.g. "EnsDb.Hsapiens.v79"}
+\item{transcriptome}{character string naming the transcriptome}
+}
+\value{
+a GenomicRanges object with annotations
 }
 \description{
 annotate a pile of TPMs against a transcriptome bundle (via e.g. EnsDb)

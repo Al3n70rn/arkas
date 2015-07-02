@@ -15,6 +15,18 @@ Vignettes are long form documentation commonly included in packages. Because the
 - Has a smaller default figure size
 - Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
 
+## Shut up, Hadley
+
+```R
+covs <- DataFrame(sampleDir=c("n1","n2","n4","s1","s2","s4"),
+                  normal=c(1, 1, 1, 0, 0, 0),
+                  subject=as.factor(c(1, 2, 4, 1, 2, 4)))
+rownames(covs) <- covs$sampleDirs
+merged <- mergeKallisto(covariates=covs, outputPath="/data/output")
+
+```
+
+
 ## Vignette Info
 
 Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
