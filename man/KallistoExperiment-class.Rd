@@ -23,7 +23,7 @@
 
 \S4method{covariates}{KallistoExperiment,data.frame}(object) <- value
 
-\S4method{features}{KallistoExperiment}(object)
+\S4method{features}{KallistoExperiment}(x)
 
 \S4method{features}{KallistoExperiment,GenomicRanges}(object) <- value
 
