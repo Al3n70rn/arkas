@@ -1,6 +1,7 @@
 #' Pathway analysis and other similar downstream functions
 #'
 #' @param res         a KallistoExperiment from mergeKallisto
+#' @param design      a design matrix with the contrast or coefficient to test in col2
 #' @param categories  how many categories for ReactomeDB enrichment plots 
 #' @param k           how many gene clusters to construct for comparison
 #' @param p.cutoff    where to set the p-value cutoff for such plots 
@@ -15,7 +16,7 @@
 #' @import erccdashboard
 #'
 #' @export
-geneWiseAnalysis <- function(res, categories=10, k=2, p.cutoff=0.05, ERCC=TRUE,
+geneWiseAnalysis <- function(res, design, categories=10, k=2, p.cutoff=0.05, ERCC=TRUE,
                              species=c("Homo.sapiens","Mus.musculus")) {
 
   ## this is really only meant for a KallistoExperiment
@@ -37,7 +38,7 @@ geneWiseAnalysis <- function(res, categories=10, k=2, p.cutoff=0.05, ERCC=TRUE,
   }
 
   ## swap out for limma-trans or similar
-  voomed <- voom(assay, design)
+  voomed <- voom(counts(res), design)
   fit <- eBayes(lmFit(voomed, design))
 
   p.cutoff <- 0.1

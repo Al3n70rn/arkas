@@ -15,7 +15,9 @@ Vignettes are long form documentation commonly included in packages. Because the
 - Has a smaller default figure size
 - Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
 
-## Shut up, Hadley
+## Loading already-processed transcript abundance estimates
+
+This is also fairly simple:
 
 ```R
 covs <- DataFrame(sampleDir=c("n1","n2","n4","s1","s2","s4"),
@@ -23,13 +25,27 @@ covs <- DataFrame(sampleDir=c("n1","n2","n4","s1","s2","s4"),
                   subject=as.factor(c(1, 2, 4, 1, 2, 4)))
 rownames(covs) <- covs$sampleDirs
 merged <- mergeKallisto(covariates=covs, outputPath="/data/output")
-
 ```
 
+The resulting object has annotations for distinct coding and non-coding transcripts,
+along with an indication of the general biological category of each transcript bundle
+(e.g. protein-coding transcript, pseudogene, ribosomal RNA, etc.).  Transcripts for 
+which annotations could not be found are assigned to the chromosome "Unknown" and 
+retained as part of the KallistoExperiment, albeit with less informative annotation.
 
-## Vignette Info
 
-Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
+## Gene-wise analysis
+
+One of the most common tasks when analysing the abundance of RNA transcripts is to 
+aggregate estimates by "gene" (i.e., "bundle of transcripts with extensive homology")
+and group the observed changes by biochemical pathway, gene sets associated with 
+experimental outcomes, or perhaps drug metabolism and metabolic targets.  For this,
+we typically collapse all the transcripts in each bundle, and run tests across those:
+
+```R
+gwa <- geneWiseAnalysis(merged)
+```
+
 
 ## Styles
 
