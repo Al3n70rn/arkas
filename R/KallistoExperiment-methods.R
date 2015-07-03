@@ -1,6 +1,7 @@
 #' @describeIn KallistoExperiment 
 #' @param object: A KallistoExperiment from which to retrieve counts
 #'
+#' @export
 setMethod("counts", "KallistoExperiment",
           function (object) return(assays(object)$est_counts))
 
@@ -11,6 +12,7 @@ setGeneric("covariates<-",
 #' @describeIn KallistoExperiment 
 #' @param object: A KallistoExperiment from which to retrieve covariates
 #'
+#' @export
 setMethod("covariates", "KallistoExperiment",
           function (object) return(colData(object)))
 
@@ -19,6 +21,7 @@ setMethod("covariates", "KallistoExperiment",
 #' @param value: A DataFrame containing the covariates
 #' @return the KallistoExperiment object, with updated covariates
 #'
+#' @export
 setReplaceMethod("covariates", c("KallistoExperiment", "DataFrame"),
                  function(object, value) {
                    colData(object) <- value
@@ -30,6 +33,7 @@ setReplaceMethod("covariates", c("KallistoExperiment", "DataFrame"),
 #' @param value: A data.frame containing the covariates
 #' @return the KallistoExperiment object, with updated covariates
 #'
+#' @export
 setReplaceMethod("covariates", c("KallistoExperiment", "data.frame"),
                  function(object, value) {
                    colData(object) <- DataFrame(value)
@@ -44,6 +48,7 @@ setGeneric("features<-",
 #' @param object: A KallistoExperiment from which features should be obtained
 #' @return a GRanges or GRangesList of feature annotations
 #'
+#' @export
 setMethod("features", "KallistoExperiment",
           function (object) return(rowData(object)))
 
@@ -52,6 +57,7 @@ setMethod("features", "KallistoExperiment",
 #' @param value: A GenomicRanges instance containing feature annotations
 #' @return the KallistoExperiment object, with updated feature annotations
 #'
+#' @export
 setReplaceMethod("features", c("KallistoExperiment", "GenomicRanges"),
                  function(object, value) {
                    rowData(object) <- value
@@ -63,6 +69,7 @@ setReplaceMethod("features", c("KallistoExperiment", "GenomicRanges"),
 #' @param value: A GRangesList instance containing feature annotations
 #' @return the KallistoExperiment object, with updated feature annotations
 #'
+#' @export
 setReplaceMethod("features", c("KallistoExperiment", "GRangesList"),
                  function(object, value) {
                    rowData(object) <- value
@@ -76,6 +83,7 @@ setGeneric("eff_length", function(object) standardGeneric("eff_length"))
 #' @param object: A KallistoExperiment with effective transcript lengths
 #' @return a matrix of effective transcript lengths
 #'
+#' @export
 setMethod("eff_length", "KallistoExperiment",
           function (object) return(assays(object)$eff_length))
 
@@ -86,16 +94,18 @@ setGeneric("TPM", function(object) standardGeneric("TPM"))
 #' @param object: A KallistoExperiment with estimated counts & effective lengths
 #' @return a matrix of TPMs (transcripts per million)
 #'
+#' @export
 setMethod("TPM", "KallistoExperiment",
           function (object) return(counts(object) / eff_length(object)))
 
 # ERCC generic 
-setGeneric("ERCC", function(object) standardgeneric("ERCC"))
+setGeneric("ERCC", function(object) standardGeneric("ERCC"))
 
 #' @describeIn KallistoExperiment 
 #' @param object: A KallistoExperiment with ERCC spike-in control counts
 #' @return a subsetted KallistoExperiment with just the ERCC features 
 #'
+#' @export
 setMethod("ERCC", "KallistoExperiment",
           function (object) return(object[ grep("^ERCC", rownames(object)), ]))
 

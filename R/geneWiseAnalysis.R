@@ -13,8 +13,16 @@
 #' @import Homo.sapiens
 #' @import Mus.musculus
 #' @import erccdashboard
+#'
+#' @export
 geneWiseAnalysis <- function(res, categories=10, k=2, p.cutoff=0.05, ERCC=TRUE,
                              species=c("Homo.sapiens","Mus.musculus")) {
+
+  ## this is really only meant for a KallistoExperiment
+  if (!is(res, "KallistoExperiment")) {
+    message("This function is optimized for KallistoExperiment objects.")
+    message("It may work for other classes, but we make no guarantees.")
+  }
 
   ## only two supported for now (would be simple to expand, though)
   species <- match.arg(species)
