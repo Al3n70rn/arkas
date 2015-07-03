@@ -40,17 +40,16 @@ setReplaceMethod("covariates", c("KallistoExperiment", "data.frame"),
                    return(object)
                  })
 
-setGeneric("features", function(object) standardGeneric("features"))
-setGeneric("features<-", 
-           function(object, value) standardGeneric("features<-"))
+## set in GenomicFeatures, which we have to import anyways 
+## setGeneric("features", function(object) standardGeneric("features"))
+setGeneric("features<-", function(object, value) standardGeneric("features<-"))
 
 #' @describeIn KallistoExperiment 
 #' @param object: A KallistoExperiment from which features should be obtained
 #' @return a GRanges or GRangesList of feature annotations
 #'
 #' @export
-setMethod("features", "KallistoExperiment",
-          function (object) return(rowData(object)))
+setMethod("features", "KallistoExperiment", function (x) return(rowData(x)))
 
 #' @describeIn KallistoExperiment 
 #' @param object: A KallistoExperiment from which features should be obtained
