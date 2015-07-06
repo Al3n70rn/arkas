@@ -32,4 +32,4 @@ rownames(design) <- colnames(NS)
 exptData(NS)$design <- design
 
 ## save a copy for easy retrieval & easy running of examples
-## save(NS, file="~/Dropbox/artemis/data/NS.rda", compress="xz")
+## save(NS, file="~/Dropbox/artemisData/data/NS.rda", compress="xz")
