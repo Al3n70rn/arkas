@@ -16,7 +16,20 @@ results <- lapply(appSession$samples,
                   bootstraps=appSession$bootstraps,
                   outputPath=appSession$outputPath)
 
-NS <- mergeKallisto(samples, outputPath=appSession$outputPath)
-
 message("AppSession variables:")
 for (i in names(appSession)) message("appSession$", i, " = ", appSession[[i]])
+
+
+NS <- mergeKallisto(samples, outputPath=appSession$outputPath)
+NS$subject <- factor(substr(colnames(NS), 2, 2))
+NS$treatment <- substr(colnames(NS), 1, 1) == "s"
+NS$ID <- NULL
+
+## exptData(SE) == metaData(RSE), should be transparent?!
+design <- with(as(colData(NS), "data.frame"),
+                  model.matrix( ~ treatment + subject ))
+rownames(design) <- colnames(NS)
+exptData(NS)$design <- design
+
+## save a copy for easy retrieval & easy running of examples
+## save(NS, file="~/Dropbox/artemis/data/NS.rda", compress="xz")
