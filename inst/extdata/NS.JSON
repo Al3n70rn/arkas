@@ -1,0 +1,22 @@
+{
+  "samples": [
+    "n1",
+    "n2",
+    "n4",
+    "s1",
+    "s2",
+    "s4"
+  ],
+  "fastaFiles": [
+    "ERCC.fa.gz",
+    "Homo_sapiens.RepBase.20_05.humrep.fa.gz",
+    "Homo_sapiens.RepBase.20_05.humsub.fa.gz",
+    "Homo_sapiens.GRCh38.80.cdna.all.fa.gz",
+    "Homo_sapiens.GRCh38.80.ncrna.fa.gz"
+  ],
+  "bootstraps": 100,
+  "fastaPath": "/Package_data/transcriptomes",
+  "fastqPath": "/data/APPSESSION/data/input/samples",
+  "outputPath": "/data/APPSESSION/data/output/appresults",
+  "AppsessionID": 123456789
+}
