@@ -7,7 +7,7 @@ names(appSession$samples) <- appSession$samples ## so column names get set
 
 ## may not need to 
 appSession$indexName <- indexKallisto(fastaFiles=appSession$fastaFiles,
-                           fastaPath=appSession$fastaPath)$indexName
+                                      fastaPath=appSession$fastaPath)$indexName
 results <- lapply(appSession$samples,
                   runKallisto,
                   indexName=appSession$indexName,
