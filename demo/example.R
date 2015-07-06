@@ -14,8 +14,6 @@ names(samples) <- samples ## so that the column names get set
 #
 indexName <- indexKallisto(fastaFiles=appSession$fastaFiles, 
                            fastaPath=appSession$fastaPath)$indexName
-
-## since these are lightweight runs, run them in parallel!
 results <- lapply(samples, 
                   runKallisto,
                   indexName=indexName,
