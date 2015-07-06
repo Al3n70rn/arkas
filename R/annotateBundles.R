@@ -21,13 +21,27 @@ annotateBundles <- function(res, transcriptome, ...) {
     stop("Only EnsemblDb annotations are supported for now")
   } else { 
     rdat <- annotateEnsembl(res, transcriptome)
-    rdat <- rdat[intersect(names(rdat), rownames(res[[1]]))]
-    fillWithNAs <- function(x) {
+#the res(list) is the fetchKallisto results for kallisto output
+   
+#BUG- the function fillWithNAs(mcols(rdat)[1,]) does not 
+#work after you intersect the data.  ignoring intersection
+
+#found the triple intersection 
+t3<-names(rdat)
+
+   for (i in 1:length(res)){
+     t3<-intersect(t3,rownames(res[[i]]))
+    }
+     #finds the n-intersection between list elements res[[i]] and names(rdat)
+message("the intersection of EnsemblDb with other DB")
+print(rdat[t3]) #printing only, 
+
+      fillWithNAs <- function(x) {
       for (i in 1:ncol(x)) x[,i] <- NA
       x
     }
     if (!all(rownames(res[[1]]) %in% names(rdat))) {
-      bogusMcols <- fillWithNAs(mcols(rdat)[1, ])
+      bogusMcols <- fillWithNAs(mcols(rdat)[1,]) #if the intersection comes up NULL, this line will not perform thus ignore intersection
       defaultGenome <- unique(genome(rdat))
       seqlevels(rdat) <- c(seqlevels(rdat), "Unknown")
       genome(rdat)["Unknown"] <- defaultGenome
