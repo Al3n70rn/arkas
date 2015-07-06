@@ -7,7 +7,7 @@ names(samples) <- samples ## so that the column names get set
 #
 # with(appSession, show(fastaFiles))
 # [1] "ERCC.fa.gz"                              
-# [2] "Homo_sapiens.RepBase.v20_05.humrep.fa.gz"
+# [2] "Homo_sapiens.RepBase.20_05.humrep.fa.gz"
 #
 # with(appSession, show(fastaPath))
 # [1] "/Package_data/transcriptomes"

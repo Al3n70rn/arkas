@@ -8,7 +8,7 @@ indexKallisto <- function(fastaFiles, fastaPath) {
 
   oldwd <- getwd()
   setwd(fastaPath)
-  cleanNames <- function(x) sort(sub("\\.fa", "", sub("\\.gz", "", x)))
+  cleanNames <- function(x) unique(sort(sub("\\.fa", "", sub("\\.gz", "", x))))
   indexName <- paste0(paste(cleanNames(fastaFiles), collapse="_"),".fa.idx")
   command <- paste(c("kallisto index -i", indexName, fastaFiles), collapse=" ")
   retval <- system(command=command)
