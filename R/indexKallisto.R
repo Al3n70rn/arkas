@@ -22,13 +22,14 @@ indexKallisto <- function(fastaFiles, fastaPath) {
   ## See if the index and its digest already exist, and if so, whether they match.
   if (.checkIndexDigest(indexPath) == TRUE) {
     message("Cached, MD5-hashed index found... delete it if you want to regenerate")
+    res$indexDigestFile <- .getIndexDigestFile(indexPath)
     return(res)
   } else { 
- 
     command <- paste(c("kallisto index -i", indexName, fastaFiles), collapse=" ")
     retval <- system(command=command)
     setwd(oldwd)
     if (retval == 0) {
+      res$indexDigestFile <- .makeIndexDigest(indexPath)
       return(res)
     } else { 
       stop("Index generation failed.")
@@ -76,13 +77,21 @@ indexKallisto <- function(fastaFiles, fastaPath) {
 #'
 #' @return            string: the filename where the MD5 digest was saved
 #'
-#' @import tools
+.getIndexDigestFile <- function(indexPath) { 
+  paste0(indexPath, ".md5")
+}
+
+#' @describeIn indexKallisto
+#' 
+#' @param indexPath   string: where the index can supposedly be found
+#'
+#' @return            string: the filename where the MD5 digest was saved
 #'
 .makeIndexDigest <- function(indexPath) {
-  indexMd5File <- paste0(indexPath, ".md5")
+  indexMd5File <- .getIndexDigestFile(indexPath)
   indexMd5 <- .getIndexDigest(indexPath)
   cat(indexMd5, file=indexMd5File)
-  indexMd5File
+  invisible(indexMd5File)
 }
 
 #' @describeIn indexKallisto
