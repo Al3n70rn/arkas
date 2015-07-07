@@ -1,7 +1,7 @@
 #' Pathway analysis and other similar downstream functions
 #'
 #' @param res         a KallistoExperiment from mergeKallisto
-#' @param design      a design matrix with the contrast or coefficient to test in col2
+#' @param design      a design matrix w/contrast or coefficient to test in col2
 #' @param categories  how many categories for ReactomeDB enrichment plots 
 #' @param k           how many gene clusters to construct for comparison
 #' @param p.cutoff    where to set the p-value cutoff for such plots 
@@ -16,8 +16,8 @@
 #' @import erccdashboard
 #'
 #' @export
-geneWiseAnalysis <- function(res, design, categories=10, k=2, p.cutoff=0.05, ERCC=TRUE,
-                             species=c("Homo.sapiens","Mus.musculus")) {
+geneWiseAnalysis <- function(res, design, categories=10, k=2, p.cutoff=0.05, 
+                             ERCC=T, species=c("Homo.sapiens","Mus.musculus")) {
 
   ## this is really only meant for a KallistoExperiment
   if (!is(res, "KallistoExperiment")) {

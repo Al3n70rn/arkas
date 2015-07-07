@@ -74,6 +74,7 @@ mergeKallisto <- function(sampleDirs=NULL,
 
   res <- KallistoExperiment(est_counts=asys$est_counts,
                             eff_length=asys$eff_length,
+                            est_counts_mad=asys$est_counts_mad,
                             transcriptomes=transcriptome,
                             kallistoVersion=kallistoVersion,
                             covariates=coldat,
