@@ -4,14 +4,12 @@
 \alias{annotateEnsembl}
 \title{annotate a pile of TPMs against an Ensembl transcriptome (via EnsDb)}
 \usage{
-annotateEnsembl(res, txome, cols = c("bundle", "name", "egid", "biotype"))
+annotateEnsembl(res, txome, ...)
 }
 \arguments{
 \item{res}{a KallistoExperiment with results from mergeKallisto}
 
 \item{txome}{a character string naming the txome, eg "EnsDb.Hsapiens.v80"}
-
-\item{cols}{names of columns that must be present in order to proceed}
 }
 \description{
 annotate a pile of TPMs against an Ensembl transcriptome (via EnsDb)
