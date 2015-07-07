@@ -1,47 +1,35 @@
 #'
 #' annotate a pile of TPMs against a transcriptome bundle (via e.g. EnsDb)
 #' 
-#' @param res             a list of matrices from mergeKallisto 
-#' @param transcriptome   character string naming the transcriptome
+#' @param kexp            a KallistoExperiment (perhaps somewhat annotated)
+#' @param transcriptomes  character vector (perhaps empty) naming transcriptomes
 #'
-#' @return a GenomicRanges object with annotations
+#' @return                a KallistoExperiment (perhaps further annotated)
 #'
 #' @export
-annotateBundles <- function(res, transcriptome, ...) { 
+annotateBundles <- function(kexp, transcriptomes, ...) { 
 
-  if (!(grepl("(EnsDb|TxDb|Mus|Homo)", transcriptome))) {
-    stop(paste("Don't know how to process ", transcriptome, " annotations..."))
+  if (length(transcriptomes) == 0) {
+    return(kexp)
+  } else if (length(transcriptomes) > 1) {
+    for (transcriptome in transcriptomes) {
+      kexp <- annotateBundles(kexp, transcriptome)
+    }
+    return(kexp)
   } else { 
-    library(transcriptome, character.only=TRUE)
-  }
+    ## actually annotate something, perhaps
+    transcriptome <- transcriptomes
+    if (grepl("EnsDb", ignore.case=TRUE, transcriptome)) {
+      annotateEnsembl(kexp, transcriptome)
+    } else if (grepl("RepBase", ignore.case=TRUE, transcriptome)) {
+      annotateRepeats(kexp, transcriptome) 
+    } else if (grepl("ERCC", ignore.case=TRUE, transcriptome)) {
+      annotateErcc(kexp, transcriptome)
+    } else {       
+      message(paste("Don't know how to annotate", transcriptome))
+      message("Returning the supplied KallistoExperiment unmodified.")
+      return(kexp)
+    }
+  } 
 
-  ## the original idea was to proceed through bundle/transcriptome IDs,
-  ## and winnow out the number of un-annotated txs progressively
-  if (!grepl("EnsDb", transcriptome)) {
-    stop("Only EnsemblDb annotations are supported for now")
-  } else { 
-    rdat <- annotateEnsembl(res, transcriptome)
-    rdat <- rdat[intersect(names(rdat), rownames(res[[1]]))]
-    fillWithNAs <- function(x) {
-      for (i in 1:ncol(x)) x[,i] <- NA
-      x
-    }
-    if (!all(rownames(res[[1]]) %in% names(rdat))) {
-      bogusMcols <- fillWithNAs(mcols(rdat)[1, ])
-      defaultGenome <- unique(genome(rdat))
-      seqlevels(rdat) <- c(seqlevels(rdat), "Unknown")
-      genome(rdat)["Unknown"] <- defaultGenome
-      isCircular(rdat)["Unknown"] <- FALSE
-      seqlengths(rdat)["Unknown"] <- 1
-      bogusGRange <- GRanges("Unknown", IRanges(1, 1), strand="*")
-      mcols(bogusGRange) <- bogusMcols
-      additionalAnnotations <- rep(bogusGRange, 
-                                   length(setdiff(rownames(res[[1]]), 
-                                                  names(rdat))))
-      names(additionalAnnotations) <- setdiff(rownames(res[[1]]), names(rdat))
-      seqinfo(additionalAnnotations) <- seqinfo(rdat)["Unknown"]
-      rdat <- c(rdat, additionalAnnotations)[as.vector(rownames(res[[1]]))] 
-    }
-  }
-  return(rdat)
 }

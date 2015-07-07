@@ -5,22 +5,26 @@
 #'
 #' @return        a KallistoExperiment, perhaps with ERCC spike-ins annotated
 #'
+#' @seealso       ERCC 
+#' 
 #' @export
+#'
 annotateErcc <- function(kexp, ...) { 
 
-  ## the original idea was to proceed through bundle/transcriptome IDs,
-  ## and winnow out the number of un-annotated txs progressively
-  data(ERCC)
-  data(erccSpikeIn) ## dummy rowData with appropriate mcols()
-  rdat <- rowData(kexp)[!grepl("ERCC", rownames(kexp))]
-  
-  stop("Not finished (close, though...)")
-  erccAnnotations <- rep(erccSpikeIn, sum(grepl("ERCC", rownames(kexp))))
-  names(erccAnnotations) <- grep("ERCC", rownames(kexp), value=TRUE) 
+  data("ERCC", package="artemis")
+  data("erccSpikeIn", package="artemis") ## dummy granges w/appropriate mcols
 
-  ## FIXME: annotate the various concentrations properly from ERCC$...
+  ## subset to only the ERCC spike-ins mapped by Kallisto...
+  ERCC <- ERCC[intersect(rownames(kexp), rownames(ERCC)), ] 
+  erccAnnotations <- rep(erccSpikeIn, nrow(ERCC))
+  names(erccAnnotations) <- rownames(ERCC)
 
-  rowData(kexp) <- c(rdat, erccAnnotations)[rownames(res)]
+  ## annotate by subgroup: as noted in ?ERCC, this corresponds to mix properties
+  erccAnnotations$tx_biotype <- paste0("erccSpikeIn_subgroup", ERCC$subgroup) 
+  features(kexp)[names(erccAnnotations)] <- erccAnnotations 
+
+  message("ERCC spike-ins annotated.")
+  message("For more information, see ?ERCC, data(ERCC), and show(ERCC).")
   return(kexp)
 
 }
