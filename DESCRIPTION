@@ -1,11 +1,11 @@
 Package: artemis
 Type: Package
 Title: various utility functions for fast, informative RNAseq analysis
-Version: 0.1.56
-Date: 2015-07-06
+Version: 0.1.57
+Date: 2015-07-07
 Author: Tim Triche, Jr., Anthony Colombo, Harold Pimentel
-Depends: limma, ReactomePA, Matrix, jsonlite, parallel, ssizeRNA, Homo.sapiens, Mus.musculus, GenomicRanges, GenomeInfoDb, RUVSeq, FGNet, tools
-Imports: rhdf5, matrixStats, GenomicRanges, GenomicFeatures, limma 
+Depends: limma, ReactomePA, Matrix, jsonlite, parallel, ssizeRNA, Homo.sapiens, Mus.musculus, GenomicRanges, GenomeInfoDb, RUVSeq, FGNet, tools, gage
+Imports: rhdf5, matrixStats, GenomicRanges, GenomicFeatures, limma
 Suggests: roxygen2, EnsDb.Hsapiens.v80, EnsDb.Mmusculus.v80, knitr
 Maintainer: Tim Triche, Jr. <tim.triche@gmail.com>
 Description: utility functions for Artemis (hunting companion of Kallisto)

@@ -44,12 +44,19 @@ setReplaceMethod("covariates", c("KallistoExperiment", "data.frame"),
 ## setGeneric("features", function(object) standardGeneric("features"))
 setGeneric("features<-", function(object, value) standardGeneric("features<-"))
 
+# annoying helper function
+.isRSE <- function(x) (class(try(rowData(x), silent=TRUE)) == "try-error")
+
 #' @describeIn KallistoExperiment 
 #' @param object: A KallistoExperiment from which features should be obtained
 #' @return a GRanges or GRangesList of feature annotations
 #'
 #' @export
-setMethod("features", "KallistoExperiment", function (x) return(rowData(x)))
+setMethod("features", "KallistoExperiment", 
+          function (x) {
+            if (.isRSE(x)) rowRanges(x)
+            else rowData(x)
+          })
 
 #' @describeIn KallistoExperiment 
 #' @param object: A KallistoExperiment from which features should be obtained
@@ -59,7 +66,8 @@ setMethod("features", "KallistoExperiment", function (x) return(rowData(x)))
 #' @export
 setReplaceMethod("features", c("KallistoExperiment", "GenomicRanges"),
                  function(object, value) {
-                   rowData(object) <- value
+                   if (.isRSE(object)) rowRanges(object) <- value
+                   else rowData(object) <- value
                    return(object)
                  })
 
@@ -71,7 +79,8 @@ setReplaceMethod("features", c("KallistoExperiment", "GenomicRanges"),
 #' @export
 setReplaceMethod("features", c("KallistoExperiment", "GRangesList"),
                  function(object, value) {
-                   rowData(object) <- value
+                   if (.isRSE(object)) rowRanges(object) <- value
+                   else rowData(object) <- value
                    return(object)
                  })
 

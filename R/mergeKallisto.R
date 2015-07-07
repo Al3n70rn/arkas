@@ -1,37 +1,46 @@
-#' merge multiple Kallisto results, yielding a KallistoExperiment 
+#' Merge multiple Kallisto results, yielding a KallistoExperiment.
+#'
+#' If no transcriptomes are specified (or the ones specified are not found),
+#' the resulting KallistoExperiment will have a rowData/rowRanges object 
+#' which consists entirely of unannotated transcripts from chromosome "Unknown".
+#' If transcriptomes are specified and annotations for those transcriptomes are
+#' found, the transcripts described in the annotations will be fully annotated
+#' for transcript ID, gene ID, gene name, entrez ID, and transcript biotype, 
+#' provided that these fields are supported in the annotation resources.
 #'
 #' FIXME: automatically determine which transcriptomes were used 
 #'
-#' @param sampleDirs    character: directories holding Kallisto results (NULL)
-#' @param outputPath    character: base path to the sampleDirs (default is .)
-#' @param covariates    data.frame or DataFrame: per-sample covariates (NULL)
-#' @param transcriptome character: target transcriptome (EnsDb.Hsapiens.v80)
-#' @param parallel      boolean: try to run the merge in parallel? (TRUE)
+#' @param outputDirs    character: directories holding Kallisto results (NULL)
+#' @param outputPath     character: base path to the outputDirs (default is .)
+#' @param covariates     data.frame or DataFrame: per-sample covariates (NULL)
+#' @param transcriptomes vector: target transcriptomes (EnsDb.Hsapiens.v80)
+#' @param parallel       boolean: try to run the merge in parallel? (TRUE)
 #'
 #' @export
 #'
-mergeKallisto <- function(sampleDirs=NULL,
+mergeKallisto <- function(outputDirs=NULL,
                           outputPath=".",
                           covariates=NULL,
-                          transcriptome="EnsDb.Hsapiens.v80",
+                          transcriptomes=c("ERCC",
+                                           "EnsDb.Hsapiens.v80",
+                                           "RepBase.v20_05"),
                           parallel=TRUE,
                           ...) { 
 
-  if (is.null(sampleDirs) & is.null(covariates)) {
-    stop("At least one of sampleDirs or covariates must be non-null to proceed")
+  if (is.null(outputDirs) & is.null(covariates)) {
+    stop("At least one of outputDirs or covariates must be non-null to proceed")
   } 
 
-  if (is.null(sampleDirs)) {
-    if (!"sampleDir" %in% names(covariates)) { 
-      stop("Your covariates need to have a column $sampleDir for each sample")
+  if (is.null(outputDirs)) {
+    if (!"outputDir" %in% names(covariates)) { 
+      stop("Your covariates need to have a column $outputDir for each sample")
     } else { 
-      sampleDirs <- covariates$sampleDir
+      outputDirs <- covariates$sampleDir
     }
   }
-  targets <- paste0(path.expand(outputPath), "/", sampleDirs)
+  targets <- paste0(path.expand(outputPath), "/", outputDirs)
   stopifnot(all(targets %in% list.dirs(outputPath)))
-  names(targets) <- sampleDirs
-
+  names(targets) <- outputDirs
 
   if (parallel == TRUE) { 
     res <- mclapply(targets, fetchKallisto)
@@ -56,7 +65,7 @@ mergeKallisto <- function(sampleDirs=NULL,
   stopifnot(identical(colnames(asys[[1]]), colnames(asys[[2]])))
   coldat <- DataFrame(ID=colnames(asys[[1]]))
   
-  ## FIXME: ensure they all nused the same transcriptome
+  ## FIXME: ensure they all used the same transcriptomes/aggregate-index
   ## ktxs <- sapply(res, extractTranscriptomeFromCall)
   ## 
   ## if (length(unique(ktxs)) > 1) {
@@ -65,22 +74,19 @@ mergeKallisto <- function(sampleDirs=NULL,
   ##   message("Setting transcriptome automatically from Kallisto call string.")
   ##   transcriptome <- matchTranscriptome(unique(ktxs))
   ## }
-  ##
-  if(!is.null(transcriptome)) {
-    rowdat <- annotateBundles(res, transcriptome)
-  } else {
-    rowdat <- GRangesList()
-  }
 
+  data(unannotatedTranscript)
+  rowdat <- rep(unannotatedTranscript, nrow(asys$est_counts))
   res <- KallistoExperiment(est_counts=asys$est_counts,
                             eff_length=asys$eff_length,
                             est_counts_mad=asys$est_counts_mad,
-                            transcriptomes=transcriptome,
+                            transcriptomes=transcriptomes,
                             kallistoVersion=kallistoVersion,
                             covariates=coldat,
                             features=rowdat,
                             ...)
   colnames(res) <- covariates(res)$ID 
+  if(!is.null(transcriptomes)) res <- annotateBundles(res, transcriptomes)
   return(res)
 
 }
