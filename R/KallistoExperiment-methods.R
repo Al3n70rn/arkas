@@ -108,4 +108,29 @@ setGeneric("ERCC", function(object) standardGeneric("ERCC"))
 setMethod("ERCC", "KallistoExperiment",
           function (object) return(object[ grep("^ERCC", rownames(object)), ]))
 
+
+# kallistoVersion generic 
+setGeneric("kallistoVersion", 
+           function(object) standardGeneric("kallistoVersion"))
+
+#' @describeIn KallistoExperiment 
+#' @param object: A KallistoExperiment
+#' @return a string: the version of Kallisto used 
+#'
+#' @export
+setMethod("kallistoVersion", "KallistoExperiment",
+          function (object) return(object@kallistoVersion))
+
+# trancscriptomes generic 
+setGeneric("transcriptomes", 
+           function(object) standardGeneric("transcriptomes"))
+
+#' @describeIn KallistoExperiment 
+#' @param object: A KallistoExperiment
+#' @return a string: the transcriptomes against which reads were pseudoaligned
+#'
+#' @export
+setMethod("transcriptomes", "KallistoExperiment",
+          function (object) return(object@transcriptomes))
+
 # FIXME: add method to retrieve normalization factors if ERCC spike-ins used 
