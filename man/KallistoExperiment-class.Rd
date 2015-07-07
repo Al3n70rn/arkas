@@ -13,6 +13,8 @@
 \alias{features,KallistoExperiment-method}
 \alias{features<-,KallistoExperiment,GRangesList-method}
 \alias{features<-,KallistoExperiment,GenomicRanges-method}
+\alias{kallistoVersion,KallistoExperiment-method}
+\alias{transcriptomes,KallistoExperiment-method}
 \title{A SummarizedExperiment subclass that stores multiple Kallisto runs}
 \usage{
 \S4method{counts}{KallistoExperiment}(object)
@@ -34,6 +36,10 @@
 \S4method{TPM}{KallistoExperiment}(object)
 
 \S4method{ERCC}{KallistoExperiment}(object)
+
+\S4method{kallistoVersion}{KallistoExperiment}(object)
+
+\S4method{transcriptomes}{KallistoExperiment}(object)
 }
 \arguments{
 \item{object:}{A KallistoExperiment from which to retrieve counts}
@@ -63,6 +69,10 @@
 \item{object:}{A KallistoExperiment with estimated counts & effective lengths}
 
 \item{object:}{A KallistoExperiment with ERCC spike-in control counts}
+
+\item{object:}{A KallistoExperiment}
+
+\item{object:}{A KallistoExperiment}
 }
 \value{
 the KallistoExperiment object, with updated covariates
@@ -80,6 +90,10 @@ a matrix of effective transcript lengths
 a matrix of TPMs (transcripts per million)
 
 a subsetted KallistoExperiment with just the ERCC features
+
+a string: the version of Kallisto used
+
+a string: the transcriptomes against which reads were pseudoaligned
 }
 \description{
 FIXME: add RUVg-derived ERCC-calibrated normalization factors in metadata
@@ -105,6 +119,10 @@ FIXME: add RUVg-derived ERCC-calibrated normalization factors in metadata
 \item \code{TPM}: 
 
 \item \code{ERCC}: 
+
+\item \code{kallistoVersion}: 
+
+\item \code{transcriptomes}: 
 }}
 \section{Slots}{
 

@@ -5,12 +5,12 @@
 \title{Pathway analysis and other similar downstream functions}
 \usage{
 geneWiseAnalysis(res, design, categories = 10, k = 2, p.cutoff = 0.05,
-  ERCC = TRUE, species = c("Homo.sapiens", "Mus.musculus"))
+  ERCC = T, species = c("Homo.sapiens", "Mus.musculus"))
 }
 \arguments{
 \item{res}{a KallistoExperiment from mergeKallisto}
 
-\item{design}{a design matrix with the contrast or coefficient to test in col2}
+\item{design}{a design matrix w/contrast or coefficient to test in col2}
 
 \item{categories}{how many categories for ReactomeDB enrichment plots}
 
