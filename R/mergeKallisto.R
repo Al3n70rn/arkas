@@ -35,7 +35,7 @@ mergeKallisto <- function(outputDirs=NULL,
     if (!"outputDir" %in% names(covariates)) { 
       stop("Your covariates need to have a column $outputDir for each sample")
     } else { 
-      outputDirs <- covariates$sampleDir
+      outputDirs <- covariates$outputDir
     }
   }
   targets <- paste0(path.expand(outputPath), "/", outputDirs)
