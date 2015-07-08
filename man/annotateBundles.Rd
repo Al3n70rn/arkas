@@ -4,15 +4,15 @@
 \alias{annotateBundles}
 \title{annotate a pile of TPMs against a transcriptome bundle (via e.g. EnsDb)}
 \usage{
-annotateBundles(res, transcriptome, ...)
+annotateBundles(kexp, transcriptomes, ...)
 }
 \arguments{
-\item{res}{a list of matrices from mergeKallisto}
+\item{kexp}{a KallistoExperiment (perhaps somewhat annotated)}
 
-\item{transcriptome}{character string naming the transcriptome}
+\item{transcriptomes}{character vector (perhaps empty) naming transcriptomes}
 }
 \value{
-a GenomicRanges object with annotations
+a KallistoExperiment (perhaps further annotated)
 }
 \description{
 annotate a pile of TPMs against a transcriptome bundle (via e.g. EnsDb)

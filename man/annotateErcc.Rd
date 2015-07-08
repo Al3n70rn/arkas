@@ -17,4 +17,7 @@ a KallistoExperiment, perhaps with ERCC spike-ins annotated
 annotate the ERCC spike-ins found amongst the transcripts in a Kallisto run
 (note: artemis includes ThermoFisher/Life annotations for these controls.)
 }
+\seealso{
+ERCC
+}
 

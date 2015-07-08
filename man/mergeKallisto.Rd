@@ -2,23 +2,33 @@
 % Please edit documentation in R/mergeKallisto.R
 \name{mergeKallisto}
 \alias{mergeKallisto}
-\title{merge multiple Kallisto results, yielding a KallistoExperiment}
+\title{Merge multiple Kallisto results, yielding a KallistoExperiment.}
 \usage{
-mergeKallisto(sampleDirs = NULL, outputPath = ".", covariates = NULL,
-  transcriptome = "EnsDb.Hsapiens.v80", parallel = TRUE, ...)
+mergeKallisto(outputDirs = NULL, outputPath = ".", covariates = NULL,
+  transcriptomes = c("ERCC", "EnsDb.Hsapiens.v80", "RepBase.v20_05"),
+  parallel = TRUE, ...)
 }
 \arguments{
-\item{sampleDirs}{character: directories holding Kallisto results (NULL)}
+\item{outputDirs}{character: directories holding Kallisto results (NULL)}
 
-\item{outputPath}{character: base path to the sampleDirs (default is .)}
+\item{outputPath}{character: base path to the outputDirs (default is .)}
 
 \item{covariates}{data.frame or DataFrame: per-sample covariates (NULL)}
 
-\item{transcriptome}{character: target transcriptome (EnsDb.Hsapiens.v80)}
+\item{transcriptomes}{vector: target transcriptomes (EnsDb.Hsapiens.v80)}
 
 \item{parallel}{boolean: try to run the merge in parallel? (TRUE)}
 }
 \description{
+If no transcriptomes are specified (or the ones specified are not found),
+the resulting KallistoExperiment will have a rowData/rowRanges object
+which consists entirely of unannotated transcripts from chromosome "Unknown".
+If transcriptomes are specified and annotations for those transcriptomes are
+found, the transcripts described in the annotations will be fully annotated
+for transcript ID, gene ID, gene name, entrez ID, and transcript biotype,
+provided that these fields are supported in the annotation resources.
+}
+\details{
 FIXME: automatically determine which transcriptomes were used
 }
 
