@@ -4,17 +4,17 @@
 \alias{annotateRepeats}
 \title{annotate the repeats found amongst unique transcripts in a KallistoExperiment}
 \usage{
-annotateRepeats(kexp, repeats, ...)
+annotateRepeats(kexp, repeatome, ...)
 }
 \arguments{
 \item{kexp}{a KallistoExperiment}
 
-\item{repeats}{the names of the repeat elements in the experiment}
+\item{repeatome}{the name of the repeatome (presumably annotated in a db)}
 }
 \value{
 a KallistoExperiment, perhaps with repeats annotated
 }
 \description{
-annotate the repeats found amongst unique transcripts in a KallistoExperiment
+FIXME: actually annotate some repeats
 }
 

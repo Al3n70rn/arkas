@@ -2,7 +2,6 @@
 % Please edit documentation in R/KallistoExperiment-class.R, R/KallistoExperiment-methods.R
 \docType{class}
 \name{KallistoExperiment-class}
-\alias{ERCC,KallistoExperiment-method}
 \alias{KallistoExperiment-class}
 \alias{TPM,KallistoExperiment-method}
 \alias{counts,KallistoExperiment-method}
@@ -35,8 +34,6 @@
 
 \S4method{TPM}{KallistoExperiment}(object)
 
-\S4method{ERCC}{KallistoExperiment}(object)
-
 \S4method{kallistoVersion}{KallistoExperiment}(object)
 
 \S4method{transcriptomes}{KallistoExperiment}(object)
@@ -68,8 +65,6 @@
 
 \item{object:}{A KallistoExperiment with estimated counts & effective lengths}
 
-\item{object:}{A KallistoExperiment with ERCC spike-in control counts}
-
 \item{object:}{A KallistoExperiment}
 
 \item{object:}{A KallistoExperiment}
@@ -88,8 +83,6 @@ the KallistoExperiment object, with updated feature annotations
 a matrix of effective transcript lengths
 
 a matrix of TPMs (transcripts per million)
-
-a subsetted KallistoExperiment with just the ERCC features
 
 a string: the version of Kallisto used
 
@@ -117,8 +110,6 @@ FIXME: add RUVg-derived ERCC-calibrated normalization factors in metadata
 \item \code{eff_length}: 
 
 \item \code{TPM}: 
-
-\item \code{ERCC}: 
 
 \item \code{kallistoVersion}: 
 
