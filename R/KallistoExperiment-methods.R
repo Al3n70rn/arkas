@@ -106,18 +106,6 @@ setGeneric("TPM", function(object) standardGeneric("TPM"))
 setMethod("TPM", "KallistoExperiment",
           function (object) return(counts(object) / eff_length(object)))
 
-# ERCC generic 
-setGeneric("ERCC", function(object) standardGeneric("ERCC"))
-
-#' @describeIn KallistoExperiment 
-#' @param object: A KallistoExperiment with ERCC spike-in control counts
-#' @return a subsetted KallistoExperiment with just the ERCC features 
-#'
-#' @export
-setMethod("ERCC", "KallistoExperiment",
-          function (object) return(object[ grep("^ERCC", rownames(object)), ]))
-
-
 # kallistoVersion generic 
 setGeneric("kallistoVersion", 
            function(object) standardGeneric("kallistoVersion"))
