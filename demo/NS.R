@@ -20,7 +20,7 @@ message("AppSession variables:")
 for (i in names(appSession)) message("appSession$", i, " = ", appSession[[i]])
 
 
-NS <- mergeKallisto(samples, outputPath=appSession$outputPath)
+NS <- mergeKallisto(appSession$samples, outputPath=appSession$outputPath)
 NS$subject <- factor(substr(colnames(NS), 2, 2))
 NS$treatment <- substr(colnames(NS), 1, 1) == "s"
 NS$ID <- NULL

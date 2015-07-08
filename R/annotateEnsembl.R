@@ -15,6 +15,7 @@ annotateEnsembl <- function(kexp, transcriptome, ...) {
   if (!grepl("EnsDb", transcriptome)) {
     message("You must specify a supported ENSEMBL transcriptome db (EnsDb)")
   } else { 
+    message("Annotating Ensembl transcripts from ", transcriptome, "...")
     library(transcriptome, character.only=TRUE)
     txcolumns <- c("gene_id", "gene_name", "entrezid", "tx_biotype")
     txmap <- transcripts(get(transcriptome), columns=txcolumns)
