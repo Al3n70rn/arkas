@@ -7,4 +7,8 @@
 #' 
 #' @export
 #' 
-isRSE <- function(x) (class(try(rowData(x), silent=TRUE)) == "try-error")
+isRSE <- function(x) {
+  # object does not have a slot RowData and is not a SummarizedExperiment0
+  (class(try(rowData(x), silent=TRUE)) == "try-error") && 
+  !is(x, "SummarizedExperiment0")
+}
