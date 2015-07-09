@@ -6,6 +6,10 @@
 #'
 setMethod("covariates", "SummarizedExperiment",
           function (object) return(colData(object)))
+setMethod("covariates", "SummarizedExperiment0",
+          function (object) return(colData(object)))
+setMethod("covariates", "RangedSummarizedExperiment",
+          function (object) return(colData(object)))
 
 
 #' @describeIn KallistoExperiment 
@@ -16,7 +20,8 @@ setMethod("covariates", "SummarizedExperiment",
 #' @export
 #'
 setMethod("features", "SummarizedExperiment", 
-          function (x) {
-            if (isRSE(x)) rowRanges(x)
-            else rowData(x)
-          })
+          function (x) if (isRSE(x)) rowRanges(x) else rowData(x))
+setMethod("features", "SummarizedExperiment0", 
+          function (x) if (isRSE(x)) rowRanges(x) else rowData(x))
+setMethod("features", "RangedSummarizedExperiment", 
+          function (x) rowRanges(x))
