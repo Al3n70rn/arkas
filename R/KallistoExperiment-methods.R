@@ -6,8 +6,6 @@ setMethod("counts", "KallistoExperiment",
           function (object) return(assays(object)$est_counts))
 
 setGeneric("covariates", function(object) standardGeneric("covariates"))
-setGeneric("covariates<-", 
-           function(object, value) standardGeneric("covariates<-"))
 
 #' @describeIn KallistoExperiment 
 #' @param object: A KallistoExperiment from which to retrieve covariates
@@ -16,36 +14,9 @@ setGeneric("covariates<-",
 setMethod("covariates", "KallistoExperiment",
           function (object) return(colData(object)))
 
-#' @describeIn KallistoExperiment 
-#' @param object: A KallistoExperiment to which covariates should be assigned
-#' @param value: A DataFrame containing the covariates
-#' @return the KallistoExperiment object, with updated covariates
-#'
-#' @export
-setReplaceMethod("covariates", c("KallistoExperiment", "DataFrame"),
-                 function(object, value) {
-                   colData(object) <- value
-                   return(object)
-                 })
-
-#' @describeIn KallistoExperiment 
-#' @param object: A KallistoExperiment to which covariates should be assigned
-#' @param value: A data.frame containing the covariates
-#' @return the KallistoExperiment object, with updated covariates
-#'
-#' @export
-setReplaceMethod("covariates", c("KallistoExperiment", "data.frame"),
-                 function(object, value) {
-                   colData(object) <- DataFrame(value)
-                   return(object)
-                 })
-
 ## set in GenomicFeatures, which we have to import anyways 
 ## setGeneric("features", function(object) standardGeneric("features"))
 setGeneric("features<-", function(object, value) standardGeneric("features<-"))
-
-# annoying helper function
-.isRSE <- function(x) (class(try(rowData(x), silent=TRUE)) == "try-error")
 
 #' @describeIn KallistoExperiment 
 #' @param object: A KallistoExperiment from which features should be obtained
@@ -54,7 +25,7 @@ setGeneric("features<-", function(object, value) standardGeneric("features<-"))
 #' @export
 setMethod("features", "KallistoExperiment", 
           function (x) {
-            if (.isRSE(x)) rowRanges(x)
+            if (isRSE(x)) rowRanges(x)
             else rowData(x)
           })
 
@@ -66,7 +37,7 @@ setMethod("features", "KallistoExperiment",
 #' @export
 setReplaceMethod("features", c("KallistoExperiment", "GenomicRanges"),
                  function(object, value) {
-                   if (.isRSE(object)) rowRanges(object) <- value
+                   if (isRSE(object)) rowRanges(object) <- value
                    else rowData(object) <- value
                    return(object)
                  })
@@ -79,7 +50,7 @@ setReplaceMethod("features", c("KallistoExperiment", "GenomicRanges"),
 #' @export
 setReplaceMethod("features", c("KallistoExperiment", "GRangesList"),
                  function(object, value) {
-                   if (.isRSE(object)) rowRanges(object) <- value
+                   if (isRSE(object)) rowRanges(object) <- value
                    else rowData(object) <- value
                    return(object)
                  })

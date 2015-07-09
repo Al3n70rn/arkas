@@ -19,7 +19,7 @@ results <- lapply(appSession$samples,
 message("AppSession variables:")
 for (i in names(appSession)) message("appSession$", i, " = ", appSession[[i]])
 
-
+## FIXME: add to documentation and use .h5 files from the artemisData package
 NS <- mergeKallisto(appSession$samples, outputPath=appSession$outputPath)
 NS$subject <- factor(substr(colnames(NS), 2, 2))
 NS$treatment <- substr(colnames(NS), 1, 1) == "s"
