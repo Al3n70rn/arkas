@@ -4,6 +4,8 @@
 #' @param method  how to link up gene/transcript IDs with functional terms
 #' @param groups  a factor indicating groups along which results can be split
 #'
+#' @importFrom matrixStats rowSds 
+#' 
 #' @import FGNet
 #' @import gage
 #'
