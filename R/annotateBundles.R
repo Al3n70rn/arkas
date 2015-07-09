@@ -33,10 +33,16 @@ t3<-names(rdat)
      t3<-intersect(t3,rownames(res[[i]]))
     }
      #finds the n-intersection between list elements res[[i]] and names(rdat)
-message("the intersection of EnsemblDb with other DB")
-print(rdat[t3]) #printing only, 
 
-      fillWithNAs <- function(x) {
+
+if (length(rdat[t3])==0){
+ print("the annotation has 0 ranges")
+ }
+if (length(rdat[t3])>0){
+  rdat<-rdat[t3]
+}
+
+     fillWithNAs <- function(x) {
       for (i in 1:ncol(x)) x[,i] <- NA
       x
     }
