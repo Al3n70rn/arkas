@@ -1,27 +1,50 @@
 #' @describeIn KallistoExperiment 
 #'
-#' @param object: A SummarizedExperiment from which to retrieve covariates
+#' @param object: something from which to retrieve covariates
 #'
 #' @export
 #'
-setMethod("covariates", "SummarizedExperiment",
+setMethod("covariates", "ANY",
           function (object) return(colData(object)))
-setMethod("covariates", "SummarizedExperiment0",
-          function (object) return(colData(object)))
-setMethod("covariates", "RangedSummarizedExperiment",
-          function (object) return(colData(object)))
-
 
 #' @describeIn KallistoExperiment 
 #'
-#' @param   object: A KallistoExperiment from which features should be obtained
+#' @param   object: something to which covariates should be assigned
+#' @param   value: the covariates to assign (usually a data.frame or DataFrame)
+#'
+#' @return the object, perhaps with updated covariates
+#'
+#' @export
+#'
+setReplaceMethod("covariates", c("ANY", "ANY"), 
+                 function(object, value) {
+                   colData(object) <- DataFrame(value)
+                   return(object)
+                 })
+
+#' @describeIn KallistoExperiment 
+#'
+#' @param   object: something from which features should be obtained
+#'
 #' @return  a GRanges or GRangesList of feature annotations
 #'
 #' @export
 #'
-setMethod("features", "SummarizedExperiment", 
+setMethod("features", "ANY", 
           function (x) if (isRSE(x)) rowRanges(x) else rowData(x))
-setMethod("features", "SummarizedExperiment0", 
-          function (x) if (isRSE(x)) rowRanges(x) else rowData(x))
-setMethod("features", "RangedSummarizedExperiment", 
-          function (x) rowRanges(x))
+
+#' @describeIn KallistoExperiment 
+#'
+#' @param   object: something to which features should be assigned
+#' @param   value: the features to assign (usually a GRanges or GRangesList)
+#'
+#' @return the object, perhaps with updated feature annotations
+#'
+#' @export
+#'
+setReplaceMethod("features", c("ANY", "ANY"), 
+                 function(object, value) {
+                   if (isRSE(object)) rowRanges(object) <- value
+                   else rowData(object) <- value
+                   return(object)
+                 })

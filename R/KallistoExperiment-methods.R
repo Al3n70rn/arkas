@@ -5,7 +5,10 @@
 setMethod("counts", "KallistoExperiment",
           function (object) return(assays(object)$est_counts))
 
+## new generics for artemis 
 setGeneric("covariates", function(object) standardGeneric("covariates"))
+setGeneric("covariates<-", 
+           function(object, value) standardGeneric("covariates<-"))
 
 #' @describeIn KallistoExperiment 
 #' @param object: A KallistoExperiment from which to retrieve covariates
@@ -19,36 +22,26 @@ setMethod("covariates", "KallistoExperiment",
 setGeneric("features<-", function(object, value) standardGeneric("features<-"))
 
 #' @describeIn KallistoExperiment 
+#'
 #' @param object: A KallistoExperiment from which features should be obtained
+#'
 #' @return a GRanges or GRangesList of feature annotations
 #'
 #' @export
+#'
 setMethod("features", "KallistoExperiment", 
-          function (x) {
-            if (isRSE(x)) rowRanges(x)
-            else rowData(x)
-          })
+          function (x) if (isRSE(x)) rowRanges(x) else rowData(x))
 
 #' @describeIn KallistoExperiment 
+#'
 #' @param object: A KallistoExperiment from which features should be obtained
-#' @param value: A GenomicRanges instance containing feature annotations
+#' @param value:  Some feature annotations, usually GRanges or GRangesList 
+#'
 #' @return the KallistoExperiment object, with updated feature annotations
 #'
 #' @export
-setReplaceMethod("features", c("KallistoExperiment", "GenomicRanges"),
-                 function(object, value) {
-                   if (isRSE(object)) rowRanges(object) <- value
-                   else rowData(object) <- value
-                   return(object)
-                 })
-
-#' @describeIn KallistoExperiment 
-#' @param object: A KallistoExperiment from which features should be obtained
-#' @param value: A GRangesList instance containing feature annotations
-#' @return the KallistoExperiment object, with updated feature annotations
 #'
-#' @export
-setReplaceMethod("features", c("KallistoExperiment", "GRangesList"),
+setReplaceMethod("features", c("KallistoExperiment", "ANY"),
                  function(object, value) {
                    if (isRSE(object)) rowRanges(object) <- value
                    else rowData(object) <- value

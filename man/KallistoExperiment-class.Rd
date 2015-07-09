@@ -5,13 +5,14 @@
 \alias{KallistoExperiment-class}
 \alias{TPM,KallistoExperiment-method}
 \alias{counts,KallistoExperiment-method}
+\alias{covariates,ANY-method}
 \alias{covariates,KallistoExperiment-method}
-\alias{covariates,SummarizedExperiment-method}
+\alias{covariates<-,ANY-method}
 \alias{eff_length,KallistoExperiment-method}
+\alias{features,ANY-method}
 \alias{features,KallistoExperiment-method}
-\alias{features,SummarizedExperiment-method}
-\alias{features<-,KallistoExperiment,GRangesList-method}
-\alias{features<-,KallistoExperiment,GenomicRanges-method}
+\alias{features<-,ANY-method}
+\alias{features<-,KallistoExperiment-method}
 \alias{kallistoVersion,KallistoExperiment-method}
 \alias{transcriptomes,KallistoExperiment-method}
 \title{A SummarizedExperiment subclass that stores multiple Kallisto runs}
@@ -22,9 +23,7 @@
 
 \S4method{features}{KallistoExperiment}(x)
 
-\S4method{features}{KallistoExperiment,GenomicRanges}(object) <- value
-
-\S4method{features}{KallistoExperiment,GRangesList}(object) <- value
+\S4method{features}{KallistoExperiment}(object) <- value
 
 \S4method{eff_length}{KallistoExperiment}(object)
 
@@ -34,9 +33,13 @@
 
 \S4method{transcriptomes}{KallistoExperiment}(object)
 
-\S4method{covariates}{SummarizedExperiment}(object)
+\S4method{covariates}{ANY}(object)
 
-\S4method{features}{SummarizedExperiment}(x)
+\S4method{covariates}{ANY}(object) <- value
+
+\S4method{features}{ANY}(x)
+
+\S4method{features}{ANY}(object) <- value
 }
 \arguments{
 \item{object:}{A KallistoExperiment from which to retrieve counts}
@@ -47,11 +50,7 @@
 
 \item{object:}{A KallistoExperiment from which features should be obtained}
 
-\item{value:}{A GenomicRanges instance containing feature annotations}
-
-\item{object:}{A KallistoExperiment from which features should be obtained}
-
-\item{value:}{A GRangesList instance containing feature annotations}
+\item{value:}{Some feature annotations, usually GRanges or GRangesList}
 
 \item{object:}{A KallistoExperiment with effective transcript lengths}
 
@@ -61,14 +60,20 @@
 
 \item{object:}{A KallistoExperiment}
 
-\item{object:}{A SummarizedExperiment from which to retrieve covariates}
+\item{object:}{something from which to retrieve covariates}
 
-\item{object:}{A KallistoExperiment from which features should be obtained}
+\item{object:}{something to which covariates should be assigned}
+
+\item{value:}{the covariates to assign (usually a data.frame or DataFrame)}
+
+\item{object:}{something from which features should be obtained}
+
+\item{object:}{something to which features should be assigned}
+
+\item{value:}{the features to assign (usually a GRanges or GRangesList)}
 }
 \value{
 a GRanges or GRangesList of feature annotations
-
-the KallistoExperiment object, with updated feature annotations
 
 the KallistoExperiment object, with updated feature annotations
 
@@ -80,7 +85,11 @@ a string: the version of Kallisto used
 
 a string: the transcriptomes against which reads were pseudoaligned
 
+the object, perhaps with updated covariates
+
 a GRanges or GRangesList of feature annotations
+
+the object, perhaps with updated feature annotations
 }
 \description{
 FIXME: add RUVg-derived ERCC-calibrated normalization factors in metadata
@@ -95,8 +104,6 @@ FIXME: add RUVg-derived ERCC-calibrated normalization factors in metadata
 
 \item \code{features<-}: 
 
-\item \code{features<-}: 
-
 \item \code{eff_length}: 
 
 \item \code{TPM}: 
@@ -107,7 +114,11 @@ FIXME: add RUVg-derived ERCC-calibrated normalization factors in metadata
 
 \item \code{covariates}: 
 
+\item \code{covariates<-}: 
+
 \item \code{features}: 
+
+\item \code{features<-}: 
 }}
 \section{Slots}{
 
