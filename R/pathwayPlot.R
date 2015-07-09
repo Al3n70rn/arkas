@@ -12,6 +12,6 @@
 pathwayPlot <- function(kexp, method="gage", groups=NULL, ...) { 
   
   message("I need some work before I'm done...")
-  message("https://github.com/Bioconductor-mirror/FGNet/blob/master/R/plotKegg.R")
+  message("cf. github.com/Bioconductor-mirror/FGNet/blob/master/R/plotKegg.R")
 
 } 
