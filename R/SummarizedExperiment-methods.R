@@ -40,11 +40,28 @@ setMethod("features", "ANY",
 #'
 #' @return the object, perhaps with updated feature annotations
 #'
+#' @importFrom GenomicRanges rowRanges
+#'
 #' @export
 #'
 setReplaceMethod("features", c("ANY", "ANY"), 
                  function(object, value) {
-                   if (isRSE(object)) rowRanges(object) <- value
+                   if (isRSE(object)) GenomicRanges::rowRanges(object) <- value
                    else rowData(object) <- value
+                   return(object)
+                 })
+
+#' @describeIn KallistoExperiment 
+#'
+#' @param   object: something to which features should be assigned
+#' @param   value: the features to assign (usually a GRanges or GRangesList)
+#'
+#' @return the object, perhaps with updated feature annotations
+#'
+#' @export
+#'
+setReplaceMethod("features", c("ANY", "SummarizedExperiment0"), 
+                 function(object, value) {
+                   elementMetadata(object) <- value
                    return(object)
                  })
