@@ -11,8 +11,9 @@
 \alias{eff_length,KallistoExperiment-method}
 \alias{features,ANY-method}
 \alias{features,KallistoExperiment-method}
-\alias{features<-,ANY-method}
-\alias{features<-,KallistoExperiment-method}
+\alias{features<-,ANY,ANY-method}
+\alias{features<-,ANY,SummarizedExperiment0-method}
+\alias{features<-,KallistoExperiment,ANY-method}
 \alias{kallistoVersion,KallistoExperiment-method}
 \alias{transcriptomes,KallistoExperiment-method}
 \title{A SummarizedExperiment subclass that stores multiple Kallisto runs}
@@ -23,7 +24,7 @@
 
 \S4method{features}{KallistoExperiment}(x)
 
-\S4method{features}{KallistoExperiment}(object) <- value
+\S4method{features}{KallistoExperiment,ANY}(object) <- value
 
 \S4method{eff_length}{KallistoExperiment}(object)
 
@@ -39,7 +40,9 @@
 
 \S4method{features}{ANY}(x)
 
-\S4method{features}{ANY}(object) <- value
+\S4method{features}{ANY,ANY}(object) <- value
+
+\S4method{features}{ANY,SummarizedExperiment0}(object) <- value
 }
 \arguments{
 \item{object:}{A KallistoExperiment from which to retrieve counts}
@@ -71,6 +74,10 @@
 \item{object:}{something to which features should be assigned}
 
 \item{value:}{the features to assign (usually a GRanges or GRangesList)}
+
+\item{object:}{something to which features should be assigned}
+
+\item{value:}{the features to assign (usually a GRanges or GRangesList)}
 }
 \value{
 a GRanges or GRangesList of feature annotations
@@ -88,6 +95,8 @@ a string: the transcriptomes against which reads were pseudoaligned
 the object, perhaps with updated covariates
 
 a GRanges or GRangesList of feature annotations
+
+the object, perhaps with updated feature annotations
 
 the object, perhaps with updated feature annotations
 }
@@ -117,6 +126,8 @@ FIXME: add RUVg-derived ERCC-calibrated normalization factors in metadata
 \item \code{covariates<-}: 
 
 \item \code{features}: 
+
+\item \code{features<-}: 
 
 \item \code{features<-}: 
 }}
