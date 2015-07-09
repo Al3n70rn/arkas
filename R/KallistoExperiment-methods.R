@@ -5,6 +5,7 @@
 setMethod("counts", "KallistoExperiment",
           function (object) return(assays(object)$est_counts))
 
+## new generics for artemis 
 setGeneric("covariates", function(object) standardGeneric("covariates"))
 setGeneric("covariates<-", 
            function(object, value) standardGeneric("covariates<-"))
@@ -16,62 +17,34 @@ setGeneric("covariates<-",
 setMethod("covariates", "KallistoExperiment",
           function (object) return(colData(object)))
 
-#' @describeIn KallistoExperiment 
-#' @param object: A KallistoExperiment to which covariates should be assigned
-#' @param value: A DataFrame containing the covariates
-#' @return the KallistoExperiment object, with updated covariates
-#'
-#' @export
-setReplaceMethod("covariates", c("KallistoExperiment", "DataFrame"),
-                 function(object, value) {
-                   colData(object) <- value
-                   return(object)
-                 })
-
-#' @describeIn KallistoExperiment 
-#' @param object: A KallistoExperiment to which covariates should be assigned
-#' @param value: A data.frame containing the covariates
-#' @return the KallistoExperiment object, with updated covariates
-#'
-#' @export
-setReplaceMethod("covariates", c("KallistoExperiment", "data.frame"),
-                 function(object, value) {
-                   colData(object) <- DataFrame(value)
-                   return(object)
-                 })
-
 ## set in GenomicFeatures, which we have to import anyways 
 ## setGeneric("features", function(object) standardGeneric("features"))
 setGeneric("features<-", function(object, value) standardGeneric("features<-"))
 
 #' @describeIn KallistoExperiment 
+#'
 #' @param object: A KallistoExperiment from which features should be obtained
+#'
 #' @return a GRanges or GRangesList of feature annotations
 #'
 #' @export
-setMethod("features", "KallistoExperiment", function (x) return(rowData(x)))
+#'
+setMethod("features", "KallistoExperiment", 
+          function (x) if (isRSE(x)) rowRanges(x) else rowData(x))
 
 #' @describeIn KallistoExperiment 
+#'
 #' @param object: A KallistoExperiment from which features should be obtained
-#' @param value: A GenomicRanges instance containing feature annotations
+#' @param value:  Some feature annotations, usually GRanges or GRangesList 
+#'
 #' @return the KallistoExperiment object, with updated feature annotations
 #'
 #' @export
-setReplaceMethod("features", c("KallistoExperiment", "GenomicRanges"),
-                 function(object, value) {
-                   rowData(object) <- value
-                   return(object)
-                 })
-
-#' @describeIn KallistoExperiment 
-#' @param object: A KallistoExperiment from which features should be obtained
-#' @param value: A GRangesList instance containing feature annotations
-#' @return the KallistoExperiment object, with updated feature annotations
 #'
-#' @export
-setReplaceMethod("features", c("KallistoExperiment", "GRangesList"),
+setReplaceMethod("features", c("KallistoExperiment", "ANY"),
                  function(object, value) {
-                   rowData(object) <- value
+                   if (isRSE(object)) rowRanges(object) <- value
+                   else rowData(object) <- value
                    return(object)
                  })
 
@@ -97,15 +70,28 @@ setGeneric("TPM", function(object) standardGeneric("TPM"))
 setMethod("TPM", "KallistoExperiment",
           function (object) return(counts(object) / eff_length(object)))
 
-# ERCC generic 
-setGeneric("ERCC", function(object) standardGeneric("ERCC"))
+# kallistoVersion generic 
+setGeneric("kallistoVersion", 
+           function(object) standardGeneric("kallistoVersion"))
 
 #' @describeIn KallistoExperiment 
-#' @param object: A KallistoExperiment with ERCC spike-in control counts
-#' @return a subsetted KallistoExperiment with just the ERCC features 
+#' @param object: A KallistoExperiment
+#' @return a string: the version of Kallisto used 
 #'
 #' @export
-setMethod("ERCC", "KallistoExperiment",
-          function (object) return(object[ grep("^ERCC", rownames(object)), ]))
+setMethod("kallistoVersion", "KallistoExperiment",
+          function (object) return(object@kallistoVersion))
+
+# trancscriptomes generic 
+setGeneric("transcriptomes", 
+           function(object) standardGeneric("transcriptomes"))
+
+#' @describeIn KallistoExperiment 
+#' @param object: A KallistoExperiment
+#' @return a string: the transcriptomes against which reads were pseudoaligned
+#'
+#' @export
+setMethod("transcriptomes", "KallistoExperiment",
+          function (object) return(object@transcriptomes))
 
 # FIXME: add method to retrieve normalization factors if ERCC spike-ins used 

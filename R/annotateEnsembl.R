@@ -4,18 +4,25 @@
 #' @import GenomicRanges 
 #' @import GenomicFeatures 
 #' 
-#' @param res     a KallistoExperiment with results from mergeKallisto
-#' @param txome   a character string naming the txome, eg "EnsDb.Hsapiens.v80"
+#' @param kexp          a KallistoExperiment
+#' @param transcriptome a character string naming the transcriptome
 #'
+#' @return              a (possibly further-annotated) KallistoExperiment
+#' 
 #' @export 
-annotateEnsembl <- function(res, txome, ...) { 
+annotateEnsembl <- function(kexp, transcriptome, ...) { 
 
-  if (!grepl("EnsDb", txome)) stop("You must specify an ENSEMBL transcriptome")
-  library(txome, character.only=TRUE)
-  txmap <- transcripts(get(txome), ## why I so love ENSEMBL: symbols AND ids
-                       columns=c("gene_id","gene_name","entrezid","tx_biotype"))
-  seqlevelsStyle(txmap) <- "UCSC"
-  return(txmap)
-
+  if (!grepl("EnsDb", transcriptome)) {
+    message("You must specify a supported ENSEMBL transcriptome db (EnsDb)")
+  } else { 
+    message("Annotating Ensembl transcripts from ", transcriptome, "...")
+    library(transcriptome, character.only=TRUE)
+    txcolumns <- c("gene_id", "gene_name", "entrezid", "tx_biotype")
+    txmap <- transcripts(get(transcriptome), columns=txcolumns)
+    seqlevelsStyle(txmap) <- "UCSC"
+    foundTxs <- intersect(rownames(kexp), names(txmap))
+    features(kexp)[foundTxs] <- txmap[foundTxs]
+  }
+  return(kexp)
 
 }
