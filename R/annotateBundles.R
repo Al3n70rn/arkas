@@ -9,11 +9,7 @@
 #' @export
 annotateBundles <- function(kexp, transcriptomes, ...) { 
 
-<<<<<<< HEAD
- if (length(transcriptomes) == 0) {
-=======
   if (length(transcriptomes) == 0) {
->>>>>>> c73a9faa1f87288a01075f219a4a5efe2fd271d9
     return(kexp)
   } else if (length(transcriptomes) > 1) {
     for (transcriptome in transcriptomes) {
