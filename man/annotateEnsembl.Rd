@@ -4,12 +4,15 @@
 \alias{annotateEnsembl}
 \title{annotate a pile of TPMs against an Ensembl transcriptome (via EnsDb)}
 \usage{
-annotateEnsembl(res, txome)
+annotateEnsembl(kexp, transcriptome, ...)
 }
 \arguments{
-\item{res}{a SummarizedExperiment with results from mergeKallisto}
+\item{kexp}{a KallistoExperiment}
 
-\item{txome}{a character string naming the txome, e.g. "EnsDb.Hsapiens.v79"}
+\item{transcriptome}{a character string naming the transcriptome}
+}
+\value{
+a (possibly further-annotated) KallistoExperiment
 }
 \description{
 annotate a pile of TPMs against an Ensembl transcriptome (via EnsDb)

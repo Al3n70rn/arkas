@@ -11,7 +11,7 @@ fetchKallisto(sampleDir = ".", h5file = "abundance.h5", checkRunInfo = T)
 
 \item{h5file}{character string: the file to read}
 
-\item{checkRunInfo}{boolean: check run_info.json against the hdf5 call?}
+\item{checkRunInfo}{boolean: check run_info.json against HDF5 call? (TRUE)}
 }
 \description{
 fetch one sample's worth of Kallisto estimates, perhaps with bootstraps

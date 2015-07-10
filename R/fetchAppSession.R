@@ -4,6 +4,7 @@
 #'
 #' @return list     the appSession created from that JSON file 
 #'
+#' @export
 fetchAppSession <- function(jsonFile) {
   appSession <- fromJSON(jsonFile)
   stopifnot("AppsessionID" %in% names(appSession))

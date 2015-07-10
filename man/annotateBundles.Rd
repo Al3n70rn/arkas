@@ -4,12 +4,15 @@
 \alias{annotateBundles}
 \title{annotate a pile of TPMs against a transcriptome bundle (via e.g. EnsDb)}
 \usage{
-annotateBundles(res, txome)
+annotateBundles(kexp, transcriptomes, ...)
 }
 \arguments{
-\item{res}{a SummarizedExperiment from mergeKallisto}
+\item{kexp}{a KallistoExperiment (perhaps somewhat annotated)}
 
-\item{txome}{a character string naming the txome, e.g. "EnsDb.Hsapiens.v79"}
+\item{transcriptomes}{character vector (perhaps empty) naming transcriptomes}
+}
+\value{
+a KallistoExperiment (perhaps further annotated)
 }
 \description{
 annotate a pile of TPMs against a transcriptome bundle (via e.g. EnsDb)
