@@ -8,12 +8,15 @@
 #' 
 #' @import FGNet
 #' @import gage
+#' @import raster
 #'
 #' @export
 #'
 pathwayPlot <- function(kexp, method="gage", groups=NULL, ...) { 
   
   message("I need some work before I'm done...")
+
+
   message("cf. github.com/Bioconductor-mirror/FGNet/blob/master/R/plotKegg.R")
 
 } 
