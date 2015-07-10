@@ -1,5 +1,5 @@
 # artemis
-an R package with support for RNAseq analysis, from raw reads to pathways, typically in a few minutes
+an R package for RNAseq analysis, from raw reads to pathways, typically in a few minutes
 
 ```R
 library(artemis)
