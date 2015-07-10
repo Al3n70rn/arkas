@@ -2,14 +2,22 @@
 % Please edit documentation in R/annotateErcc.R
 \name{annotateErcc}
 \alias{annotateErcc}
-\title{annotate spike-in controls for normalization (Life Tech annotations built in)}
+\title{annotate the ERCC spike-ins found amongst the transcripts in a Kallisto run
+(note: artemis includes ThermoFisher/Life annotations for these controls.)}
 \usage{
-annotateErcc(res)
+annotateErcc(kexp, ...)
 }
 \arguments{
-\item{res}{a SummarizedExperiment resulting from mergeKallisto}
+\item{kexp}{a KallistoExperiment}
+}
+\value{
+a KallistoExperiment, perhaps with ERCC spike-ins annotated
 }
 \description{
-annotate spike-in controls for normalization (Life Tech annotations built in)
+annotate the ERCC spike-ins found amongst the transcripts in a Kallisto run
+(note: artemis includes ThermoFisher/Life annotations for these controls.)
+}
+\seealso{
+ERCC
 }
 

@@ -2,21 +2,33 @@
 % Please edit documentation in R/mergeKallisto.R
 \name{mergeKallisto}
 \alias{mergeKallisto}
-\title{merge multiple Kallisto results, by default yielding a SummarizedExperiment}
+\title{Merge multiple Kallisto results, yielding a KallistoExperiment.}
 \usage{
-mergeKallisto(sampleDirs, outputPath = ".", txomes = c(),
-  value = c("SummarizedExperiment", "list"), ...)
+mergeKallisto(outputDirs = NULL, outputPath = ".", covariates = NULL,
+  transcriptomes = c("ERCC", "EnsDb.Hsapiens.v80", "RepBase.v20_05"),
+  parallel = TRUE, ...)
 }
 \arguments{
-\item{sampleDirs}{character vector: directory names holding Kallisto results}
+\item{outputDirs}{character: directories holding Kallisto results (NULL)}
 
-\item{outputPath}{character string: base path to the sampleDirs, default "."}
+\item{outputPath}{character: base path to the outputDirs (default is .)}
 
-\item{txomes}{character vector: the target transcriptome(s)/repeatome(s)}
+\item{covariates}{data.frame or DataFrame: per-sample covariates (NULL)}
 
-\item{value}{character string: return a SummarizedExperiment or a list?}
+\item{transcriptomes}{vector: target transcriptomes (EnsDb.Hsapiens.v80)}
+
+\item{parallel}{boolean: try to run the merge in parallel? (TRUE)}
 }
 \description{
-merge multiple Kallisto results, by default yielding a SummarizedExperiment
+If no transcriptomes are specified (or the ones specified are not found),
+the resulting KallistoExperiment will have a rowData/rowRanges object
+which consists entirely of unannotated transcripts from chromosome "Unknown".
+If transcriptomes are specified and annotations for those transcriptomes are
+found, the transcripts described in the annotations will be fully annotated
+for transcript ID, gene ID, gene name, entrez ID, and transcript biotype,
+provided that these fields are supported in the annotation resources.
+}
+\details{
+FIXME: automatically determine which transcriptomes were used
 }
 

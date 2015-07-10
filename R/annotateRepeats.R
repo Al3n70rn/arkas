@@ -1,13 +1,26 @@
+#' annotate the repeats found amongst unique transcripts in a KallistoExperiment
 #'
-#' Annotate repeats by class (not finished yet)
+#' FIXME: actually annotate some repeats 
+#' 
+#' @param kexp       a KallistoExperiment
+#' @param repeatome  the name of the repeatome (presumably annotated in a db)
 #'
-#' @param res a SummarizedExperiment from mergeKallisto 
-#' @param repbase a character string naming the repbase version
+#' @return           a KallistoExperiment, perhaps with repeats annotated
 #'
-annotateRepeats <- function(res, repbase) {
-  
-  if (!grepl("RepBase", repbase)) stop("You must specify a RepBase assembly!")
+#' @export
+#'
+annotateRepeats <- function(kexp, repeatome, ...) { 
 
-  stop("Not done yet...")
+  message("Not yet")
+  return(kexp)
+  
+  if (FALSE) { 
+    message("Annotating repeats supplied in ", repeatome, "...")
+    data("repeatElement", package="artemis") ## dummy granges w/mcols()
+    repeatElements <- rep(repeatElement, sum(grepl(repeats, rownames(kexp))))
+    names(repeatElements) <- grep(repeats, rownames(kexp), value=TRUE) 
+    features(kexp)[names(repeatElements)] <- repeatElements
+    return(kexp)
+  }
 
 }

@@ -1,16 +1,30 @@
+#' annotate the ERCC spike-ins found amongst the transcripts in a Kallisto run
+#' (note: artemis includes ThermoFisher/Life annotations for these controls.)
+#' 
+#' @param kexp    a KallistoExperiment
 #'
-#' annotate spike-in controls for normalization (Life Tech annotations built in)
+#' @return        a KallistoExperiment, perhaps with ERCC spike-ins annotated
 #'
-#' @param res a SummarizedExperiment resulting from mergeKallisto
+#' @seealso       ERCC 
+#' 
+#' @export
 #'
-annotateErcc <- function(res) {
-  
-  ## so for ERCC spike-ins, repeats, and ENSEMBL transcripts, we can use (e.g.)
-  ## c("bundle", "name", "biotype") and always have something useful to offer.
-  data(ERCC)
-  names(ERCC)[1] <- c("bundle")
-  ERCC$name <- rownames(ERCC)
-  ERCC$biotype <- "SpikeIns"
-  stop("Not done yet...")
+annotateErcc <- function(kexp, ...) { 
+
+  data("ERCC", package="artemis")
+  data("erccSpikeIn", package="artemis") ## dummy granges w/appropriate mcols
+
+  ## subset to only the ERCC spike-ins mapped by Kallisto...
+  ERCC <- ERCC[intersect(rownames(kexp), rownames(ERCC)), ] 
+  erccAnnotations <- rep(erccSpikeIn, nrow(ERCC))
+  names(erccAnnotations) <- rownames(ERCC)
+
+  ## annotate by subgroup: as noted in ?ERCC, this corresponds to mix properties
+  erccAnnotations$tx_biotype <- paste0("erccSpikeIn_subgroup", ERCC$subgroup) 
+  features(kexp)[names(erccAnnotations)] <- erccAnnotations 
+
+  message("ERCC spike-ins annotated.")
+  message("For more information, see ?ERCC, data(ERCC), and show(ERCC).")
+  return(kexp)
 
 }

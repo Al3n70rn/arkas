@@ -2,16 +2,19 @@
 % Please edit documentation in R/annotateRepeats.R
 \name{annotateRepeats}
 \alias{annotateRepeats}
-\title{Annotate repeats by class (not finished yet)}
+\title{annotate the repeats found amongst unique transcripts in a KallistoExperiment}
 \usage{
-annotateRepeats(res, repbase)
+annotateRepeats(kexp, repeatome, ...)
 }
 \arguments{
-\item{res}{a SummarizedExperiment from mergeKallisto}
+\item{kexp}{a KallistoExperiment}
 
-\item{repbase}{a character string naming the repbase version}
+\item{repeatome}{the name of the repeatome (presumably annotated in a db)}
+}
+\value{
+a KallistoExperiment, perhaps with repeats annotated
 }
 \description{
-Annotate repeats by class (not finished yet)
+FIXME: actually annotate some repeats
 }
 

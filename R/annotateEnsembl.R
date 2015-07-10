@@ -1,26 +1,28 @@
 #'
 #' annotate a pile of TPMs against an Ensembl transcriptome (via EnsDb)
 #' 
-#' @param res a SummarizedExperiment with results from mergeKallisto
-#' @param txome a character string naming the txome, e.g. "EnsDb.Hsapiens.v79"
+#' @import GenomicRanges 
+#' @import GenomicFeatures 
+#' 
+#' @param kexp          a KallistoExperiment
+#' @param transcriptome a character string naming the transcriptome
 #'
-annotateEnsembl <- function(res, txome) {
+#' @return              a (possibly further-annotated) KallistoExperiment
+#' 
+#' @export 
+annotateEnsembl <- function(kexp, transcriptome, ...) { 
 
-  if (!grepl("EnsDb", txome)) stop("You must specify an ENSEMBL transcriptome")
-  library(txome, character.only=TRUE)
-  ## e.g. library(EnsDb.Hsapiens.v79)
-
-  ## so for ERCC spike-ins, repeats, and ENSEMBL transcripts, we can use (e.g.)
-  ## c("bundle", "name", "biotype") and always have something useful to offer.
-  txmap <- transcripts(get(txome), ## why I so love ENSEMBL: symbols AND ids
-                       columns=c("gene_id","gene_name","tx_biotype"))
-
-  ## don't do this, it breaks the EnsemblDb class for some reason
-  ## names(mcols(txmap)) <- c("bundle", "name", "biotype")
-  
-
-  ## this should go elsewhere
-  mapByGene <- function(x) tapply(x[txmap$tx_id], txmap$entrezid, sum)
-  return(results)
+  if (!grepl("EnsDb", transcriptome)) {
+    message("You must specify a supported ENSEMBL transcriptome db (EnsDb)")
+  } else { 
+    message("Annotating Ensembl transcripts from ", transcriptome, "...")
+    library(transcriptome, character.only=TRUE)
+    txcolumns <- c("gene_id", "gene_name", "entrezid", "tx_biotype")
+    txmap <- transcripts(get(transcriptome), columns=txcolumns)
+    seqlevelsStyle(txmap) <- "UCSC"
+    foundTxs <- intersect(rownames(kexp), names(txmap))
+    features(kexp)[foundTxs] <- txmap[foundTxs]
+  }
+  return(kexp)
 
 }

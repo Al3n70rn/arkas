@@ -7,7 +7,7 @@
 fetchRunInfo(ri = "run_info.json")
 }
 \arguments{
-\item{ri}{character string specifying the name of the runinfo file}
+\item{ri:}{character string specifying the name of the runinfo file}
 }
 \description{
 fetches the JSON-encoded run information for a Kallisto run
