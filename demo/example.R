@@ -1,4 +1,5 @@
 library(artemis)
+library(matrixStats)
 
 jsonFile <- system.file("extdata", "Appsession.JSON", package="artemis")
 appSession <- fetchAppSession(jsonFile) ## autofill APPSESSION in paths
