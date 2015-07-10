@@ -3,8 +3,24 @@
 \docType{class}
 \name{MultiAssayExperiment-class}
 \alias{MultiAssayExperiment-class}
+\alias{show,MultiAssayExperiment-method}
 \title{toy class for enforcing coherence between samples and perSampleMetadata}
+\usage{
+\S4method{show}{MultiAssayExperiment}(object)
+}
+\arguments{
+\item{object}{the MultiAssayExperiment (duh?)}
+}
 \description{
 toy class for enforcing coherence between samples and perSampleMetadata
 }
+\section{Methods (by generic)}{
+\itemize{
+\item \code{show}: 
+}}
+\section{Slots}{
+
+\describe{
+\item{\code{perSampleMetadata}}{metadata elements (e.g. QC) that must match colnames}
+}}
 
