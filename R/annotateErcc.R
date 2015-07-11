@@ -1,9 +1,9 @@
-#' annotate the ERCC spike-ins found amongst the transcripts in a Kallisto run
-#' (note: artemis includes ThermoFisher/Life annotations for these controls.)
+#' annotate the ERCC spike-ins found amongst the transcripts in a run
+#' (artemis includes ThermoFisher/Life annotations for these; see ?ERCC.)
 #' 
-#' @param kexp    a KallistoExperiment
+#' @param kexp    something that smells vaguely like a KallistoExperiment
 #'
-#' @return        a KallistoExperiment, perhaps with ERCC spike-ins annotated
+#' @return        the supplied object, perhaps with ERCC spike-ins annotated
 #'
 #' @seealso       ERCC 
 #' 

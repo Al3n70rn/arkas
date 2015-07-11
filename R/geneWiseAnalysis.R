@@ -1,26 +1,25 @@
-#' Pathway analysis and other similar downstream functions
+#' Downstream analysis of bundle-aggregated transcript abundance estimates.
 #'
-#' @param res         a KallistoExperiment from mergeKallisto
+#' @param kexp        a KallistoExperiment or SummarizedExperiment-like object 
 #' @param design      a design matrix w/contrast or coefficient to test in col2
-#' @param categories  how many categories for ReactomeDB enrichment plots 
-#' @param k           how many gene clusters to construct for comparison
-#' @param p.cutoff    where to set the p-value cutoff for such plots 
-#' @param ERCC        perform ERCC spike-in analysis as well? (default: TRUE)
+#' @param categories  how many categories for ReactomeDB enrichment plots (10)
+#' @param k           how many gene clusters to construct for comparison (2)
+#' @param p.cutoff    where to set the p-value cutoff for such plots (0.05)
 #' @param species     which species? (Homo.sapiens; FIX: get from transcriptome)
 #'
 #' @import limma
-#' @import FGNet
 #' @import ReactomePA
 #' @import Homo.sapiens
 #' @import Mus.musculus
-#' @import erccdashboard
 #'
+#' @importFrom matrixStats rowSds 
+#' 
 #' @export
-geneWiseAnalysis <- function(res, design, categories=10, k=2, p.cutoff=0.05, 
-                             ERCC=T, species=c("Homo.sapiens","Mus.musculus")) {
+geneWiseAnalysis <- function(kexp, design, categories=10, k=2, p.cutoff=0.05, 
+                             species=c("Homo.sapiens","Mus.musculus")) {
 
   ## this is really only meant for a KallistoExperiment
-  if (!is(res, "KallistoExperiment")) {
+  if (!is(kexp, "KallistoExperiment")) {
     message("This function is optimized for KallistoExperiment objects.")
     message("It may work for other classes, but we make no guarantees.")
   }
@@ -29,16 +28,8 @@ geneWiseAnalysis <- function(res, design, categories=10, k=2, p.cutoff=0.05,
   species <- match.arg(species)
   commonName <- switch(species, Mus.musculus="mouse", Homo.sapiens="human")
 
-  ## pull in erccdashboard if ERCC spike-ins were run
-  if (ERCC == TRUE) {
-    library(erccdashboard)
-    ERCC_counts <- counts(ERCC(res))
-    ## FIXME: plot the ERCC controls for each sample
-    ## FIXME: remind the user that RUVg on ERCCs >> raw data >> ERCC-regressed
-  }
-
   ## swap out for limma-trans or similar
-  voomed <- voom(counts(res), design)
+  voomed <- voom(counts(kexp), design)
   fit <- eBayes(lmFit(voomed, design))
 
   p.cutoff <- 0.1
@@ -87,20 +78,13 @@ geneWiseAnalysis <- function(res, design, categories=10, k=2, p.cutoff=0.05,
     }
   }
 
-  ## [Seq]GSEA... maybe better do it right, with UniProt/BioPAX structures?
-  ## Meanwhile, ReactomePA has facilities to do simple GSEA enrichment & plots
+  ## ReactomePA has facilities to do simple GSEA enrichment & plots
+  ##
   ## Gene sets from DSigDb (http://tanlab.ucdenver.edu/DSigDB/DSigDBv1.0/) may
   ## be tremendously handy for looking at treatment-relevant diffexp/diffmeth.
   ##
-  if (FALSE) { 
-    ## SeqGSEA/DsigDb analyses
-  }
-
-  ## KEGG pathway plots via FGNet
-  if (FALSE) { 
-    keggIds <- getTerms(feaAlzheimer, returnValue="KEGG")[[3]]
-    plotKegg("hsa05010", geneExpr=genesAlzExpr, geneIDtype="GENENAME")
-  }
+  ## EnrichmentBrowser is another recent package that may be tremendously handy
+  ##
 
   return(top)
 

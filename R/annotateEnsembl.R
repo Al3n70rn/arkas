@@ -1,13 +1,13 @@
 #'
-#' annotate a pile of TPMs against an Ensembl transcriptome (via EnsDb)
+#' annotate a pile of counts against an Ensembl transcriptome (via EnsDb)
 #' 
 #' @import GenomicRanges 
 #' @import GenomicFeatures 
 #' 
-#' @param kexp          a KallistoExperiment
+#' @param kexp          a KallistoExperiment (or something that behaves like it)
 #' @param transcriptome a character string naming the transcriptome
 #'
-#' @return              a (possibly further-annotated) KallistoExperiment
+#' @return              a possibly further-annotated version of kexp
 #' 
 #' @export 
 annotateEnsembl <- function(kexp, transcriptome, ...) { 

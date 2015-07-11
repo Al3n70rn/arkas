@@ -1,22 +1,17 @@
-#' use FGNet and gage to plot an entire pathway's worth of contrasts
+#' use pathview to plot an entire pathway's worth of contrasts
 #'
-#' @param kexp    a KallistoExperiment
-#' @param method  how to link up gene/transcript IDs with functional terms
-#' @param groups  a factor indicating groups along which results can be split
+#' @param res     results from gene-wise or transcript-wise expression analysis 
+#' @param pathway which pathway (or keywords to find the appropriate pathway)
 #'
-#' @importFrom matrixStats rowSds 
-#' 
-#' @import FGNet
-#' @import gage
-#' @import raster
+#' @seealso EnrichmentBrowser
+#' @seealso pathview
+#'
+#' @import pathview 
 #'
 #' @export
 #'
-pathwayPlot <- function(kexp, method="gage", groups=NULL, ...) { 
+pathwayPlot <- function(res, pathway, ...) { 
   
-  message("I need some work before I'm done...")
+  
 
-
-  message("cf. github.com/Bioconductor-mirror/FGNet/blob/master/R/plotKegg.R")
-
-} 
+}

@@ -2,18 +2,21 @@
 % Please edit documentation in R/pathwayPlot.R
 \name{pathwayPlot}
 \alias{pathwayPlot}
-\title{use FGNet and gage to plot an entire pathway's worth of contrasts}
+\title{use pathview to plot an entire pathway's worth of contrasts}
 \usage{
-pathwayPlot(kexp, method = "gage", groups = NULL, ...)
+pathwayPlot(res, pathway, ...)
 }
 \arguments{
-\item{kexp}{a KallistoExperiment}
+\item{res}{results from gene-wise or transcript-wise expression analysis}
 
-\item{method}{how to link up gene/transcript IDs with functional terms}
-
-\item{groups}{a factor indicating groups along which results can be split}
+\item{pathway}{which pathway (or keywords to find the appropriate pathway)}
 }
 \description{
-use FGNet and gage to plot an entire pathway's worth of contrasts
+use pathview to plot an entire pathway's worth of contrasts
+}
+\seealso{
+EnrichmentBrowser
+
+pathview
 }
 
