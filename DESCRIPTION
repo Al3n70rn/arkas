@@ -1,13 +1,37 @@
 Package: artemis
 Type: Package
-Title: various utility functions for fast, informative RNAseq analysis
-Version: 0.1.70
-Date: 2015-07-10
+Title: A package that wraps Kallisto for quick, informative *seq analysis
+Version: 0.1.71
+Date: 2015-07-11
 Author: Tim Triche, Jr., Anthony Colombo, Harold Pimentel
-Depends: limma, ReactomePA, Matrix, jsonlite, parallel, ssizeRNA, Homo.sapiens, Mus.musculus, GenomicRanges, GenomeInfoDb, RUVSeq, FGNet, tools, gage
+Depends: Matrix, jsonlite, parallel, erccdashboard, GenomeInfoDb, ReactomePA,
+         EnrichmentBrowser, Homo.sapiens, Mus.musculus, RUVSeq, ssizeRNA, tools
 Imports: rhdf5, matrixStats, GenomicRanges, GenomicFeatures, limma
-Suggests: roxygen2, EnsDb.Hsapiens.v80, EnsDb.Mmusculus.v80, knitr
-Maintainer: Tim Triche, Jr. <tim.triche@gmail.com>
-Description: utility functions for Artemis (hunting companion of Kallisto)
-License: GPL (>= 2)
+Suggests: roxygen2, EnsDb.Hsapiens.v80, EnsDb.Mmusculus.v80, Seurat, knitr
 VignetteBuilder: knitr
+Maintainer: Tim Triche, Jr. <tim.triche@gmail.com>
+Description: Artemis was the hunting companion of Kallisto.  This package wraps
+             various aspects of workflow automation (assembling transcriptomes, 
+             hashing indices after they have been built, checking versions, and
+             generally avoiding annoyance factors) useful in the day-to-day
+             operation of a transcriptome pseudoaligner. Tools for data 
+             extraction (progressive annotation of combined transcriptomes), QC 
+             (ERCC control plots and RUVSeq normalization), interpretation
+             (gene-level, transcript-level, pathway- and network-level output), 
+             guidelines for validation (sample size estimation by simulation),
+             and interactions with cloud computing services such as BaseSpace
+             are therefore integrated within the default package workflow.  
+             Please be aware that, while Artemis is licensed under the GPL,
+             Kallisto itself is free FOR NON-COMMERCIAL USAGE ONLY. For-profit 
+             use of Kallisto requires a licensing agreement executed with the 
+             Regents of the University of California. Artemis' component parts
+             are not restricted in this fashion (though we do not guarantee that
+             all [pseudo]aligners will necessarily work as well end-to-end), and
+             most downstream analyses can proceed from any SummarizedExperiment.
+             Artemis' annotation functions, in particular, can greatly ease data
+             integration, as when comparing in-house results to those of major 
+             genome and transcriptome sequencing projects such as TCGA and ICGC.
+             Sample size estimates and pathway analyses are similarly decoupled 
+             from the underlying source of transcript abundance estimates. 
+VignetteBuilder: knitr
+License: GPL (>= 2)

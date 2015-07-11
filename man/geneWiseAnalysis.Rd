@@ -2,27 +2,25 @@
 % Please edit documentation in R/geneWiseAnalysis.R
 \name{geneWiseAnalysis}
 \alias{geneWiseAnalysis}
-\title{Pathway analysis and other similar downstream functions}
+\title{Downstream analysis of bundle-aggregated transcript abundance estimates.}
 \usage{
-geneWiseAnalysis(res, design, categories = 10, k = 2, p.cutoff = 0.05,
-  ERCC = T, species = c("Homo.sapiens", "Mus.musculus"))
+geneWiseAnalysis(kexp, design, categories = 10, k = 2, p.cutoff = 0.05,
+  species = c("Homo.sapiens", "Mus.musculus"))
 }
 \arguments{
-\item{res}{a KallistoExperiment from mergeKallisto}
+\item{kexp}{a KallistoExperiment or SummarizedExperiment-like object}
 
 \item{design}{a design matrix w/contrast or coefficient to test in col2}
 
-\item{categories}{how many categories for ReactomeDB enrichment plots}
+\item{categories}{how many categories for ReactomeDB enrichment plots (10)}
 
-\item{k}{how many gene clusters to construct for comparison}
+\item{k}{how many gene clusters to construct for comparison (2)}
 
-\item{p.cutoff}{where to set the p-value cutoff for such plots}
-
-\item{ERCC}{perform ERCC spike-in analysis as well? (default: TRUE)}
+\item{p.cutoff}{where to set the p-value cutoff for such plots (0.05)}
 
 \item{species}{which species? (Homo.sapiens; FIX: get from transcriptome)}
 }
 \description{
-Pathway analysis and other similar downstream functions
+Downstream analysis of bundle-aggregated transcript abundance estimates.
 }
 
