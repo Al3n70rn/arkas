@@ -2,17 +2,29 @@
 % Please edit documentation in R/pathwayPlot.R
 \name{pathwayPlot}
 \alias{pathwayPlot}
-\title{use pathview to plot an entire pathway's worth of contrasts}
+\title{use pathview to plot a pathway or pathways colored by gene-wise contrasts}
 \usage{
-pathwayPlot(res, pathway, ...)
+pathwayPlot(pathway, results, path = ".", species = NULL,
+  IDtype = "ENSEMBL", ...)
 }
 \arguments{
-\item{res}{results from gene-wise or transcript-wise expression analysis}
+\item{pathway:}{which pathway (or keywords to find the appropriate pathway)}
 
-\item{pathway}{which pathway (or keywords to find the appropriate pathway)}
+\item{results:}{results from geneWise or transcriptWise expression analyses}
+
+\item{path:}{the working directory for downloaded/generated files (".")}
+
+\item{species:}{species for pathway extraction (defaults to results$species)}
+
+\item{IDtype:}{type of identifier for gene/transcript annotations (ENSEMBL)}
+
+\item{...:}{additional arguments to be passed to pathview}
+}
+\value{
+a list with the human-readable pathway name(s) and the plot file(s)
 }
 \description{
-use pathview to plot an entire pathway's worth of contrasts
+use pathview to plot a pathway or pathways colored by gene-wise contrasts
 }
 \seealso{
 EnrichmentBrowser
