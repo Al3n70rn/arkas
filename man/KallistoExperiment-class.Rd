@@ -3,7 +3,6 @@
 \docType{class}
 \name{KallistoExperiment-class}
 \alias{KallistoExperiment-class}
-\alias{TPM,KallistoExperiment-method}
 \alias{counts,KallistoExperiment-method}
 \alias{covariates,ANY-method}
 \alias{covariates,KallistoExperiment-method}
@@ -15,6 +14,7 @@
 \alias{features<-,ANY,SummarizedExperiment0-method}
 \alias{features<-,KallistoExperiment,ANY-method}
 \alias{kallistoVersion,KallistoExperiment-method}
+\alias{tpm,KallistoExperiment-method}
 \alias{transcriptomes,KallistoExperiment-method}
 \title{A SummarizedExperiment subclass that stores multiple Kallisto runs}
 \usage{
@@ -28,7 +28,7 @@
 
 \S4method{eff_length}{KallistoExperiment}(object)
 
-\S4method{TPM}{KallistoExperiment}(object)
+\S4method{tpm}{KallistoExperiment}(object)
 
 \S4method{kallistoVersion}{KallistoExperiment}(object)
 
@@ -86,7 +86,7 @@ the KallistoExperiment object, with updated feature annotations
 
 a matrix of effective transcript lengths
 
-a matrix of TPMs (transcripts per million)
+a matrix of tpms (transcripts per million)
 
 a string: the version of Kallisto used
 
@@ -115,7 +115,8 @@ FIXME: add RUVg-derived ERCC-calibrated normalization factors in metadata
 
 \item \code{eff_length}: 
 
-\item \code{TPM}: 
+\item \code{tpm}: Obtain tpm estimates as shown in
+https://haroldpimentel.wordpress.com/2014/05/08/what-the-fpkm-a-review-rna-seq-expression-units/
 
 \item \code{kallistoVersion}: 
 
