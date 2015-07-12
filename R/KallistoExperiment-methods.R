@@ -59,16 +59,25 @@ setGeneric("eff_length", function(object) standardGeneric("eff_length"))
 setMethod("eff_length", "KallistoExperiment",
           function (object) return(assays(object)$eff_length))
 
-# TPM generic 
-setGeneric("TPM", function(object) standardGeneric("TPM"))
+# tpm generic 
+setGeneric("tpm", function(object) standardGeneric("tpm"))
 
-#' @describeIn KallistoExperiment 
+#' @describeIn KallistoExperiment
+#'
+#' Obtain tpm estimates as shown in 
+#' https://haroldpimentel.wordpress.com/2014/05/08/what-the-fpkm-a-review-rna-seq-expression-units/
+#' 
+#'
 #' @param object: A KallistoExperiment with estimated counts & effective lengths
-#' @return a matrix of TPMs (transcripts per million)
+#' 
+#' @return a matrix of tpms (transcripts per million)
 #'
 #' @export
-setMethod("TPM", "KallistoExperiment",
-          function (object) return(counts(object) / eff_length(object)))
+setMethod("tpm", "KallistoExperiment",
+          function (object) {
+            rate <- log(counts(object)) - log(eff_length(object))
+            exp(rate - log(sum(exp(rate))) + log(1e6))
+          })
 
 # kallistoVersion generic 
 setGeneric("kallistoVersion", 
