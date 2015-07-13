@@ -21,7 +21,9 @@ annotateEnsembl <- function(kexp, transcriptome, ...) {
     txmap <- transcripts(get(transcriptome), columns=txcolumns)
     seqlevelsStyle(txmap) <- "UCSC"
     foundTxs <- intersect(rownames(kexp), names(txmap))
-    features(kexp)[foundTxs] <- txmap[foundTxs]
+    feats <- features(kexp)
+    feats[foundTxs] <- txmap[foundTxs]
+    features(kexp) <- feats
   }
   return(kexp)
 

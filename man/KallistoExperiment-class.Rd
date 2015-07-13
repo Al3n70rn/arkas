@@ -74,10 +74,6 @@
 \item{object:}{something to which features should be assigned}
 
 \item{value:}{the features to assign (usually a GRanges or GRangesList)}
-
-\item{object:}{something to which features should be assigned}
-
-\item{value:}{the features to assign (usually a GRanges or GRangesList)}
 }
 \value{
 a GRanges or GRangesList of feature annotations
@@ -95,8 +91,6 @@ a string: the transcriptomes against which reads were pseudoaligned
 the object, perhaps with updated covariates
 
 a GRanges or GRangesList of feature annotations
-
-the object, perhaps with updated feature annotations
 
 the object, perhaps with updated feature annotations
 }

@@ -7,6 +7,7 @@
 #' @param p.cutoff    where to set the p-value cutoff for such plots (0.05)
 #' @param species     which species? (Homo.sapiens; FIX: get from transcriptome)
 #'
+#' @import edgeR 
 #' @import limma
 #' @import ReactomePA
 #' @import Homo.sapiens
@@ -25,13 +26,10 @@ geneWiseAnalysis <- function(kexp, design, categories=10, k=2, p.cutoff=0.05,
   }
 
   ## only two supported for now (would be simple to expand, though)
-  species <- match.arg(species)
+  species <- match.arg(species) ## NOT to be confused with KEGG species ID
   commonName <- switch(species, Mus.musculus="mouse", Homo.sapiens="human")
 
-  ## swap out for limma-trans or similar
-  voomed <- voom(counts(kexp), design)
-  fit <- eBayes(lmFit(voomed, design))
-
+  res <- fitBundles(kexp, design)
   p.cutoff <- 0.1
   fold.cutoff <- 1
   top <- topTable(fit, coef=2, p=p.cutoff, n=nrow(assay))
