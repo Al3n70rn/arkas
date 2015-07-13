@@ -21,7 +21,9 @@ annotateErcc <- function(kexp, ...) {
 
   ## annotate by subgroup: as noted in ?ERCC, this corresponds to mix properties
   erccAnnotations$tx_biotype <- paste0("erccSpikeIn_subgroup", ERCC$subgroup) 
-  features(kexp)[names(erccAnnotations)] <- erccAnnotations 
+  feats <- features(kexp)
+  feats[names(erccAnnotations)] <- erccAnnotations 
+  features(kexp) <- feats
 
   message("ERCC spike-ins annotated.")
   message("For more information, see ?ERCC, data(ERCC), and show(ERCC).")
