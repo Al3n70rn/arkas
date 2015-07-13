@@ -11,7 +11,7 @@
 #' 
 #' @export 
 annotateEnsembl <- function(kexp, transcriptome, ...) { 
-
+   kexpCopy<-kexp
   if (!grepl("EnsDb", transcriptome)) {
     message("You must specify a supported ENSEMBL transcriptome db (EnsDb)")
   } else { 
@@ -21,8 +21,20 @@ annotateEnsembl <- function(kexp, transcriptome, ...) {
     txmap <- transcripts(get(transcriptome), columns=txcolumns)
     seqlevelsStyle(txmap) <- "UCSC"
     foundTxs <- intersect(rownames(kexp), names(txmap))
-    features(kexp)[foundTxs] <- txmap[foundTxs]
+    features(kexpCopy)[foundTxs] <- txmap[foundTxs] #features creates a GRanges list class and squashes KallistoExperiment class
+  
+    #Needed to cast kexp into a new Kexp with updated annotation from GRanges features.  this is a hack because it does not merge other Kallisto Experiments, not does it merge feature metadata GRanges objects.
+
+    kexp<-KallistoExperiment(est_counts=assays(kexp)$est_counts,
+        eff_length=assays(kexp)$eff_length,
+        est_counts_mad=assays(kexp)$est_counts_mad,
+        transcriptomes=transcriptomes(kexp),
+        kallistoVersion=kallistoVersion(kexp),
+        covariates=covariates(kexp),
+        features=kexpCopy)
   }
+
+
   return(kexp)
 
 }
