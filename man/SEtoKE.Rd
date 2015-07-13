@@ -2,14 +2,12 @@
 % Please edit documentation in R/SEtoKE.R
 \name{SEtoKE}
 \alias{SEtoKE}
-\title{convert a properly annotated SummarizedExperiment with 'counts',
+\title{Convert a properly annotated SummarizedExperiment with 'counts',
 or a matrix of counts and a GRanges of annotations for each count,
-to a KallistoExperiment (thereby providing tpm estimates on demand).
-Note that, without bias correction, these tpm estimates are somewhat janky.
-Note also that the code here is based upon Harold Pimentel's code, cf.
-https://haroldpimentel.wordpress.com/2014/05/08/what-the-fpkm-a-review-rna-seq-expression-units/}
+to a KallistoExperiment (thereby providing tpm estimates on demand).}
 \usage{
-SEtoKE(SE = NULL, counts = NULL, features = NULL, transcriptomes = NULL)
+SEtoKE(SE = NULL, counts = NULL, features = NULL, covariates = NULL,
+  transcriptomes = NULL, fraglen = 200, ...)
 }
 \arguments{
 \item{SE}{a properly-annotated SummarizedExperiment}
@@ -18,17 +16,17 @@ SEtoKE(SE = NULL, counts = NULL, features = NULL, transcriptomes = NULL)
 
 \item{features}{if SE is not supplied, GRanges with lengths}
 
+\item{covariates}{optional data.frame or DataFrame if SE is not present}
+
 \item{transcriptomes}{mandatory string or strings naming the transcriptomes}
+
+\item{fraglen}{optional mean fragment length estimate for PE runs}
 }
 \value{
 a KallistoExperiment
 }
 \description{
-convert a properly annotated SummarizedExperiment with 'counts',
-or a matrix of counts and a GRanges of annotations for each count,
-to a KallistoExperiment (thereby providing tpm estimates on demand).
-Note that, without bias correction, these tpm estimates are somewhat janky.
-Note also that the code here is based upon Harold Pimentel's code, cf.
+Note that the code here is based upon Harold Pimentel's code, cf.
 https://haroldpimentel.wordpress.com/2014/05/08/what-the-fpkm-a-review-rna-seq-expression-units/
 }
 \seealso{
