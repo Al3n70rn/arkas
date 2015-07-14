@@ -1,17 +1,17 @@
-#' annotate the repeats found amongst unique transcripts in a KallistoExperiment
+#' annotate the repeats found amongst unique transcripts 
 #'
 #' FIXME: actually annotate some repeats 
 #' 
-#' @param kexp       a KallistoExperiment
+#' @param kexp       something that smells like a KallistoExperiment
 #' @param repeatome  the name of the repeatome (presumably annotated in a db)
 #'
-#' @return           a KallistoExperiment, perhaps with repeats annotated
+#' @return           the supplied *Experiment, perhaps with repeats annotated
 #'
 #' @export
 #'
 annotateRepeats <- function(kexp, repeatome, ...) { 
 
-  message("Not yet")
+  message("Repeat annotation is not yet properly implemented...")
   return(kexp)
   
   if (FALSE) { 

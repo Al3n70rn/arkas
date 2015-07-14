@@ -7,12 +7,12 @@
 annotateGenes(kexp, transcriptome, ...)
 }
 \arguments{
-\item{kexp}{some sort of *Experiment, perhaps somewhat annotated}
+\item{kexp}{a KallistoExperiment (or something that behaves like it)}
 
-\item{transcriptome}{character string naming the target transcriptome}
+\item{transcriptome}{a character string naming the transcriptome}
 }
 \value{
-the supplied experiment, perhaps further annotated
+a possibly further-annotated version of kexp
 }
 \description{
 annotate genes against EnsemblDb (like for annotateEnsembl, but gene-level)

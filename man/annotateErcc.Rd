@@ -2,20 +2,20 @@
 % Please edit documentation in R/annotateErcc.R
 \name{annotateErcc}
 \alias{annotateErcc}
-\title{annotate the ERCC spike-ins found amongst the transcripts in a Kallisto run
-(note: artemis includes ThermoFisher/Life annotations for these controls.)}
+\title{annotate the ERCC spike-ins found amongst the transcripts in a run
+(artemis includes ThermoFisher/Life annotations for these; see ?ERCC.)}
 \usage{
 annotateErcc(kexp, ...)
 }
 \arguments{
-\item{kexp}{a KallistoExperiment}
+\item{kexp}{something that smells vaguely like a KallistoExperiment}
 }
 \value{
-a KallistoExperiment, perhaps with ERCC spike-ins annotated
+the supplied object, perhaps with ERCC spike-ins annotated
 }
 \description{
-annotate the ERCC spike-ins found amongst the transcripts in a Kallisto run
-(note: artemis includes ThermoFisher/Life annotations for these controls.)
+annotate the ERCC spike-ins found amongst the transcripts in a run
+(artemis includes ThermoFisher/Life annotations for these; see ?ERCC.)
 }
 \seealso{
 ERCC

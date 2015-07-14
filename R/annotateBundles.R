@@ -1,5 +1,5 @@
 #'
-#' annotate a pile of TPMs against a transcriptome bundle (via e.g. EnsDb)
+#' annotate a pile of tpms against a transcriptome bundle (via e.g. EnsDb)
 #' 
 #' @param kexp            a KallistoExperiment (perhaps somewhat annotated)
 #' @param transcriptomes  character vector (perhaps empty) naming transcriptomes

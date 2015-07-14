@@ -1,9 +1,9 @@
 #' annotate genes against EnsemblDb (like for annotateEnsembl, but gene-level)
 #' 
-#' @param kexp            some sort of *Experiment, perhaps somewhat annotated
-#' @param transcriptome   character string naming the target transcriptome
+#' @param kexp          a KallistoExperiment (or something that behaves like it)
+#' @param transcriptome a character string naming the transcriptome
 #'
-#' @return                the supplied experiment, perhaps further annotated
+#' @return              a possibly further-annotated version of kexp
 #'
 #' @export
 annotateGenes <- function(kexp, transcriptome, ...) { 
