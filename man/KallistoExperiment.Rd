@@ -2,29 +2,46 @@
 % Please edit documentation in R/KallistoExperiment.R
 \name{KallistoExperiment}
 \alias{KallistoExperiment}
-\title{Initializes a KallistoExperiment and performs some rudimentary checks}
+\title{Initializes a KallistoExperiment and performs some rudimentary checks.
+Many of the arguments CAN be NULL; determination of which is required
+is done at run-time.  A KallistoExperiment must contain at least the
+est_counts and eff_length assays, because these are required for tpm
+estimates.  HOWEVER, given raw counts along with informative lengths
+for each feature (row), we can deduce the effective length of each
+transcript or bundle from the total normalized count. Function SEtoKE(),
+which underlies as(SE, "KallistoExperiment"), does exactly that.}
 \usage{
 KallistoExperiment(est_counts = NULL, eff_length = NULL,
   transcriptomes = NULL, covariates = DataFrame(),
   features = GRangesList(), kallistoVersion = "", est_counts_mad = NULL,
-  ...)
+  summarizedexperiment = NULL, ...)
 }
 \arguments{
 \item{est_counts}{matrix of estimated counts}
 
 \item{eff_length}{matrix of effective transcript lengths}
 
-\item{transcriptomes}{string or vector of strings naming the target txomes}
+\item{transcriptomes}{string or strings naming the target txomes}
 
-\item{covariates}{the column metadata for the object}
+\item{covariates}{the column metadata (covariates) for each sample}
 
-\item{features}{the row metadata for the object}
+\item{features}{the row-wise annotations for the object}
 
-\item{kallistoVersion}{the version of Kallisto used to run the experiment}
+\item{kallistoVersion}{version of Kallisto used to run the experiment}
 
-\item{est_counts_mad}{matrix of count MADs under the best bootstrap model}
+\item{est_counts_mad}{matrix of count MADs summarizing bootstrap runs}
 }
 \description{
-Initializes a KallistoExperiment and performs some rudimentary checks
+Initializes a KallistoExperiment and performs some rudimentary checks.
+Many of the arguments CAN be NULL; determination of which is required
+is done at run-time.  A KallistoExperiment must contain at least the
+est_counts and eff_length assays, because these are required for tpm
+estimates.  HOWEVER, given raw counts along with informative lengths
+for each feature (row), we can deduce the effective length of each
+transcript or bundle from the total normalized count. Function SEtoKE(),
+which underlies as(SE, "KallistoExperiment"), does exactly that.
+}
+\seealso{
+SEtoKE
 }
 

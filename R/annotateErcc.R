@@ -1,9 +1,9 @@
-#' annotate the ERCC spike-ins found amongst the transcripts in a Kallisto run
-#' (note: artemis includes ThermoFisher/Life annotations for these controls.)
+#' annotate the ERCC spike-ins found amongst the transcripts in a run
+#' (artemis includes ThermoFisher/Life annotations for these; see ?ERCC.)
 #' 
-#' @param kexp    a KallistoExperiment
+#' @param kexp    something that smells vaguely like a KallistoExperiment
 #'
-#' @return        a KallistoExperiment, perhaps with ERCC spike-ins annotated
+#' @return        the supplied object, perhaps with ERCC spike-ins annotated
 #'
 #' @seealso       ERCC 
 #' 
@@ -21,7 +21,9 @@ annotateErcc <- function(kexp, ...) {
 
   ## annotate by subgroup: as noted in ?ERCC, this corresponds to mix properties
   erccAnnotations$tx_biotype <- paste0("erccSpikeIn_subgroup", ERCC$subgroup) 
-  features(kexp)[names(erccAnnotations)] <- erccAnnotations 
+  feats <- features(kexp)
+  feats[names(erccAnnotations)] <- erccAnnotations 
+  features(kexp) <- feats
 
   message("ERCC spike-ins annotated.")
   message("For more information, see ?ERCC, data(ERCC), and show(ERCC).")

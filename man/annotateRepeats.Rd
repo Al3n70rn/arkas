@@ -2,17 +2,17 @@
 % Please edit documentation in R/annotateRepeats.R
 \name{annotateRepeats}
 \alias{annotateRepeats}
-\title{annotate the repeats found amongst unique transcripts in a KallistoExperiment}
+\title{annotate the repeats found amongst unique transcripts}
 \usage{
 annotateRepeats(kexp, repeatome, ...)
 }
 \arguments{
-\item{kexp}{a KallistoExperiment}
+\item{kexp}{something that smells like a KallistoExperiment}
 
 \item{repeatome}{the name of the repeatome (presumably annotated in a db)}
 }
 \value{
-a KallistoExperiment, perhaps with repeats annotated
+the supplied *Experiment, perhaps with repeats annotated
 }
 \description{
 FIXME: actually annotate some repeats
