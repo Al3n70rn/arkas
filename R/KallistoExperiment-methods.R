@@ -60,14 +60,14 @@ setMethod("eff_length", "KallistoExperiment",
           function (object) return(assays(object)$eff_length))
 
 # TPM generic 
-setGeneric("TPM", function(object) standardGeneric("TPM"))
+setGeneric("tpm", function(object) standardGeneric("tpm"))
 
 #' @describeIn KallistoExperiment 
 #' @param object: A KallistoExperiment with estimated counts & effective lengths
 #' @return a matrix of TPMs (transcripts per million)
 #'
 #' @export
-setMethod("TPM", "KallistoExperiment",
+setMethod("tpm", "KallistoExperiment",
           function (object) return(counts(object) / eff_length(object)))
 
 # kallistoVersion generic 

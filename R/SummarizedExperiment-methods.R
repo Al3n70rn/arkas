@@ -31,7 +31,7 @@ setReplaceMethod("covariates", c("ANY", "ANY"),
 #' @export
 #'
 setMethod("features", "ANY", 
-          function (x) if (isRSE(x)) rowRanges(x) else rowData(x))
+          function (x) if (isRSE(x)) x@rowRanges else x@rowData)
 
 #' @describeIn KallistoExperiment 
 #'
@@ -46,15 +46,18 @@ setMethod("features", "ANY",
 #'
 setReplaceMethod("features", c("ANY", "ANY"), 
                  function(object, value) {
-                   if (isRSE(object)) GenomicRanges::rowRanges(object) <- value
-                   else rowData(object) <- value
-                   return(object)
-                 })
+                   if (isRSE(object)) {
+                      object@rowRanges<-value
+                   } else {
+                   object@rowData<-value
+                 }
+                    return(object)
+                  })
 
 #' @describeIn KallistoExperiment 
 #'
 #' @param   object: something to which features should be assigned
-#' @param   value: the features to assign (usually a GRanges or GRangesList)
+#' @param   value: the features to assin (usually a GRanges or GRangesList)
 #'
 #' @return the object, perhaps with updated feature annotations
 #'
@@ -64,4 +67,5 @@ setReplaceMethod("features", c("ANY", "SummarizedExperiment0"),
                  function(object, value) {
                    elementMetadata(object) <- value
                    return(object)
+                    stop("SummarizedExperiment0 objects have no row annotations")
                  })
