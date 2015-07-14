@@ -2,7 +2,7 @@
 % Please edit documentation in R/annotateBundles.R
 \name{annotateBundles}
 \alias{annotateBundles}
-\title{annotate a pile of TPMs against a transcriptome bundle (via e.g. EnsDb)}
+\title{annotate a pile of tpms against a transcriptome bundle (via e.g. EnsDb)}
 \usage{
 annotateBundles(kexp, transcriptomes, ...)
 }
@@ -15,6 +15,6 @@ annotateBundles(kexp, transcriptomes, ...)
 a KallistoExperiment (perhaps further annotated)
 }
 \description{
-annotate a pile of TPMs against a transcriptome bundle (via e.g. EnsDb)
+annotate a pile of tpms against a transcriptome bundle (via e.g. EnsDb)
 }
 

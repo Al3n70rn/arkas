@@ -2,19 +2,19 @@
 % Please edit documentation in R/annotateEnsembl.R
 \name{annotateEnsembl}
 \alias{annotateEnsembl}
-\title{annotate a pile of TPMs against an Ensembl transcriptome (via EnsDb)}
+\title{annotate a pile of counts against an Ensembl transcriptome (via EnsDb)}
 \usage{
 annotateEnsembl(kexp, transcriptome, ...)
 }
 \arguments{
-\item{kexp}{a KallistoExperiment}
+\item{kexp}{a KallistoExperiment (or something that behaves like it)}
 
 \item{transcriptome}{a character string naming the transcriptome}
 }
 \value{
-a (possibly further-annotated) KallistoExperiment
+a possibly further-annotated version of kexp
 }
 \description{
-annotate a pile of TPMs against an Ensembl transcriptome (via EnsDb)
+annotate a pile of counts against an Ensembl transcriptome (via EnsDb)
 }
 
