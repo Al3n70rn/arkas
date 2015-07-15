@@ -9,7 +9,7 @@
 #'
 #' @import edgeR 
 #' @import limma
-#' @import ReactomePA
+#' @import ReactomePA 
 #' @import Homo.sapiens
 #' @import Mus.musculus
 #'
