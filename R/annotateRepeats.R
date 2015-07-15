@@ -11,16 +11,20 @@
 #'
 annotateRepeats <- function(kexp, repeatome, ...) { 
 
-  message("Repeat annotation is not yet properly implemented...")
-  return(kexp)
-  
-  if (FALSE) { 
+ # message("Repeat annotation is not yet properly implemented...")
+  #return(kexp)
+  data("repeatsByClass",package="artemis") #this loads rptsByClass object, which holds annotation of repetitive elements
+  data("repeatElement",package="artemis") #dummy GRanges object
+
+  #if (FALSE) { 
+   
+   
     message("Annotating repeats supplied in ", repeatome, "...")
     data("repeatElement", package="artemis") ## dummy granges w/mcols()
     repeatElements <- rep(repeatElement, sum(grepl(repeats, rownames(kexp))))
     names(repeatElements) <- grep(repeats, rownames(kexp), value=TRUE) 
     features(kexp)[names(repeatElements)] <- repeatElements
     return(kexp)
-  }
+#  }
 
 }
