@@ -15,15 +15,23 @@ annotateRepeats <- function(kexp, repeatome, ...) {
   #return(kexp)
   data("repeatsByClass",package="artemis") #this loads rptsByClass object, which holds annotation of repetitive elements
   data("repeatElement",package="artemis") #dummy GRanges object
-
+   message("Annotating repeats supplied in ", repeatome, "...")
   #if (FALSE) { 
+      repeatsDF<-as.data.frame(rptsByClass) #puts the rptsByClass GRangesList as a dataframe because names(rptsByClass) has <20 levels.  the DF is convenient
+   intersectRpts<-intersect(rownames(res)==repeatsDF$name) #grabs the intersected metadata between DF and rowData(res)
+   indexRpts<-which(repeatsDF$name==intersectRpts) #subsets repeatsDF
+   repeatsDF<-repeatsDF[indexRpts,]
+
+   repeatElement<-rep(repeatElement,nrow(repeatsDF))
+   names(repeatElement)<-repeatsDF$name
+   genome(repeatElement)<-unique(genome(rptsByClass)) #GRanges List loaded by RepeatsByClass.rda
+   strand(repeatElement)<-repeatsDF$strand
    
-   
-    message("Annotating repeats supplied in ", repeatome, "...")
-    data("repeatElement", package="artemis") ## dummy granges w/mcols()
-    repeatElements <- rep(repeatElement, sum(grepl(repeats, rownames(kexp))))
-    names(repeatElements) <- grep(repeats, rownames(kexp), value=TRUE) 
-    features(kexp)[names(repeatElements)] <- repeatElements
+    
+    # repeatElements <- rep(repeatElement, sum(grepl(repeats, rownames(kexp))))
+   # names(repeatElements) <- grep(repeats, rownames(kexp), value=TRUE) 
+   # features(kexp)[names(repeatElements)] <- repeatElements
+     features(kexp)[names(repeatElement)]<-repeatElement
     return(kexp)
 #  }
 
