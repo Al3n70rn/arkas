@@ -18,7 +18,7 @@ annotateRepeats <- function(kexp, repeatome, ...) {
    message("Annotating repeats supplied in ", repeatome, "...")
   #if (FALSE) { 
       repeatsDF<-as.data.frame(rptsByClass) #puts the rptsByClass GRangesList as a dataframe because names(rptsByClass) has <20 levels.  the DF is convenient
-   intersectRpts<-intersect(rownames(kexp)==repeatsDF$name) #grabs the intersected metadata between DF and rowData(res)
+   intersectRpts<-intersect(rownames(kexp),repeatsDF$name) #grabs the intersected metadata between DF and rowData(res)
    indexRpts<-which(repeatsDF$name==intersectRpts) #subsets repeatsDF
    repeatsDF<-repeatsDF[indexRpts,]
 
