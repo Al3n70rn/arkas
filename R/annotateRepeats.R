@@ -30,8 +30,8 @@ annotateRepeats <- function(kexp, repeatome, ...) {
    names(repeatElement)<-intersectRpts  #one repeat per entry FIX
   # names(repeatElement)<-repeatsDF$name
    genome(repeatElement)<-unique(genome(rptsByClass)) #GRanges List loaded by RepeatsByClass.rda
-   strand(repeatElement)<-repeatsDF$strand
-   repeatElement$tx_biotype<-repeatsDF$class   
+  # strand(repeatElement)<-repeatsDF$strand
+  # repeatElement$tx_biotype<-repeatsDF$class   
     
     # repeatElements <- rep(repeatElement, sum(grepl(repeats, rownames(kexp))))
    # names(repeatElements) <- grep(repeats, rownames(kexp), value=TRUE) 
@@ -49,4 +49,4 @@ annotateRepeats <- function(kexp, repeatome, ...) {
   #hence the repeats, repeat alot.  how do you handle this ?
   #this method in R, it just flags only the intersected names once, although there exist many repeats across many ranges, across many classes. 
 
-  
+  #we do not have yet how to label the strand for repeat non unique elements.  keepeing only basic info
