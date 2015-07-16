@@ -22,7 +22,7 @@ annotateRepeats <- function(kexp, repeatome, ...) {
    repeatsDF[i]<-lapply(repeatsDF[i],as.character) #need to set rownames for repeatsDF
     
   intersectRpts<-intersect(rownames(kexp),repeatsDF$name) #grabs the intersected metadata between DF and rowData(res)
-   repeatsDF<-repeatsDF[repeatsDF$name %in% intersectRpts,] #subsets rows of repeatsDF to match the column of intersectRpts
+   repeatsDF<-repeatsDF[repeatsDF$name %in% intersectRpts,] #subsets rows of repeatsDF to match the column of intersect
 
    
   repeatElement<-rep(repeatElement,length(intersectRpts)) #only 1 repeat per repeat
