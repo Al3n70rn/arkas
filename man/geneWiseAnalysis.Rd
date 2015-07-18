@@ -4,21 +4,23 @@
 \alias{geneWiseAnalysis}
 \title{Downstream analysis of bundle-aggregated transcript abundance estimates.}
 \usage{
-geneWiseAnalysis(kexp, design, categories = 10, k = 2, p.cutoff = 0.05,
-  species = c("Homo.sapiens", "Mus.musculus"))
+geneWiseAnalysis(kexp, design, p.cutoff = 0.05, fold.cutoff = 1,
+  read.cutoff = 1, species = c("Homo.sapiens", "Mus.musculus"))
 }
 \arguments{
 \item{kexp}{a KallistoExperiment or SummarizedExperiment-like object}
 
-\item{design}{a design matrix w/contrast or coefficient to test in col2}
+\item{design}{a design matrix w/contrast or coefficient to test}
 
-\item{categories}{how many categories for ReactomeDB enrichment plots (10)}
+\item{p.cutoff}{where to set the p-value cutoff for plots, etc. (0.05)}
 
-\item{k}{how many gene clusters to construct for comparison (2)}
+\item{fold.cutoff}{where to set the log2-FC cutoff for plots, etc. (1==2x)}
 
-\item{p.cutoff}{where to set the p-value cutoff for such plots (0.05)}
+\item{read.cutoff}{minimum read coverage (estimated) for a gene bundle}
 
 \item{species}{which species? (Homo.sapiens; FIX: get from transcriptome)}
+
+\item{topheat}{how many bundles to include in the cluster heatmaps? (100)}
 }
 \description{
 Downstream analysis of bundle-aggregated transcript abundance estimates.
