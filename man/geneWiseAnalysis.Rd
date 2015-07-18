@@ -22,6 +22,10 @@ geneWiseAnalysis(kexp, design, p.cutoff = 0.05, fold.cutoff = 1,
 
 \item{topheat}{how many bundles to include in the cluster heatmaps? (100)}
 }
+\value{
+a list w/items design, voomed, fit, top, enriched,
+                                  scaledExprs, clusts, enrichedGO, enrichedRx
+}
 \description{
 Downstream analysis of bundle-aggregated transcript abundance estimates.
 }
