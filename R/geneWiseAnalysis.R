@@ -17,6 +17,9 @@
 #'
 #' @importFrom matrixStats rowSds 
 #' 
+#' @return            a list w/items design, voomed, fit, top, enriched, 
+#'                                   scaledExprs, clusts, enrichedGO, enrichedRx
+#'
 #' @export
 #' 
 geneWiseAnalysis <- function(kexp, design, 
@@ -35,9 +38,9 @@ geneWiseAnalysis <- function(kexp, design,
 
   message("Fitting bundles...")
   res <- fitBundles(kexp, design, bundleID="entrezid", read.cutoff=read.cutoff)
-  top <- with(res, topTable(fit, coef=2, p=p.cutoff, n=nrow(kexp)))
-  top <- top[ abs(top$logFC) >= fold.cutoff, ] ## per SEQC recommendations
-  topGenes <- rownames(top)
+  res$top <- with(res, topTable(fit, coef=2, p=p.cutoff, n=nrow(kexp)))
+  res$top <- res$top[ abs(res$top$logFC) >= fold.cutoff, ] ## per SEQC
+  topGenes <- rownames(res$top)
 
   ## match species to map top genes to Entrez IDs 
   message("Matching species...")
@@ -45,40 +48,41 @@ geneWiseAnalysis <- function(kexp, design,
   topGenes <- topGenes[topGenes %in% keys(get(species), "ENTREZID")]
 
   ## overall
-  enriched <- enrichPathway(gene=topGenes, 
-                            qvalueCutoff=p.cutoff, 
-                            readable=TRUE) 
-  barplot(enriched, showCategory=10, title="Overall Reactome enrichment")
-  readline("Press a key to continue...")
+  message("Performing Reactome enrichment analysis...")
+  res$enriched <- enrichPathway(gene=topGenes, 
+                                qvalueCutoff=p.cutoff, 
+                                readable=TRUE) 
+  barplot(res$enriched, showCategory=10, title="Overall Reactome enrichment")
 
   ## cluster profiling within Reactome and/or GO 
-  scaledExprs <- t(scale(t(res$voomed$E[ topGenes, ])))
+  message("Performing clustered enrichment analysis...")
+  res$scaledExprs <- t(scale(t(res$voomed$E[ topGenes, ])))
   ## turns out it's pretty easy: there's an "up" cluster, and a "down" cluster
-  clust <- cutree(hclust(dist(scaledExprs), method="ward"), k=2)
+  clust <- cutree(hclust(dist(res$scaledExprs), method="ward"), k=2)
   genes <- split(names(clust), clust)
   names(genes) <- c("down", "up")
-  res <- compareCluster(geneCluster=genes, 
-                        fun="enrichPathway", 
-                        qvalueCutoff=p.cutoff)
-  plot(res) ## this is interesting, it turns out 
-  readline("Press a key to continue...")
+  res$clusts <- compareCluster(geneCluster=genes, 
+                               fun="enrichPathway", 
+                               qvalueCutoff=p.cutoff)
+  plot(res$clusts) ## this is interesting, it turns out 
 
   ## up vs down genes
   enrichedGO <- list()
   enrichedRx <- list()
+  message("Performing GO analysis...")
   for (i in names(genes)) {
     enrichedGO[[i]] <- enrichGO(gene=genes[[i]], commonName, readable=TRUE,
                                 qvalueCutoff=p.cutoff)
     enrichedRx[[i]] <- enrichPathway(gene=genes[[i]], commonName, readable=TRUE,
                                      qvalueCutoff=p.cutoff)
   }
+  res$enrichedGO <- enrichedGO
 
   for (i in names(genes)) {
     barplot(enrichedGO[[i]], showCategory=10, title=paste("Gene ontologies", i))
-    readline("Press a key to continue...")
     if (nrow(summary(enrichedRx[[i]])) > 0) {
+      res$enrichedRx <- enrichedRx
       barplot(enrichedRx[[i]], showCategory=10, title=paste("Reactome", i))
-      readline("Press a key to continue...")
     }
   }
 
@@ -90,7 +94,7 @@ geneWiseAnalysis <- function(kexp, design,
   ## EnrichmentBrowser is another recent package that may be tremendously handy
   ##
 
-  return(top)
+  return(res)
 
 }
 
