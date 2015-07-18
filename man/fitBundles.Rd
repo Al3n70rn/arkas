@@ -4,12 +4,16 @@
 \alias{fitBundles}
 \title{encapsulate limma/voom analysis for consistency with ebrowser()}
 \usage{
-fitBundles(kexp, design, ...)
+fitBundles(kexp, design, bundleID = "gene_id", read.cutoff = 1, ...)
 }
 \arguments{
-\item{kexp}{A KallistoExperiment}
+\item{kexp}{A KallistoExperimenta}
 
 \item{design}{A model matrix}
+
+\item{bundleID}{The ID to bundle on (default is gene_id)}
+
+\item{read.cutoff}{Exclude bundles where the maximum count is < this}
 }
 \value{
 A list with elements (design, voomed, fit)

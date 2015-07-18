@@ -1,17 +1,14 @@
-#' Downstream analysis of bundle-aggregated transcript abundance estimates.
+#' Downstream analysis of raw transcript abundance estimates.
 #'
 #' @param kexp        a KallistoExperiment or SummarizedExperiment-like object 
-#' @param design      a design matrix w/contrast or coefficient to test
+#' @param design      a design matrix w/contrast or coefficient to test in col2
 #' @param p.cutoff    where to set the p-value cutoff for plots, etc. (0.05)
-#' @param fold.cutoff where to set the log2-FC cutoff for plots, etc. (1==2x)
-#' @param read.cutoff minimum read coverage (estimated) for a gene bundle 
-#' @param topheat     how many bundles to include in the cluster heatmaps? (100)
+#' @param fold.cutoff where to set the log2-FC cutoff for plots, etc. (1 == 2x)
 #' @param species     which species? (Homo.sapiens; FIX: get from transcriptome)
-#' 
+#' @param annotation  functional annotations for individual transcripts (varies)
+#'
 #' @import edgeR 
 #' @import limma
-#' @import ReactomePA 
-#' @import clusterProfiler
 #' @import Homo.sapiens
 #' @import Mus.musculus
 #'
@@ -19,9 +16,9 @@
 #' 
 #' @export
 #' 
-geneWiseAnalysis <- function(kexp, design, 
-                             p.cutoff=0.05, fold.cutoff=1, read.cutoff=1, 
-                             species=c("Homo.sapiens","Mus.musculus")) {
+transcriptWiseAnalysis <- function(kexp, design, p.cutoff=0.05, fold.cutoff=1, 
+                                   species=c("Homo.sapiens","Mus.musculus"),
+                                   annotation=NULL) {  
 
   ## this is really only meant for a KallistoExperiment
   if (!is(kexp, "KallistoExperiment")) {
@@ -33,14 +30,18 @@ geneWiseAnalysis <- function(kexp, design,
   species <- match.arg(species) ## NOT to be confused with KEGG species ID
   commonName <- switch(species, Mus.musculus="mouse", Homo.sapiens="human")
 
-  message("Fitting bundles...")
-  res <- fitBundles(kexp, design, bundleID="entrezid", read.cutoff=read.cutoff)
-  top <- with(res, topTable(fit, coef=2, p=p.cutoff, n=nrow(kexp)))
+  stop("This ain't done")
+
+  res <- fitTranscripts(kexp, design)
+  p.cutoff <- 0.1
+  fold.cutoff <- 1
+  top <- topTable(fit, coef=2, p=p.cutoff, n=nrow(assay))
   top <- top[ abs(top$logFC) >= fold.cutoff, ] ## per SEQC recommendations
+
+  ## ReactomePA for pathway analysis 
   topGenes <- rownames(top)
 
   ## match species to map top genes to Entrez IDs 
-  message("Matching species...")
   library(species, character.only=TRUE)
   topGenes <- topGenes[topGenes %in% keys(get(species), "ENTREZID")]
 
@@ -49,10 +50,9 @@ geneWiseAnalysis <- function(kexp, design,
                             qvalueCutoff=p.cutoff, 
                             readable=TRUE) 
   barplot(enriched, showCategory=10, title="Overall Reactome enrichment")
-  readline("Press a key to continue...")
 
   ## cluster profiling within Reactome and/or GO 
-  scaledExprs <- t(scale(t(res$voomed$E[ topGenes, ])))
+  scaledExprs <- t(scale(t(voomed$E[ topGenes, ])))
   ## turns out it's pretty easy: there's an "up" cluster, and a "down" cluster
   clust <- cutree(hclust(dist(scaledExprs), method="ward"), k=2)
   genes <- split(names(clust), clust)
@@ -60,8 +60,7 @@ geneWiseAnalysis <- function(kexp, design,
   res <- compareCluster(geneCluster=genes, 
                         fun="enrichPathway", 
                         qvalueCutoff=p.cutoff)
-  plot(res) ## this is interesting, it turns out 
-  readline("Press a key to continue...")
+  plot(res) ## this is not so interesting, it turns out 
 
   ## up vs down genes
   enrichedGO <- list()
@@ -75,10 +74,8 @@ geneWiseAnalysis <- function(kexp, design,
 
   for (i in names(genes)) {
     barplot(enrichedGO[[i]], showCategory=10, title=paste("Gene ontologies", i))
-    readline("Press a key to continue...")
     if (nrow(summary(enrichedRx[[i]])) > 0) {
       barplot(enrichedRx[[i]], showCategory=10, title=paste("Reactome", i))
-      readline("Press a key to continue...")
     }
   }
 
