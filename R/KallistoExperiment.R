@@ -47,7 +47,7 @@ KallistoExperiment <- function(est_counts=NULL,
   new("KallistoExperiment", 
       assays=Assays(assays),
       colData=covariates,
-      rowData=features,
+      rowRanges=features,
       kallistoVersion=kallistoVersion,
       transcriptomes=transcriptomes)
 
