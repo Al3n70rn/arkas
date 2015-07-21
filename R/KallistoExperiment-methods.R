@@ -38,7 +38,7 @@ setGeneric("features<-", function(object, value) standardGeneric("features<-"))
 #' @export
 #'
 setMethod("features", "KallistoExperiment", 
-          function (x) if (isRSE(x)) x@rowRanges else x@rowData)
+          function (x) rowRanges(x))
 
 #' @describeIn KallistoExperiment 
 #'

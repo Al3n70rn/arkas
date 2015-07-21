@@ -9,11 +9,11 @@
 \alias{covariates,KallistoExperiment-method}
 \alias{covariates<-,ANY-method}
 \alias{eff_length,KallistoExperiment-method}
-\alias{features,ANY-method}
 \alias{features,KallistoExperiment-method}
-\alias{features<-,ANY,ANY-method}
-\alias{features<-,ANY,SummarizedExperiment0-method}
-\alias{features<-,KallistoExperiment,ANY-method}
+\alias{features,SummarizedExperiment0-method}
+\alias{features<-,KallistoExperiment-method}
+\alias{features<-,RangedSummarizedExperiment-method}
+\alias{features<-,SummarizedExperiment0-method}
 \alias{kallistoVersion,KallistoExperiment-method}
 \alias{promoters,KallistoExperiment-method}
 \alias{tpm,KallistoExperiment-method}
@@ -27,7 +27,7 @@
 
 \S4method{features}{KallistoExperiment}(x)
 
-\S4method{features}{KallistoExperiment,ANY}(object) <- value
+\S4method{features}{KallistoExperiment}(object) <- value
 
 \S4method{eff_length}{KallistoExperiment}(object)
 
@@ -49,11 +49,11 @@
 
 \S4method{covariates}{ANY}(object) <- value
 
-\S4method{features}{ANY}(x)
+\S4method{features}{SummarizedExperiment0}(x)
 
-\S4method{features}{ANY,ANY}(object) <- value
+\S4method{features}{RangedSummarizedExperiment}(object) <- value
 
-\S4method{features}{ANY,SummarizedExperiment0}(object) <- value
+\S4method{features}{SummarizedExperiment0}(object) <- value
 }
 \arguments{
 \item{object:}{A KallistoExperiment from which to retrieve counts}
