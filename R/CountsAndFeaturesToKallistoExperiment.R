@@ -12,8 +12,9 @@
 #' @export 
 CountsAndFeaturesToKallistoExperiment <- function(counts, 
                                                   features, 
-                                                  transcriptomes) {
+                                                  transcriptomes,
+                                                  ...) {
   stopifnot(is(counts, "matrix"))
   stopifnot(is(features, "GenomicRanges"))
-  SEtoKE(NULL, counts=counts, features=features, transcriptomes=transcriptomes) 
+  SEtoKE(counts=counts, features=features, transcriptomes=transcriptomes) 
 }

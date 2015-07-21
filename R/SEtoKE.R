@@ -1,9 +1,13 @@
 #' Convert a properly annotated SummarizedExperiment with 'counts',
-#' or a matrix of counts and a GRanges of annotations for each count, 
+#' OR a matrix of counts and a GRanges of annotations for each count, 
 #' to a KallistoExperiment (thereby providing tpm estimates on demand). 
 #'
 #' Note that the code here is based upon Harold Pimentel's code, cf. 
 #' https://haroldpimentel.wordpress.com/2014/05/08/what-the-fpkm-a-review-rna-seq-expression-units/
+#' 
+#' FIXME: add bias correction to eff_lengths, or derive from TPM instead?
+#' FIXME: allow for metadata and per-sample metadata (i.e. MultiAssayExperiment)
+#' FIXME: add some sort of KallistoExperiment method to correct bias post-hoc
 #' 
 #' @param SE              a properly-annotated SummarizedExperiment
 #' @param counts          if SE is not supplied, a matrix of counts
@@ -20,14 +24,40 @@
 SEtoKE <- function(SE=NULL, counts=NULL, features=NULL, covariates=NULL,
                    transcriptomes=NULL, fraglen=200, ...) { 
 
-  if (!is.null(SE)) {
-    counts <- counts(SE)
+  if (is.null(SE)) {
+    stopifnot(!is.null(counts) && !is.null(features))
+    annotated <- intersect(names(features), rownames(counts))
+    if (length(annotated) == 0) stop("Your counts are not properly annotated!")
+    counts <- counts[annotated, ]
+    features <- features[annotated]
+    if (is.null(covariates)) {
+      covariates <- DataFrame(ID=colnames(counts), row.names=colnames(counts))
+    } else { 
+      covariates <- covariates[colnames(counts),] 
+      if (nrow(covariates) != colnames(counts)) {
+        stop("Your covariates dataframe lacks columns found in your counts!")
+      }
+    }
+  } else {
+    ## in case we are converting an updateObject()ed kexp...
+    counts <- assays(SE)[[grep("count", assayNames(SE))[1]]]
+    eff_lengths <- assays(SE)[["eff_lengths"]]
     features <- features(SE)
     covariates <- colData(SE) 
-  } else { 
-    stopifnot(!is.null(counts) && !is.null(features))
   }
-  eff_lengths <- width(features) - fraglen + 1 
+
+  if (!is.null(SE) & "eff_length" %in% names(assays(SE))) {
+    eff_lengths <- assays(SE)$eff_length
+  } else { 
+    ## FIXME: this is silly, although it's what Kallisto does
+    biased_efflen <- width(features) - fraglen + 1
+    eff_lengths <- matrix(rep(biased_efflen, ncol(counts)), ncol=ncol(counts))
+    colnames(eff_lengths) <- colnames(counts)
+  }
+
+  stopifnot(identical(colnames(counts), colnames(eff_lengths)))
+  stopifnot(identical(colnames(counts), rownames(covariates)))
+  stopifnot(identical(rownames(counts), names(features)))
 
   KallistoExperiment(est_counts=counts,
                      eff_length=eff_lengths,
@@ -36,5 +66,4 @@ SEtoKE <- function(SE=NULL, counts=NULL, features=NULL, covariates=NULL,
                      covariates=covariates,
                      features=features,
                      ...)
-
 }

@@ -5,7 +5,7 @@
 \title{verbose, specialized alias for SEtoKE so that users can easily find it
 FIXME: automate the process of length extraction with usable transcriptome(s)}
 \usage{
-CountsAndFeaturesToKallistoExperiment(counts, features, transcriptomes)
+CountsAndFeaturesToKallistoExperiment(counts, features, transcriptomes, ...)
 }
 \arguments{
 \item{counts}{matrix of transcript or bundle counts}

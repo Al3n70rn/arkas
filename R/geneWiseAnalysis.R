@@ -1,22 +1,40 @@
 #' Downstream analysis of bundle-aggregated transcript abundance estimates.
 #'
 #' @param kexp        a KallistoExperiment or SummarizedExperiment-like object 
-#' @param design      a design matrix w/contrast or coefficient to test in col2
-#' @param categories  how many categories for ReactomeDB enrichment plots (10)
-#' @param k           how many gene clusters to construct for comparison (2)
-#' @param p.cutoff    where to set the p-value cutoff for such plots (0.05)
+#' @param design      a design matrix with 2nd coefficient as one to test
+#' @param p.cutoff    where to set the p-value cutoff for plots, etc. (0.05)
+#' @param fold.cutoff where to set the log2-FC cutoff for plots, etc. (1==2x)
+#' @param read.cutoff minimum read coverage (estimated) for a gene bundle 
+#' @param topheat     how many bundles to include in the cluster heatmaps? (100)
 #' @param species     which species? (Homo.sapiens; FIX: get from transcriptome)
-#'
+#' 
 #' @import edgeR 
 #' @import limma
 #' @import ReactomePA 
+#' @import clusterProfiler
 #' @import Homo.sapiens
 #' @import Mus.musculus
 #'
 #' @importFrom matrixStats rowSds 
 #' 
+#' 
+#' @details           If no design matrix is found, the function will look in 
+#'                    exptData(kexp)$design. If that too is empty it will fail.
+#'                    There seems to be a bug in rendering Reactome plots, so 
+#'                    it may be necessary to do so manually:  
+#' \code{res <- geneWiseAnalysis(kexp, design, ...)} 
+#'                    followed by 
+#' \code{barplot(res$enriched, showCategory=10)}
+#'                    and 
+#' \code{plot(res$clusts)}
+#'
+#' @return            a list w/items design, voomed, fit, top, enriched,
+#'                                   scaledExprs, clusts, ... (perhaps) 
+#'
 #' @export
-geneWiseAnalysis <- function(kexp, design, categories=10, k=2, p.cutoff=0.05, 
+#' 
+geneWiseAnalysis <- function(kexp, design=NULL,
+                             p.cutoff=0.05, fold.cutoff=1, read.cutoff=1, 
                              species=c("Homo.sapiens","Mus.musculus")) {
 
   ## this is really only meant for a KallistoExperiment
@@ -25,56 +43,68 @@ geneWiseAnalysis <- function(kexp, design, categories=10, k=2, p.cutoff=0.05,
     message("It may work for other classes, but we make no guarantees.")
   }
 
+  if (is.null(design)) {
+    if (!is.null(exptData(kexp)$design)) {
+      design <- exptData(kexp)$design
+    } else { 
+      stop("A design matrix must be supplied, or present in metadata.")
+    }
+  }
+
   ## only two supported for now (would be simple to expand, though)
   species <- match.arg(species) ## NOT to be confused with KEGG species ID
   commonName <- switch(species, Mus.musculus="mouse", Homo.sapiens="human")
 
-  res <- fitBundles(kexp, design)
-  p.cutoff <- 0.1
-  fold.cutoff <- 1
-  top <- topTable(fit, coef=2, p=p.cutoff, n=nrow(assay))
-  top <- top[ abs(top$logFC) >= fold.cutoff, ] ## per SEQC recommendations
-
-  ## ReactomePA for pathway analysis 
-  topGenes <- rownames(top)
+  message("Fitting bundles...")
+  res <- fitBundles(kexp, design, bundleID="entrezid", read.cutoff=read.cutoff)
+  res$top <- with(res, topTable(fit, coef=2, p=p.cutoff, n=nrow(kexp)))
+  res$top <- res$top[ abs(res$top$logFC) >= fold.cutoff, ] ## per SEQC
+  topGenes <- rownames(res$top)
 
   ## match species to map top genes to Entrez IDs 
+  message("Matching species...")
   library(species, character.only=TRUE)
   topGenes <- topGenes[topGenes %in% keys(get(species), "ENTREZID")]
 
   ## overall
-  enriched <- enrichPathway(gene=topGenes, 
-                            qvalueCutoff=p.cutoff, 
-                            readable=TRUE) 
-  barplot(enriched, showCategory=10, title="Overall Reactome enrichment")
+  message("Performing Reactome enrichment analysis...")
+  res$enriched <- enrichPathway(gene=topGenes, 
+                                qvalueCutoff=p.cutoff, 
+                                readable=TRUE) 
+  barplot(res$enriched, showCategory=10, title="Overall Reactome enrichment")
 
   ## cluster profiling within Reactome and/or GO 
-  scaledExprs <- t(scale(t(voomed$E[ topGenes, ])))
+  message("Performing clustered enrichment analysis...")
+  res$scaledExprs <- t(scale(t(res$voomed$E[ topGenes, ])))
   ## turns out it's pretty easy: there's an "up" cluster, and a "down" cluster
-  clust <- cutree(hclust(dist(scaledExprs), method="ward"), k=2)
+  clust <- cutree(hclust(dist(res$scaledExprs), method="ward"), k=2)
   genes <- split(names(clust), clust)
   names(genes) <- c("down", "up")
-  res <- compareCluster(geneCluster=genes, 
-                        fun="enrichPathway", 
-                        qvalueCutoff=p.cutoff)
-  plot(res) ## this is not so interesting, it turns out 
+  res$clusts <- compareCluster(geneCluster=genes, 
+                               fun="enrichPathway", 
+                               qvalueCutoff=p.cutoff)
+  plot(res$clusts) ## this is interesting, it turns out 
 
   ## up vs down genes
-  enrichedGO <- list()
-  enrichedRx <- list()
-  for (i in names(genes)) {
-    enrichedGO[[i]] <- enrichGO(gene=genes[[i]], commonName, readable=TRUE,
-                                qvalueCutoff=p.cutoff)
-    enrichedRx[[i]] <- enrichPathway(gene=genes[[i]], commonName, readable=TRUE,
-                                     qvalueCutoff=p.cutoff)
-  }
+  ## enrichedGO <- list()
+  ## enrichedRx <- list()
+  ## message("Performing GO analysis...")
+  ## for (i in names(genes)) {
+  ##   enrichedGO[[i]] <- enrichGO(gene=genes[[i]], commonName, readable=TRUE,
+  ##                               qvalueCutoff=p.cutoff)
+  ##   enrichedRx[[i]] <- enrichPathway(gene=genes[[i]], commonName, readable=T,
+  ##                                    qvalueCutoff=p.cutoff)
+  ## }
+  ## res$enrichedGO <- enrichedGO
 
-  for (i in names(genes)) {
-    barplot(enrichedGO[[i]], showCategory=10, title=paste("Gene ontologies", i))
-    if (nrow(summary(enrichedRx[[i]])) > 0) {
-      barplot(enrichedRx[[i]], showCategory=10, title=paste("Reactome", i))
-    }
-  }
+  ## for (i in names(genes)) {
+  ##   barplot(enrichedGO[[i]], showCategory=10, 
+  ##           title=paste("Gene ontologies", i))
+  ##   if (nrow(summary(enrichedRx[[i]])) > 0) {
+  ##     res$enrichedRx <- enrichedRx
+  ##     barplot(enrichedRx[[i]], showCategory=10, title=paste("Reactome", i))
+  ##   }
+  ## }
 
   ## ReactomePA has facilities to do simple GSEA enrichment & plots
   ##
@@ -84,7 +114,7 @@ geneWiseAnalysis <- function(kexp, design, categories=10, k=2, p.cutoff=0.05,
   ## EnrichmentBrowser is another recent package that may be tremendously handy
   ##
 
-  return(top)
+  return(res)
 
 }
 
