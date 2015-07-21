@@ -1,35 +1,36 @@
 library(artemis)
+library(artemisData)
 library(matrixStats)
 
-jsonFile <- system.file("extdata", "Appsession.JSON", package="artemis")
-appSession <- fetchAppSession(jsonFile) ## autofill APPSESSION in paths
-samples <- c("MrT", "MrN") ## normally will be set by appSession
-names(samples) <- samples ## so that the column names get set 
-#
-# with(appSession, show(fastaFiles))
-# [1] "ERCC.fa.gz"                              
-# [2] "Homo_sapiens.RepBase.20_05.humrep.fa.gz"
-#
-# with(appSession, show(fastaPath))
-# [1] "/Package_data/transcriptomes"
-#
-indexName <- indexKallisto(fastaFiles=appSession$fastaFiles, 
-                           fastaPath=appSession$fastaPath)$indexName
+message("Looking for Kallisto in ~/bin...")
+kallisto <- paste0(path.expand("~/bin"), "/kallisto")
+if(!file.exists(kallisto)) {
+  message("You do not seem to have kallisto installed.  We can't proceed.")
+} else {
+  message("Found it, proceeding...")
+}
+
+pathBase <- system.file("extdata", "", package="artemisData")
+fastaPath <- paste0(pathBase, "/fasta")
+fastqPath <- paste0(pathBase, "/fastq")
+samples <- c(MrN="MrN", MrT="MrT") ## normally set by appSession
+fastaFiles <- c( "ERCC.fa.gz", ## spike-in controls  
+                 "Homo_sapiens.RepBase.20_05.humrep.fa.gz", ## repeats 
+                 "Homo_sapiens.RepBase.20_05.humsub.fa.gz")  ## ALUs and such
+
+## build an index if it isn't already there (in artemisData, it is)
+indexName <- indexKallisto(fastaFiles=fastaFiles, fastaPath=fastaPath)$indexName
+
+## run pseudoalignments 
 results <- lapply(samples, 
                   runKallisto,
                   indexName=indexName,
-                  fastqPath=appSession$fastqPath,
-                  fastaPath=appSession$fastaPath,
-                  bootstraps=appSession$bootstraps, 
-                  outputPath=appSession$outputPath)
-merged <- mergeKallisto(samples, outputPath=appSession$outputPath)
-message("AppSession variables:")
-for (i in names(appSession)) message("appSession$", i, " = ", appSession[[i]])
+                  fastqPath=fastqPath,
+                  fastaPath=fastaPath,
+                  bootstraps=10,
+                  outputPath=".")
+merged <- suppressWarnings(mergeKallisto(samples, outputPath="."))
 
-## discarded this by accident
-tpm <- assays(merged)$est_count / assays(merged)$eff_length
-colnames(tpm) <- sub("Mr", "", colnames(tpm))
-png(file="test.png")
-heatmap(tpm[ rev(order(rowSds(tpm)))[1:100], ], 
-        main="Repeat transcription, teratoma vs. normal")
-dev.off()
+## plot differentially mobilized classes of repeat elements
+topK <- function(x, k=50) x[rev(order(rowSds(x)))[1:k], ]
+heatmap(topK(tpm(merged)), main="Repeat transcription, teratoma vs. normal")

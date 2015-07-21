@@ -3,6 +3,7 @@
 \docType{class}
 \name{KallistoExperiment-class}
 \alias{KallistoExperiment-class}
+\alias{biotype,KallistoExperiment-method}
 \alias{counts,KallistoExperiment-method}
 \alias{covariates,ANY-method}
 \alias{covariates,KallistoExperiment-method}
@@ -14,8 +15,10 @@
 \alias{features<-,ANY,SummarizedExperiment0-method}
 \alias{features<-,KallistoExperiment,ANY-method}
 \alias{kallistoVersion,KallistoExperiment-method}
+\alias{promoters,KallistoExperiment-method}
 \alias{tpm,KallistoExperiment-method}
 \alias{transcriptomes,KallistoExperiment-method}
+\alias{transcriptsBy,KallistoExperiment-method}
 \title{A SummarizedExperiment subclass that stores multiple Kallisto runs}
 \usage{
 \S4method{counts}{KallistoExperiment}(object)
@@ -33,6 +36,14 @@
 \S4method{kallistoVersion}{KallistoExperiment}(object)
 
 \S4method{transcriptomes}{KallistoExperiment}(object)
+
+\S4method{transcriptsBy}{KallistoExperiment}(x, by = c("gene", "exon", "cds"),
+  ...)
+
+\S4method{promoters}{KallistoExperiment}(x, upstream = 2000,
+  downstream = 200, ...)
+
+\S4method{biotype}{KallistoExperiment}(object)
 
 \S4method{covariates}{ANY}(object)
 
@@ -63,6 +74,14 @@
 
 \item{object:}{A KallistoExperiment}
 
+\item{x:}{A KallistoExperiment}
+
+\item{by:}{The gene_name for which to retrieve transcripts}
+
+\item{x:}{A KallistoExperiment}
+
+\item{object:}{A KallistoExperiment}
+
 \item{object:}{something from which to retrieve covariates}
 
 \item{object:}{something to which covariates should be assigned}
@@ -76,6 +95,10 @@
 \item{value:}{the features to assign (usually a GRanges or GRangesList)}
 }
 \value{
+A matrix of counts.
+
+a DataFrame
+
 a GRanges or GRangesList of feature annotations
 
 the KallistoExperiment object, with updated feature annotations
@@ -84,9 +107,15 @@ a matrix of effective transcript lengths
 
 a matrix of tpms (transcripts per million)
 
-a string: the version of Kallisto used
+a string: the version of Kallisto used for pseudoalignment
 
 a string: the transcriptomes against which reads were pseudoaligned
+
+a subset of the object with features whose gene_name matches
+
+a subset of the object with features whose gene_name matches
+
+character: the transcript biotype (if any) for each transcript
 
 the object, perhaps with updated covariates
 
@@ -115,6 +144,12 @@ https://haroldpimentel.wordpress.com/2014/05/08/what-the-fpkm-a-review-rna-seq-e
 \item \code{kallistoVersion}: 
 
 \item \code{transcriptomes}: 
+
+\item \code{transcriptsBy}: 
+
+\item \code{promoters}: FIXME: inherit from RangedSummarizedExperiment and get all this for free
+
+\item \code{biotype}: 
 
 \item \code{covariates}: 
 

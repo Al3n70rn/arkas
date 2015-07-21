@@ -4,12 +4,14 @@
 \alias{annotateGenes}
 \title{annotate genes against EnsemblDb (like for annotateEnsembl, but gene-level)}
 \usage{
-annotateGenes(kexp, transcriptome, ...)
+annotateGenes(kexp = NULL, transcriptome, counts = NULL, ...)
 }
 \arguments{
-\item{kexp}{a KallistoExperiment (or something that behaves like it)}
+\item{kexp}{a KallistoExperiment (or NULL, if annotating counts)}
 
 \item{transcriptome}{a character string naming the transcriptome}
+
+\item{counts}{a matrix of counts (ignored if !is.null(kexp))}
 }
 \value{
 a possibly further-annotated version of kexp
