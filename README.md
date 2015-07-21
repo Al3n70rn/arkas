@@ -7,7 +7,7 @@ and various other sorts of related malarkey (run the demo!).
 
 
 ```R
-library(artemis)
+suppressPackageStartupMessages(library(artemisData))
 ## this assumes Kallisto is in ~/bin/
 demo("example", package="artemis")
 ```
