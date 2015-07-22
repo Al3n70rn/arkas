@@ -3,7 +3,6 @@
 \docType{class}
 \name{KallistoExperiment-class}
 \alias{KallistoExperiment-class}
-\alias{biotype,KallistoExperiment-method}
 \alias{counts,KallistoExperiment-method}
 \alias{covariates,ANY-method}
 \alias{covariates,KallistoExperiment-method}
@@ -15,7 +14,7 @@
 \alias{features<-,RangedSummarizedExperiment-method}
 \alias{features<-,SummarizedExperiment0-method}
 \alias{kallistoVersion,KallistoExperiment-method}
-\alias{promoters,KallistoExperiment-method}
+\alias{mad,KallistoExperiment-method}
 \alias{tpm,KallistoExperiment-method}
 \alias{transcriptomes,KallistoExperiment-method}
 \alias{transcriptsBy,KallistoExperiment-method}
@@ -37,13 +36,9 @@
 
 \S4method{transcriptomes}{KallistoExperiment}(object)
 
-\S4method{transcriptsBy}{KallistoExperiment}(x, by = c("gene", "exon", "cds"),
-  ...)
+\S4method{transcriptsBy}{KallistoExperiment}(x, by = "gene", ...)
 
-\S4method{promoters}{KallistoExperiment}(x, upstream = 2000,
-  downstream = 200, ...)
-
-\S4method{biotype}{KallistoExperiment}(object)
+\S4method{mad}{KallistoExperiment}(x)
 
 \S4method{covariates}{ANY}(object)
 
@@ -64,7 +59,7 @@
 
 \item{object:}{A KallistoExperiment from which features should be obtained}
 
-\item{value:}{Some feature annotations, usually GRanges or GRangesList}
+\item{value:}{Some feature annotations, usually a GRanges or GRangesList}
 
 \item{object:}{A KallistoExperiment with effective transcript lengths}
 
@@ -77,8 +72,6 @@
 \item{x:}{A KallistoExperiment}
 
 \item{by:}{The gene_name for which to retrieve transcripts}
-
-\item{x:}{A KallistoExperiment}
 
 \item{object:}{A KallistoExperiment}
 
@@ -113,9 +106,7 @@ a string: the transcriptomes against which reads were pseudoaligned
 
 a subset of the object with features whose gene_name matches
 
-a subset of the object with features whose gene_name matches
-
-character: the transcript biotype (if any) for each transcript
+a matrix of bootstrapped tx MADs (rows == txs, columns == samples)
 
 the object, perhaps with updated covariates
 
@@ -128,28 +119,26 @@ FIXME: add RUVg-derived ERCC-calibrated normalization factors in metadata
 }
 \section{Methods (by generic)}{
 \itemize{
-\item \code{counts}: 
+\item \code{counts}: Retrieve the estimated count matrix from a KallistoExperiment.
 
-\item \code{covariates}: 
+\item \code{covariates}: Retrieve the sample covariates from a KallistoExperiment.
 
-\item \code{features}: 
+\item \code{features}: Retrieve the per-row annotations for a KallistoExperiment.
 
-\item \code{features<-}: 
+\item \code{features<-}: Assign per-row annotations to a KallistoExperiment.
 
-\item \code{eff_length}: 
+\item \code{eff_length}: Retrieve the matrix of effective transcript lengths from a KallistoExperiment
 
 \item \code{tpm}: Obtain tpm estimates as shown in
 https://haroldpimentel.wordpress.com/2014/05/08/what-the-fpkm-a-review-rna-seq-expression-units/
 
-\item \code{kallistoVersion}: 
+\item \code{kallistoVersion}: Retrieve the version of Kallisto used for alignment from a KallistoExperiment
 
-\item \code{transcriptomes}: 
+\item \code{transcriptomes}: Retrieve the transcriptomes used for annotation from a KallistoExperiment
 
-\item \code{transcriptsBy}: 
+\item \code{transcriptsBy}: Fetch transcripts for a gene, or all transcripts bundled by gene.
 
-\item \code{promoters}: FIXME: inherit from RangedSummarizedExperiment and get all this for free
-
-\item \code{biotype}: 
+\item \code{mad}: Fetch the matrix of MADs for estimated counts, if bootstraps were run.
 
 \item \code{covariates}: 
 

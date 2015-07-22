@@ -88,8 +88,6 @@ pathwayPlot <- function(pathway, kexp=NULL, results=NULL, design=NULL, coef=2,
   return(results)
 }
 
-#' @describeIn pathwayPlot
-#' 
 .findSpeciesId <- function(species, synonyms=NULL) { 
   if (is.null(synonyms)) {
     synonyms <- list(hsa=c("hum", "hom", "hsa"), 
@@ -101,16 +99,12 @@ pathwayPlot <- function(pathway, kexp=NULL, results=NULL, design=NULL, coef=2,
   return(species) ## in case we fail to find a match
 }
 
-#' @describeIn pathwayPlot
-#' 
 .getKEGGIDs <- function(species) { 
   switch(.findSpeciesId(species), 
          hsa=keys(Homo.sapiens, keytype="PATH"),
          mus=keys(Mus.musculus, keytype="PATH"))
 }
 
-#' @describeIn pathwayPlot
-#' 
 .findPathId <- function(pathway, species, quiet=FALSE) { 
   stopifnot(nchar(pathway) > 0)
   species <- .findSpeciesId(species)
@@ -126,19 +120,6 @@ pathwayPlot <- function(pathway, kexp=NULL, results=NULL, design=NULL, coef=2,
   .getPathsByName(pathway, species, quiet)
 }
 
-#' @describeIn pathwayPlot
-#'
-#' Some code largely modeled upon the name-to-pathway searching tool seen at: 
-#' biobeat.wordpress.com/2013/02/21/accessing-kegg-database-from-rbioconductor/
-#' 
-#' @param  pathway  the pathway token(s)
-#' @param  species  the species ID (hsa)
-#' @param  quiet    whether to suppress output (FALSE)
-#'
-#' @import KEGGREST 
-#' 
-#' @return pathway names 
-#' 
 .getPathsByName <- function(pathway, species="hsa", quiet=FALSE) { 
   KEGG_PATHWAY_LIST_BASE <- "http://rest.kegg.jp/list/pathway/"
   pathway_list_REST_url <- paste(KEGG_PATHWAY_LIST_BASE, species, sep="")
@@ -152,9 +133,6 @@ pathwayPlot <- function(pathway, kexp=NULL, results=NULL, design=NULL, coef=2,
   sapply(paths, function(x) strsplit(strsplit(x, ":")[[1]][2], "\t")[[1]][1])
 }
 
-
-#' @describeIn pathwayPlot
-#' 
 .findPathPlot <- function(pathway, species, path=".") { 
   grep(.findPathId(pathway, species), 
        list.files(path, pattern="pathview.*png"), 

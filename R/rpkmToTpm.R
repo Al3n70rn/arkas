@@ -22,10 +22,6 @@ rpkmToTpm <- function(rpkm, ...){
   matrix(do.call(cbind, apply(rpkm, 2, .tpmBySample)))
 }
 
-#' @describeIn  rpkmToTpm
-#'
-#' @param rpkm  a vector of possibly-zero RPKM estimates
-#'
 .tpmBySample <- function(rpkm) { 
   tpm <- rpkm
   nonzero <- which(rpkm > 0)
