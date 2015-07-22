@@ -1,4 +1,9 @@
-suppressPackageStartupMessages(library(artemisData))
+dataIsInstalled <- suppressPackageStartupMessages(require(artemisData))
+if(!dataIsInstalled){ 
+  message("You need to install the artemisData package.")
+  message("Try biocLite(\"ramsinghlab/artemisData\") then come back.")
+  stop("Go ahead, we'll wait!")
+} 
 library(matrixStats)
 
 message("Looking for Kallisto in ~/bin...")
