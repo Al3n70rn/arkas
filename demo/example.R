@@ -32,10 +32,14 @@ results <- mclapply(samples,
                     indexName=indexName,
                     fastqPath=fastqPath,
                     fastaPath=fastaPath,
-                    bootstraps=5,
+                    bootstraps=100,
                     outputPath=".")
 merged <- mergeKallisto(samples, outputPath=".")
 
-## plot differentially mobilized classes of repeat elements
-topK <- function(x, k=50) x[rev(order(rowSds(x)))[1:k], ]
-heatmap(topK(tpm(merged)), main="Repeat transcription, teratoma vs. normal")
+## plot repeat element txn using (counts/bootstrap MADs) as "effect size"
+topKbyMAD <- function(kexp, k=25) {
+  tpm(kexp)[rev(order(rowMeans(counts(kexp) / mad(kexp))))[1:k],]
+}
+heatmap(log1p(topKbyMAD(merged)), scale="none", 
+        col=colorRampPalette(c("white","red","darkred"))(255),
+        main="Repeat transcription, teratoma vs. normal")

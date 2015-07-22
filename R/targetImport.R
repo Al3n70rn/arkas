@@ -43,13 +43,6 @@ targetImport <- function(counts=NULL,
 
 }
 
-#' @describeIn targetImport
-#' 
-#' @param files   the files to import (should all be uniformly formatted)
-#' @param path    optionally, where are the files (".")
-#' 
-#' @return        a matrix of raw counts, if all goes well
-#' 
 .readTargetFiles <- function(files, path=".") { 
   oldwd <- getwd()
   stopifnot(all(files %in% list.files(path=path)))

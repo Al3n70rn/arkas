@@ -1,5 +1,7 @@
 #' @describeIn KallistoExperiment 
 #'
+#' Retrieve the estimated count matrix from a KallistoExperiment. 
+#'
 #' @param object: A KallistoExperiment from which to retrieve counts
 #'
 #' @return  A matrix of counts.
@@ -16,6 +18,8 @@ setGeneric("covariates<-",
 
 #' @describeIn KallistoExperiment 
 #'
+#' Retrieve the sample covariates from a KallistoExperiment. 
+#'
 #' @param object: A KallistoExperiment from which to retrieve covariates
 #'
 #' @return a DataFrame
@@ -31,6 +35,8 @@ setGeneric("features<-", function(object, value) standardGeneric("features<-"))
 
 #' @describeIn KallistoExperiment 
 #'
+#' Retrieve the per-row annotations for a KallistoExperiment. 
+#'
 #' @param object: A KallistoExperiment from which features should be obtained
 #'
 #' @return a GRanges or GRangesList of feature annotations
@@ -42,8 +48,10 @@ setMethod("features", "KallistoExperiment",
 
 #' @describeIn KallistoExperiment 
 #'
+#' Assign per-row annotations to a KallistoExperiment. 
+#'
 #' @param object: A KallistoExperiment from which features should be obtained
-#' @param value:  Some feature annotations, usually GRanges or GRangesList 
+#' @param value:  Some feature annotations, usually a GRanges or GRangesList 
 #'
 #' @return the KallistoExperiment object, with updated feature annotations
 #'
@@ -63,6 +71,8 @@ setReplaceMethod("features", c("KallistoExperiment", "ANY"),
 setGeneric("eff_length", function(object) standardGeneric("eff_length"))
 
 #' @describeIn KallistoExperiment 
+#'
+#' Retrieve the matrix of effective transcript lengths from a KallistoExperiment
 #'
 #' @param object: A KallistoExperiment with effective transcript lengths
 #'
@@ -99,6 +109,8 @@ setGeneric("kallistoVersion",
 
 #' @describeIn KallistoExperiment 
 #'
+#' Retrieve the version of Kallisto used for alignment from a KallistoExperiment
+#'
 #' @param object: A KallistoExperiment
 #'
 #' @return a string: the version of Kallisto used for pseudoalignment
@@ -114,6 +126,8 @@ setGeneric("transcriptomes",
 
 #' @describeIn KallistoExperiment 
 #'
+#' Retrieve the transcriptomes used for annotation from a KallistoExperiment
+#'
 #' @param object: A KallistoExperiment
 #' @return a string: the transcriptomes against which reads were pseudoaligned
 #'
@@ -124,6 +138,8 @@ setMethod("transcriptomes", "KallistoExperiment",
 
 #' @describeIn KallistoExperiment 
 #'
+#' Fetch transcripts for a gene, or all transcripts bundled by gene.
+#'
 #' @param x: A KallistoExperiment
 #' @param by: The gene_name for which to retrieve transcripts
 #'
@@ -132,39 +148,24 @@ setMethod("transcriptomes", "KallistoExperiment",
 #' @export
 #'
 setMethod("transcriptsBy", "KallistoExperiment",
-          function(x, by, ...) {
+          function(x, by="gene", ...) {
             if (by == "gene") { 
-              split(x, mcols(features(x))$gene_name)
+              split(x, mcols(x)$gene_name)
             } else { 
-              return(x[mcols(features(x))$gene_name == by, ])
+              return(x[mcols(x)$gene_name == by, ])
             }
           })
 
 #' @describeIn KallistoExperiment 
 #'
-#' FIXME: inherit from RangedSummarizedExperiment and get all this for free 
-#'
-#' @param x: A KallistoExperiment
-#'
-#' @return a subset of the object with features whose gene_name matches 
-#'
-#' @export
-#'
-setMethod("promoters", "KallistoExperiment",
-          function(x, ...) return(promoters(features(x), ...)))
-
-# biotype generic 
-setGeneric("biotype", function(object) standardGeneric("biotype"))
-
-#' @describeIn KallistoExperiment 
-#'
+#' Fetch the matrix of MADs for estimated counts, if bootstraps were run. 
+#' 
 #' @param object: A KallistoExperiment
 #'
-#' @return character: the transcript biotype (if any) for each transcript
+#' @return a matrix of bootstrapped tx MADs (rows == txs, columns == samples)
 #'
 #' @export
 #'
-setMethod("biotype", "KallistoExperiment",
-          function (object) return(mcols(features(object))$tx_biotype))
+setMethod("mad", "KallistoExperiment", function(x) assays(x)$est_counts_mad)
 
 # FIXME: add method to retrieve normalization factors if ERCC spike-ins used 
