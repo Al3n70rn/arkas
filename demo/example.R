@@ -26,14 +26,15 @@ fastaFiles <- c( "ERCC.fa.gz", ## spike-in controls
 indexName <- indexKallisto(fastaFiles=fastaFiles, fastaPath=fastaPath)$indexName
 
 ## run pseudoalignments 
-results <- lapply(samples, 
-                  runKallisto,
-                  indexName=indexName,
-                  fastqPath=fastqPath,
-                  fastaPath=fastaPath,
-                  bootstraps=10,
-                  outputPath=".")
-merged <- suppressWarnings(mergeKallisto(samples, outputPath="."))
+library(parallel)
+results <- mclapply(samples, 
+                    runKallisto,
+                    indexName=indexName,
+                    fastqPath=fastqPath,
+                    fastaPath=fastaPath,
+                    bootstraps=5,
+                    outputPath=".")
+merged <- mergeKallisto(samples, outputPath=".")
 
 ## plot differentially mobilized classes of repeat elements
 topK <- function(x, k=50) x[rev(order(rowSds(x)))[1:k], ]
