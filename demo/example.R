@@ -1,5 +1,4 @@
-library(artemis)
-library(artemisData)
+suppressPackageStartupMessages(library(artemisData))
 library(matrixStats)
 
 message("Looking for Kallisto in ~/bin...")
