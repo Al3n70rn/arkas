@@ -25,7 +25,6 @@ KallistoExperiment <- function(est_counts=NULL,
                                features=GRangesList(),
                                kallistoVersion="",
                                est_counts_mad=NULL,
-                               summarizedexperiment=NULL,
                                ...) {
 
   ## we can compute tpm without eff_len, IFF the transcripts are annotated 
@@ -39,16 +38,17 @@ KallistoExperiment <- function(est_counts=NULL,
   if (length(transcriptomes) > 1) {
     transcriptomes <- paste(transcriptomes, collapse=", ")
   }
-  assays <- list(est_counts=est_counts, 
-                 eff_length=eff_length,
-                 est_counts_mad=est_counts_mad) 
-  assays <- assays[!sapply(assays, is.null)] 
-
-  new("KallistoExperiment", 
-      assays=Assays(assays),
-      colData=covariates,
-      rowRanges=features,
-      kallistoVersion=kallistoVersion,
-      transcriptomes=transcriptomes)
+  asys <- list(est_counts=est_counts, 
+               eff_length=eff_length,
+               est_counts_mad=est_counts_mad)
+  asys <- asys[!sapply(asys, is.null)]
+  new("KallistoExperiment",
+        SummarizedExperiment(
+          assays=asys,
+          rowRanges=features,
+          colData=covariates
+        ),
+        kallistoVersion=kallistoVersion,
+        transcriptomes=transcriptomes)
 
 }
