@@ -1,7 +1,7 @@
 #' Downstream analysis of bundle-aggregated transcript abundance estimates.
 #'
 #' @param kexp        a KallistoExperiment or SummarizedExperiment-like object 
-#' @param design      a design matrix w/contrast or coefficient to test
+#' @param design      a design matrix with 2nd coefficient as one to test
 #' @param p.cutoff    where to set the p-value cutoff for plots, etc. (0.05)
 #' @param fold.cutoff where to set the log2-FC cutoff for plots, etc. (1==2x)
 #' @param read.cutoff minimum read coverage (estimated) for a gene bundle 
@@ -17,12 +17,24 @@
 #'
 #' @importFrom matrixStats rowSds 
 #' 
-#' @return            a list w/items design, voomed, fit, top, enriched, 
-#'                                   scaledExprs, clusts, enrichedGO, enrichedRx
+#' 
+#' @details           If no design matrix is found, the function will look in 
+#'                    exptData(kexp)$design. If that too is empty it will fail.
+#'                    There seems to be a bug in rendering Reactome plots, so 
+#'                    it may be necessary to do so manually:  
+#' \code{res <- geneWiseAnalysis(kexp, design, ...)} 
+#'                    followed by 
+#' \code{barplot(res$enriched, showCategory=10)}
+#'                    and 
+#' \code{plot(res$clusts)}
+#'
+#' @return            a list w/items design, voomed, fit, top, enriched,
+#'                                   scaledExprs, clusts, ... (perhaps) 
 #'
 #' @export
 #' 
-geneWiseAnalysis <- function(kexp, design, 
+geneWiseAnalysis <- function(kexp, design=NULL,
+
                              p.cutoff=0.05, fold.cutoff=1, read.cutoff=1, 
                              species=c("Homo.sapiens","Mus.musculus")) {
 
@@ -30,6 +42,14 @@ geneWiseAnalysis <- function(kexp, design,
   if (!is(kexp, "KallistoExperiment")) {
     message("This function is optimized for KallistoExperiment objects.")
     message("It may work for other classes, but we make no guarantees.")
+  }
+
+  if (is.null(design)) {
+    if (!is.null(exptData(kexp)$design)) {
+      design <- exptData(kexp)$design
+    } else { 
+      stop("A design matrix must be supplied, or present in metadata.")
+    }
   }
 
   ## only two supported for now (would be simple to expand, though)
@@ -67,25 +87,25 @@ geneWiseAnalysis <- function(kexp, design,
   plot(res$clusts) ## this is interesting, it turns out 
 
   ## up vs down genes
-  enrichedGO <- list()
-  enrichedRx <- list()
-  message("Performing GO analysis...")
-  for (i in names(genes)) {
-    enrichedGO[[i]] <- enrichGO(gene=genes[[i]], commonName, readable=TRUE,
-                                qvalueCutoff=p.cutoff)
-    enrichedRx[[i]] <- enrichPathway(gene=genes[[i]], commonName, readable=TRUE,
-                                     qvalueCutoff=p.cutoff)
-  }
-  res$enrichedGO <- enrichedGO
+  ## enrichedGO <- list()
+  ## enrichedRx <- list()
+  ## message("Performing GO analysis...")
+  ## for (i in names(genes)) {
+  ##   enrichedGO[[i]] <- enrichGO(gene=genes[[i]], commonName, readable=TRUE,
+  ##                               qvalueCutoff=p.cutoff)
+  ##   enrichedRx[[i]] <- enrichPathway(gene=genes[[i]], commonName, readable=T,
+  ##                                    qvalueCutoff=p.cutoff)
+  ## }
+  ## res$enrichedGO <- enrichedGO
 
-  for (i in names(genes)) {
-    barplot(enrichedGO[[i]], showCategory=10, title=paste("Gene ontologies", i))
-    if (nrow(summary(enrichedRx[[i]])) > 0) {
-      res$enrichedRx <- enrichedRx
-      barplot(enrichedRx[[i]], showCategory=10, title=paste("Reactome", i))
-    }
-  }
-
+  ## for (i in names(genes)) {
+  ##   barplot(enrichedGO[[i]], showCategory=10, 
+  ##           title=paste("Gene ontologies", i))
+  ##   if (nrow(summary(enrichedRx[[i]])) > 0) {
+  ##     res$enrichedRx <- enrichedRx
+  ##     barplot(enrichedRx[[i]], showCategory=10, title=paste("Reactome", i))
+  ##   }
+  ## }
   ## ReactomePA has facilities to do simple GSEA enrichment & plots
   ##
   ## Gene sets from DSigDb (http://tanlab.ucdenver.edu/DSigDB/DSigDBv1.0/) may

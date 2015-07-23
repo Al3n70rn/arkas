@@ -2,10 +2,11 @@
 % Please edit documentation in R/transcriptWiseAnalysis.R
 \name{transcriptWiseAnalysis}
 \alias{transcriptWiseAnalysis}
-\title{Downstream analysis of raw transcript abundance estimates.}
+\title{Downstream analysis of raw transcript abundance estimates.
+FIXME: add bundle-wise annotation for pathway/functional enrichment}
 \usage{
 transcriptWiseAnalysis(kexp, design, p.cutoff = 0.05, fold.cutoff = 1,
-  species = c("Homo.sapiens", "Mus.musculus"), annotation = NULL)
+  annotation = NULL, coef = 2, ...)
 }
 \arguments{
 \item{kexp}{a KallistoExperiment or SummarizedExperiment-like object}
@@ -16,11 +17,10 @@ transcriptWiseAnalysis(kexp, design, p.cutoff = 0.05, fold.cutoff = 1,
 
 \item{fold.cutoff}{where to set the log2-FC cutoff for plots, etc. (1 == 2x)}
 
-\item{species}{which species? (Homo.sapiens; FIX: get from transcriptome)}
-
 \item{annotation}{functional annotations for individual transcripts (varies)}
 }
 \description{
-Downstream analysis of raw transcript abundance estimates.
+Downstream analysis of raw transcript abundance estimates
+FIXME: add bundle-wise annotation for pathway/functional enrichment
 }
 

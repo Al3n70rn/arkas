@@ -2,21 +2,33 @@
 % Please edit documentation in R/pathwayPlot.R
 \name{pathwayPlot}
 \alias{pathwayPlot}
-\title{use pathview to plot a pathway or pathways colored by gene-wise contrasts}
+\title{Use pathview to plot a pathway or pathways colored by gene-wise contrasts.
+The default is to plot the effect-size-signed, -log10(p.value) for each row.}
 \usage{
-pathwayPlot(pathway, results, path = ".", species = NULL,
-  IDtype = "ENSEMBL", ...)
+pathwayPlot(pathway, kexp = NULL, results = NULL, design = NULL,
+  coef = 2, IDtype = "ENSEMBL", path = ".", addData = NULL,
+  how = "signed", species = c("Homo sapiens", "Mus musculus"), ...)
 }
 \arguments{
 \item{pathway:}{which pathway (or keywords to find the appropriate pathway)}
 
-\item{results:}{results from geneWise or transcriptWise expression analyses}
+\item{kexp:}{a KallistoExperiment (can be null, if \code{results} is OK)}
+
+\item{results:}{cached results from running fitBundles to avoid rerunning it}
+
+\item{design:}{a design matrix to compute contrasts within the experiment}
+
+\item{coef:}{which column in the design matrix to extract coefficients (2)}
+
+\item{IDtype:}{type of identifier for gene/transcript annotations (ENSEMBL)}
 
 \item{path:}{the working directory for downloaded/generated files (".")}
 
-\item{species:}{species for pathway extraction (defaults to results$species)}
+\item{species:}{species for pathway extraction (defaults to Homo sapiens)}
 
-\item{IDtype:}{type of identifier for gene/transcript annotations (ENSEMBL)}
+\item{addData:}{optional per-annotation DNA methylation or copy number data}
+
+\item{how:}{how to display effects at each node? (signed -log10(p[j]))}
 
 \item{...:}{additional arguments to be passed to pathview}
 }
@@ -24,11 +36,14 @@ pathwayPlot(pathway, results, path = ".", species = NULL,
 a list with the human-readable pathway name(s) and the plot file(s)
 }
 \description{
-use pathview to plot a pathway or pathways colored by gene-wise contrasts
+Use pathview to plot a pathway or pathways colored by gene-wise contrasts.
+The default is to plot the effect-size-signed, -log10(p.value) for each row.
 }
 \seealso{
-EnrichmentBrowser
+enrichmentAnalysis
 
-pathview
+\pkg{EnrichmentBrowser}
+
+\pkg{pathview}
 }
 

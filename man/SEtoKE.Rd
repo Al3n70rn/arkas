@@ -3,7 +3,7 @@
 \name{SEtoKE}
 \alias{SEtoKE}
 \title{Convert a properly annotated SummarizedExperiment with 'counts',
-or a matrix of counts and a GRanges of annotations for each count,
+OR a matrix of counts and a GRanges of annotations for each count,
 to a KallistoExperiment (thereby providing tpm estimates on demand).}
 \usage{
 SEtoKE(SE = NULL, counts = NULL, features = NULL, covariates = NULL,
@@ -28,6 +28,11 @@ a KallistoExperiment
 \description{
 Note that the code here is based upon Harold Pimentel's code, cf.
 https://haroldpimentel.wordpress.com/2014/05/08/what-the-fpkm-a-review-rna-seq-expression-units/
+}
+\details{
+FIXME: add bias correction to eff_lengths, or derive from TPM instead?
+FIXME: allow for metadata and per-sample metadata (i.e. MultiAssayExperiment)
+FIXME: add some sort of KallistoExperiment method to correct bias post-hoc
 }
 \seealso{
 KallistoExperiment

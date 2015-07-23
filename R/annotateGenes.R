@@ -1,12 +1,13 @@
 #' annotate genes against EnsemblDb (like for annotateEnsembl, but gene-level)
 #' 
-#' @param kexp          a KallistoExperiment (or something that behaves like it)
+#' @param kexp          a KallistoExperiment (or NULL, if annotating counts)
 #' @param transcriptome a character string naming the transcriptome
+#' @param counts        a matrix of counts (ignored if !is.null(kexp))
 #'
 #' @return              a possibly further-annotated version of kexp
 #'
 #' @export
-annotateGenes <- function(kexp, transcriptome, ...) { 
+annotateGenes <- function(kexp=NULL, transcriptome, counts=NULL, ...) { 
 
   ## actually annotate something, perhaps
   if (grepl("EnsDb", ignore.case=TRUE, transcriptome)) {

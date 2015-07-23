@@ -64,6 +64,7 @@ mergeKallisto <- function(outputDirs=NULL,
   stopifnot(all(sapply(asys, is, "matrix")))
   stopifnot(identical(colnames(asys[[1]]), colnames(asys[[2]])))
   coldat <- DataFrame(ID=colnames(asys[[1]]))
+  rownames(coldat) <- coldat$ID
   
   ## FIXME: ensure they all used the same transcriptomes/aggregate-index
   ## ktxs <- sapply(res, extractTranscriptomeFromCall)

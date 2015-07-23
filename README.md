@@ -3,11 +3,12 @@ RNAseq analysis, from raw reads to pathways, typically in a few minutes.
 (Mostly by wrapping [Kallisto](http://pachterlab.github.io/kallisto/) and caching everything we possibly can.)  
 Also a sandbox for wacky new ideas about RNA methylation,  
 functional analysis of differential transcript abundance,  
-and various other sorts of related malarkey (see demo).  
+and various other sorts of related malarkey (run the demo!).  
 
 
 ```R
-library(artemis)
+suppressPackageStartupMessages(library(artemisData))
+## this assumes Kallisto is in ~/bin/
 demo("example", package="artemis")
 ```
 

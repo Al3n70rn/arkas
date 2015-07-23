@@ -1,7 +1,13 @@
 #' @describeIn KallistoExperiment 
+#'
+#' Retrieve the estimated count matrix from a KallistoExperiment. 
+#'
 #' @param object: A KallistoExperiment from which to retrieve counts
 #'
+#' @return  A matrix of counts.
+#'
 #' @export
+#'
 setMethod("counts", "KallistoExperiment",
           function (object) return(assays(object)$est_counts))
 
@@ -11,9 +17,15 @@ setGeneric("covariates<-",
            function(object, value) standardGeneric("covariates<-"))
 
 #' @describeIn KallistoExperiment 
+#'
+#' Retrieve the sample covariates from a KallistoExperiment. 
+#'
 #' @param object: A KallistoExperiment from which to retrieve covariates
 #'
+#' @return a DataFrame
+#'
 #' @export
+#'
 setMethod("covariates", "KallistoExperiment",
           function (object) return(colData(object)))
 
@@ -23,6 +35,8 @@ setGeneric("features<-", function(object, value) standardGeneric("features<-"))
 
 #' @describeIn KallistoExperiment 
 #'
+#' Retrieve the per-row annotations for a KallistoExperiment. 
+#'
 #' @param object: A KallistoExperiment from which features should be obtained
 #'
 #' @return a GRanges or GRangesList of feature annotations
@@ -30,12 +44,15 @@ setGeneric("features<-", function(object, value) standardGeneric("features<-"))
 #' @export
 #'
 setMethod("features", "KallistoExperiment", 
+
           function (x) if (isRSE(x)) x@rowRanges else x@rowData)
 
 #' @describeIn KallistoExperiment 
 #'
+#' Assign per-row annotations to a KallistoExperiment. 
+#'
 #' @param object: A KallistoExperiment from which features should be obtained
-#' @param value:  Some feature annotations, usually GRanges or GRangesList 
+#' @param value:  Some feature annotations, usually a GRanges or GRangesList 
 #'
 #' @return the KallistoExperiment object, with updated feature annotations
 #'
@@ -43,19 +60,29 @@ setMethod("features", "KallistoExperiment",
 #'
 setReplaceMethod("features", c("KallistoExperiment", "ANY"),
                  function(object, value) {
-                   if (isRSE(object)) object@rowRanges <- value
-                   else object@rowData <- value
-                   return(object)
+
+              
+                   if (isRSE(object)){
+                        object@rowRanges <- value
+                   }else{
+                       object@rowData <- value
+                     }                    
+                    return(object)
                  })
 
 # eff_length generic 
 setGeneric("eff_length", function(object) standardGeneric("eff_length"))
 
 #' @describeIn KallistoExperiment 
+#'
+#' Retrieve the matrix of effective transcript lengths from a KallistoExperiment
+#'
 #' @param object: A KallistoExperiment with effective transcript lengths
+#'
 #' @return a matrix of effective transcript lengths
 #'
 #' @export
+#'
 setMethod("eff_length", "KallistoExperiment",
           function (object) return(assays(object)$eff_length))
 
@@ -67,12 +94,12 @@ setGeneric("tpm", function(object) standardGeneric("tpm"))
 #' Obtain tpm estimates as shown in 
 #' https://haroldpimentel.wordpress.com/2014/05/08/what-the-fpkm-a-review-rna-seq-expression-units/
 #' 
-#'
 #' @param object: A KallistoExperiment with estimated counts & effective lengths
 #' 
 #' @return a matrix of tpms (transcripts per million)
 #'
 #' @export
+#'
 setMethod("tpm", "KallistoExperiment",
           function (object) {
             rate <- log(counts(object)) - log(eff_length(object))
@@ -84,23 +111,64 @@ setGeneric("kallistoVersion",
            function(object) standardGeneric("kallistoVersion"))
 
 #' @describeIn KallistoExperiment 
+#'
+#' Retrieve the version of Kallisto used for alignment from a KallistoExperiment
+#'
 #' @param object: A KallistoExperiment
-#' @return a string: the version of Kallisto used 
+#'
+#' @return a string: the version of Kallisto used for pseudoalignment
 #'
 #' @export
+#'
 setMethod("kallistoVersion", "KallistoExperiment",
           function (object) return(object@kallistoVersion))
 
-# trancscriptomes generic 
+# transcriptomes generic 
 setGeneric("transcriptomes", 
            function(object) standardGeneric("transcriptomes"))
 
 #' @describeIn KallistoExperiment 
+#'
+#' Retrieve the transcriptomes used for annotation from a KallistoExperiment
+#'
 #' @param object: A KallistoExperiment
 #' @return a string: the transcriptomes against which reads were pseudoaligned
 #'
 #' @export
+#'
 setMethod("transcriptomes", "KallistoExperiment",
           function (object) return(object@transcriptomes))
+
+#' @describeIn KallistoExperiment 
+#'
+#' Fetch transcripts for a gene, or all transcripts bundled by gene.
+#'
+#' @param x: A KallistoExperiment
+#' @param by: The gene_name for which to retrieve transcripts
+#'
+#' @return a subset of the object with features whose gene_name matches 
+#'
+#' @export
+#'
+setMethod("transcriptsBy", "KallistoExperiment",
+          function(x, by="gene", ...) {
+            if (by == "gene") { 
+              split(x, mcols(x)$gene_name)
+            } else { 
+              return(x[mcols(x)$gene_name == by, ])
+            }
+          })
+
+#' @describeIn KallistoExperiment 
+#'
+#' Fetch the matrix of MADs for estimated counts, if bootstraps were run. 
+#' 
+#' @param object: A KallistoExperiment
+#'
+#' @return a matrix of bootstrapped tx MADs (rows == txs, columns == samples)
+#'
+#' @export
+#'
+setMethod("mad", "KallistoExperiment", function(x) assays(x)$est_counts_mad)
 
 # FIXME: add method to retrieve normalization factors if ERCC spike-ins used 
