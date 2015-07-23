@@ -2,20 +2,29 @@
 % Please edit documentation in R/targetImport.R
 \name{targetImport}
 \alias{targetImport}
-\title{import RNAseq data from TARGET (isoform or gene level)}
+\title{import RNAseq data from TARGET Level 3 quantification (isoform or gene level)}
 \usage{
-targetImport(counts, ...)
+targetImport(counts = NULL, files = NULL,
+  transcriptome = "EnsDb.Hsapiens.v75", level = c("unknown", "transcripts",
+  "genes"), ...)
 }
 \arguments{
-\item{counts}{a matrix of TARGET counts (raw, median normalized, RPKM)}
+\item{counts}{matrix of TARGET counts (NULL, but see details)}
 
-\item{type}{what type of data it is (default: figure out, ENSG vs ENST)}
+\item{files}{alternatively, file names of TARGET level 3 data (NULL)}
+
+\item{transcriptome}{which transcriptome annotation was used? (Ensembl v75)}
+
+\item{level}{at what level was the data summarized? (guess)}
 }
 \value{
 a KallistoExperiment
 }
 \description{
-import RNAseq data from TARGET (isoform or gene level)
+import RNAseq data from TARGET Level 3 quantification (isoform or gene level)
+}
+\details{
+One or the other of counts OR files must be set!
 }
 \seealso{
 CountsAndFeaturesToKallistoExperiment

@@ -1,6 +1,7 @@
 #' import RNAseqV2 data from TCGA (at least the way it comes from FireHose)
 #' 
-#' @param counts    a matrix of normalized (eep!) RNAseqV2 counts
+#' @param counts          a matrix of normalized (eep!) RNAseqV2 counts
+#' @param transcriptome   what transcriptome these were derived from 
 #' 
 #' @return          a KallistoExperiment attempting to derive effective lengths
 #'

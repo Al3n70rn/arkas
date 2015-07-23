@@ -2,13 +2,15 @@
 #'
 #' @param kexp            something that behaves like a KallistoExperiment 
 #' 
-#' @import erccdashboard
+
 #' @import RUVSeq 
 #' 
 #' @export 
 #'
-erccAnalysis <- function(kexp, ...) {
 
+ 
+erccAnalysis <- function(kexp, ...) {
+#deleted #' @import erccdashboard
   data(ERCC)
   ERCC_counts <- counts(kexp)[ grep("ERCC", rownames(kexp)), ] 
   if (nrow(ERCC_counts) < 1) stop("You do not seem to have any ERCC controls.")

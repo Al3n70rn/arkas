@@ -1,16 +1,19 @@
-#' encapsulate limma/voom analysis for consistency with ebrowser()
+#' encapsulate limma/voom analysis and TMM normalization at transcript level 
 #' 
-#' @param kexp    A KallistoExperiment
-#' @param design  A model matrix 
+#' @param kexp        A KallistoExperiment
+#' @param design      A model matrix 
+#' @param read.cutoff Exclude transcripts where the maximum count is < this 
 #'
 #' @return        A list with elements (design, voomed, fit)
 #'
 #' @export
 #' 
-fitTranscripts <- function(kexp, design, ...) { 
+
+fitTranscripts <- function(kexp, design, read.cutoff=1, ...) { 
 
   res <- list()
-  dge <- DGEList(counts=counts(kexp))
+  filteredCounts <- collapseTranscripts(kexp, read.cutoff=read.cutoff, ...)
+  dge <- DGEList(counts=filteredCounts)
   dge <- calcNormFactors(dge)
   res$design <- design 
   res$voomed <- voom(dge, res$design)

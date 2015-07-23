@@ -8,14 +8,16 @@
 \alias{covariates,KallistoExperiment-method}
 \alias{covariates<-,ANY-method}
 \alias{eff_length,KallistoExperiment-method}
-\alias{features,ANY-method}
 \alias{features,KallistoExperiment-method}
-\alias{features<-,ANY,ANY-method}
-\alias{features<-,ANY,SummarizedExperiment0-method}
-\alias{features<-,KallistoExperiment,ANY-method}
+\alias{features,SummarizedExperiment0-method}
+\alias{features<-,KallistoExperiment-method}
+\alias{features<-,RangedSummarizedExperiment-method}
+\alias{features<-,SummarizedExperiment0-method}
 \alias{kallistoVersion,KallistoExperiment-method}
+\alias{mad,KallistoExperiment-method}
 \alias{tpm,KallistoExperiment-method}
 \alias{transcriptomes,KallistoExperiment-method}
+\alias{transcriptsBy,KallistoExperiment-method}
 \title{A SummarizedExperiment subclass that stores multiple Kallisto runs}
 \usage{
 \S4method{counts}{KallistoExperiment}(object)
@@ -24,7 +26,7 @@
 
 \S4method{features}{KallistoExperiment}(x)
 
-\S4method{features}{KallistoExperiment,ANY}(object) <- value
+\S4method{features}{KallistoExperiment}(object) <- value
 
 \S4method{eff_length}{KallistoExperiment}(object)
 
@@ -34,15 +36,19 @@
 
 \S4method{transcriptomes}{KallistoExperiment}(object)
 
+\S4method{transcriptsBy}{KallistoExperiment}(x, by = "gene", ...)
+
+\S4method{mad}{KallistoExperiment}(x)
+
 \S4method{covariates}{ANY}(object)
 
 \S4method{covariates}{ANY}(object) <- value
 
-\S4method{features}{ANY}(x)
+\S4method{features}{SummarizedExperiment0}(x)
 
-\S4method{features}{ANY,ANY}(object) <- value
+\S4method{features}{RangedSummarizedExperiment}(object) <- value
 
-\S4method{features}{ANY,SummarizedExperiment0}(object) <- value
+\S4method{features}{SummarizedExperiment0}(object) <- value
 }
 \arguments{
 \item{object:}{A KallistoExperiment from which to retrieve counts}
@@ -53,13 +59,19 @@
 
 \item{object:}{A KallistoExperiment from which features should be obtained}
 
-\item{value:}{Some feature annotations, usually GRanges or GRangesList}
+\item{value:}{Some feature annotations, usually a GRanges or GRangesList}
 
 \item{object:}{A KallistoExperiment with effective transcript lengths}
 
 \item{object:}{A KallistoExperiment with estimated counts & effective lengths}
 
 \item{object:}{A KallistoExperiment}
+
+\item{object:}{A KallistoExperiment}
+
+\item{x:}{A KallistoExperiment}
+
+\item{by:}{The gene_name for which to retrieve transcripts}
 
 \item{object:}{A KallistoExperiment}
 
@@ -76,6 +88,10 @@
 \item{value:}{the features to assign (usually a GRanges or GRangesList)}
 }
 \value{
+A matrix of counts.
+
+a DataFrame
+
 a GRanges or GRangesList of feature annotations
 
 the KallistoExperiment object, with updated feature annotations
@@ -84,9 +100,13 @@ a matrix of effective transcript lengths
 
 a matrix of tpms (transcripts per million)
 
-a string: the version of Kallisto used
+a string: the version of Kallisto used for pseudoalignment
 
 a string: the transcriptomes against which reads were pseudoaligned
+
+a subset of the object with features whose gene_name matches
+
+a matrix of bootstrapped tx MADs (rows == txs, columns == samples)
 
 the object, perhaps with updated covariates
 
@@ -99,22 +119,26 @@ FIXME: add RUVg-derived ERCC-calibrated normalization factors in metadata
 }
 \section{Methods (by generic)}{
 \itemize{
-\item \code{counts}: 
+\item \code{counts}: Retrieve the estimated count matrix from a KallistoExperiment.
 
-\item \code{covariates}: 
+\item \code{covariates}: Retrieve the sample covariates from a KallistoExperiment.
 
-\item \code{features}: 
+\item \code{features}: Retrieve the per-row annotations for a KallistoExperiment.
 
-\item \code{features<-}: 
+\item \code{features<-}: Assign per-row annotations to a KallistoExperiment.
 
-\item \code{eff_length}: 
+\item \code{eff_length}: Retrieve the matrix of effective transcript lengths from a KallistoExperiment
 
 \item \code{tpm}: Obtain tpm estimates as shown in
 https://haroldpimentel.wordpress.com/2014/05/08/what-the-fpkm-a-review-rna-seq-expression-units/
 
-\item \code{kallistoVersion}: 
+\item \code{kallistoVersion}: Retrieve the version of Kallisto used for alignment from a KallistoExperiment
 
-\item \code{transcriptomes}: 
+\item \code{transcriptomes}: Retrieve the transcriptomes used for annotation from a KallistoExperiment
+
+\item \code{transcriptsBy}: Fetch transcripts for a gene, or all transcripts bundled by gene.
+
+\item \code{mad}: Fetch the matrix of MADs for estimated counts, if bootstraps were run.
 
 \item \code{covariates}: 
 

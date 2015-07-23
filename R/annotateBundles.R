@@ -21,8 +21,9 @@ annotateBundles <- function(kexp, transcriptomes, ...) {
     transcriptome <- transcriptomes
     if (grepl("EnsDb", ignore.case=TRUE, transcriptome)) {
       annotateEnsembl(kexp, transcriptome)
-    } else if (grepl("RepBase", ignore.case=TRUE, transcriptome)) {
-      annotateRepeats(kexp, transcriptome) 
+      #  } else if (grepl("RepBase", ignore.case=TRUE, transcriptome)) {
+      #    ## this is on hold until repeatsByClass moves into its own package
+      #    annotateRepeats(kexp, transcriptome) 
     } else if (grepl("ERCC", ignore.case=TRUE, transcriptome)) {
       annotateErcc(kexp, transcriptome)
     } else {       

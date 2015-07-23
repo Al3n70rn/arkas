@@ -30,8 +30,8 @@ setReplaceMethod("covariates", c("ANY", "ANY"),
 #'
 #' @export
 #'
-setMethod("features", "ANY", 
-          function (x) if (isRSE(x)) x@rowRanges else x@rowData)
+setMethod("features", "SummarizedExperiment0", 
+          function (x) rowRanges(x))
 
 #' @describeIn KallistoExperiment 
 #'
@@ -44,13 +44,9 @@ setMethod("features", "ANY",
 #'
 #' @export
 #'
-setReplaceMethod("features", c("ANY", "ANY"), 
+setReplaceMethod("features", c("RangedSummarizedExperiment", "ANY"), 
                  function(object, value) {
-                   if (isRSE(object)) {
-                     object@rowRanges <- value
-                   } else {
-                     object@rowData <- value
-                   }
+                   rowRanges(object) <- value
                    return(object)
                  })
 
@@ -58,7 +54,7 @@ setReplaceMethod("features", c("ANY", "ANY"),
 #'
 #' @export
 #'
-setReplaceMethod("features", c("ANY", "SummarizedExperiment0"), 
+setReplaceMethod("features", c("SummarizedExperiment0", "ANY"), 
                  function(object, value) {
                    stop("SummarizedExperiment0 objects have no row annotations")
                  })

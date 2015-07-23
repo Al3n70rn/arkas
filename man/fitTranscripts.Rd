@@ -2,19 +2,20 @@
 % Please edit documentation in R/fitTranscripts.R
 \name{fitTranscripts}
 \alias{fitTranscripts}
-\title{encapsulate limma/voom analysis for consistency with ebrowser()}
+\title{encapsulate limma/voom analysis and TMM normalization at transcript level}
 \usage{
-fitTranscripts(kexp, design, ...)
+fitTranscripts(kexp, design, read.cutoff = 1, ...)
 }
 \arguments{
 \item{kexp}{A KallistoExperiment}
 
 \item{design}{A model matrix}
+\item{read.cutoff}{Exclude transcripts where the maximum count is < this}
 }
 \value{
 A list with elements (design, voomed, fit)
 }
 \description{
-encapsulate limma/voom analysis for consistency with ebrowser()
+encapsulate limma/voom analysis and TMM normalization at transcript level
 }
 
