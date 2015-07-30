@@ -20,7 +20,7 @@ transcriptWiseAnalysis(kexp, design, p.cutoff = 0.05, fold.cutoff = 1,
 \item{annotation}{functional annotations for individual transcripts (varies)}
 }
 \description{
-Downstream analysis of raw transcript abundance estimates
+Downstream analysis of raw transcript abundance estimates.
 FIXME: add bundle-wise annotation for pathway/functional enrichment
 }
 

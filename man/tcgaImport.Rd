@@ -8,11 +8,8 @@ tcgaImport(counts, ...)
 }
 \arguments{
 \item{counts}{a matrix of normalized (eep!) RNAseqV2 counts}
-<<<<<<< HEAD
-=======
 
 \item{transcriptome}{what transcriptome these were derived from}
->>>>>>> 26601c2f2f83fa53a922394c3d7e57752b1b2ebf
 }
 \value{
 a KallistoExperiment attempting to derive effective lengths

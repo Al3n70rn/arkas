@@ -10,6 +10,7 @@ fitTranscripts(kexp, design, read.cutoff = 1, ...)
 \item{kexp}{A KallistoExperiment}
 
 \item{design}{A model matrix}
+
 \item{read.cutoff}{Exclude transcripts where the maximum count is < this}
 }
 \value{

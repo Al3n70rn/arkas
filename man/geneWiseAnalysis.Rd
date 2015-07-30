@@ -4,21 +4,13 @@
 \alias{geneWiseAnalysis}
 \title{Downstream analysis of bundle-aggregated transcript abundance estimates.}
 \usage{
-<<<<<<< HEAD
-geneWiseAnalysis(kexp, design, p.cutoff = 0.05, fold.cutoff = 1,
-=======
 geneWiseAnalysis(kexp, design = NULL, p.cutoff = 0.05, fold.cutoff = 1,
->>>>>>> 26601c2f2f83fa53a922394c3d7e57752b1b2ebf
   read.cutoff = 1, species = c("Homo.sapiens", "Mus.musculus"))
 }
 \arguments{
 \item{kexp}{a KallistoExperiment or SummarizedExperiment-like object}
 
-<<<<<<< HEAD
-\item{design}{a design matrix w/contrast or coefficient to test}
-=======
 \item{design}{a design matrix with 2nd coefficient as one to test}
->>>>>>> 26601c2f2f83fa53a922394c3d7e57752b1b2ebf
 
 \item{p.cutoff}{where to set the p-value cutoff for plots, etc. (0.05)}
 
@@ -32,11 +24,7 @@ geneWiseAnalysis(kexp, design = NULL, p.cutoff = 0.05, fold.cutoff = 1,
 }
 \value{
 a list w/items design, voomed, fit, top, enriched,
-<<<<<<< HEAD
-                                  scaledExprs, clusts, enrichedGO, enrichedRx
-=======
                                   scaledExprs, clusts, ... (perhaps)
->>>>>>> 26601c2f2f83fa53a922394c3d7e57752b1b2ebf
 }
 \description{
 Downstream analysis of bundle-aggregated transcript abundance estimates.

@@ -1,3 +1,5 @@
+#' Saving plots in PDF format in a single output file
+
 #' @param res  An output from limma created by fitBundles
 #' @param outName  a string for saving the file
 #' 
