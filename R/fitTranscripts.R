@@ -8,6 +8,7 @@
 #'
 #' @export
 #' 
+
 fitTranscripts <- function(kexp, design, read.cutoff=1, ...) { 
 
   res <- list()

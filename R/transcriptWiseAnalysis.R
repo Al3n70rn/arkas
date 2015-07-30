@@ -1,4 +1,5 @@
 #' Downstream analysis of raw transcript abundance estimates.
+
 #' FIXME: add bundle-wise annotation for pathway/functional enrichment 
 #'
 #' @param kexp        a KallistoExperiment or SummarizedExperiment-like object 
@@ -17,9 +18,10 @@
 #' @export
 #' 
 transcriptWiseAnalysis <- function(kexp, design, p.cutoff=0.05, fold.cutoff=1, 
-                                   annotation=NULL, coef=2, ...) {  
+                                     annotation=NULL,coef=2, ...){ 
 
-  ## this is really only meant for a KallistoExperiment
+
+ ## this is really only meant for a KallistoExperiment
   if (!is(kexp, "KallistoExperiment")) {
     message("This function is optimized for KallistoExperiment objects.")
     message("It may work for other classes, but we make no guarantees.")
@@ -28,6 +30,7 @@ transcriptWiseAnalysis <- function(kexp, design, p.cutoff=0.05, fold.cutoff=1,
   ## only two supported for now (would be simple to expand, though)
   species <- match.arg(species) ## NOT to be confused with KEGG species ID
   commonName <- switch(species, Mus.musculus="mouse", Homo.sapiens="human")
+
 
   res <- fitTranscripts(kexp, design, read.cutoff)
   top <- topTable(fit, coef=coef, p=p.cutoff, n=nrow(assay))

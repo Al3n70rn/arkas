@@ -9,7 +9,8 @@
 setClass("KallistoExperiment",
          representation(transcriptomes="character", 
                         kallistoVersion="character"),
-         contains="RangedSummarizedExperiment")
+              contains="SummarizedExperiment")
+              # contains="RangedSummarizedExperiment")
 
 .checkAssayNames <- function (object, names) { # {{{
   if (!all(names %in% names(assays(object, withDimnames = FALSE)))) {
