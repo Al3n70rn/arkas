@@ -3,9 +3,10 @@
 #'   
 #' @param kexp        a KallistoExperiment or SummarizedExperiment-like object 
 #' @param res         a list w/items design, voomed, fit, top, enriched,
-#'                    scaledExprs, clusts, ... (perhaps)
-#' @param topGenes    rownames(res$top) limma object with keys from species library
+#'                    scaledExprs, clusts, ... (perhaps). this is the outp                      put from geneWiseAnalysis saved as an object
 #'
+#'
+#' @param species     which species? (Homo.sapiens; FIX: get from transcri                      ptome)
 #'
 #' @import edgeR 
 #' @import limma
@@ -16,19 +17,26 @@
 #' @return            a single merged object with gene names and limma quantified                        values for differential expression
 #' @export  
 
-formatResults<-function(kexp,res, topGenes){
+formatResults<-function(kexp,res,species=c("Homo.sapiens", "Mus.musculus")){
 
-if(missing(topGenes)){
-message("Matching species...")
-  library(species, character.only=TRUE)
-  topGenes <- topGenes[topGenes %in% keys(get(species), "ENTREZID")]
-}
+
+species <- match.arg(species) ## NOT to be confused with KEGG species ID
+  commonName <- switch(species, Mus.musculus="mouse", Homo.sapiens="human")
 
 if(missing(kexp)){
 cat("missing KallistoExperiment stopping ... ")
  return()
 
 }
+
+
+if (!is(kexp, "KallistoExperiment")) {
+    message("This function is optimized for KallistoExperiment objects.")
+    message("It may work for other classes, but we make no guarantees.")
+  }
+
+
+
 
 if(missing(res)){
 cat("missing limma result fit object ... ")
@@ -50,7 +58,16 @@ cat("missing limma result fit object ... ")
                                 qvalueCutoff=p.cutoff, 
                                 readable=TRUE) 
 
-}
+}#if missing res
+
+
+topGenes <- rownames(res$top)
+
+  ## match species to map top genes to Entrez IDs 
+  message("Matching species...")
+  library(species, character.only=TRUE)
+  topGenes <- topGenes[topGenes %in% keys(get(species), "ENTREZID")]
+
 
 NSTop<- features(kexp)[features(kexp)$entrezid %in% topGenes]
 
@@ -58,12 +75,7 @@ subsetTop<-cbind(NSTop$gene_name,NSTop$entrezid)
 
 colnames(subsetTop)<-c("gene_name","entrezid")
 
-
-uniqueEntrezid<-unique(NSTop$entrezid)
-
-subNSTop<-subsetTop[which(!duplicated(test[,2])=="TRUE"),]
-
-
+subNSTop<-subsetTop[which(!duplicated(subsetTop[,2])=="TRUE"),]
 
 matchIndx<-match(subNSTop[,2] ,rownames(res$top))
 
