@@ -17,7 +17,7 @@
 #' discarding transcripts (and bundles) that were not be detected in any sample.
 #' (Filtering tends to increase statistical power at a given false-positive rate
 #' per Bourgon et al, 2010, \link{http://www.pnas.org/content/107/21/9546.long})
-#'
+#' @import GenomicRanges
 #' @return              a matrix of summarized counts per sample bundle 
 #'
 #' @seealso collapseTranscripts
