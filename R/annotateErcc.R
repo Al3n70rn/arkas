@@ -11,16 +11,16 @@
 #'
 annotateErcc <- function(kexp, ...) { 
 
-  data("ERCC", package="artemis")
+  data("ERCC_annotated", package="artemis")
   data("erccSpikeIn", package="artemis") ## dummy granges w/appropriate mcols
 
   ## subset to only the ERCC spike-ins mapped by Kallisto...
-  ERCC <- ERCC[intersect(rownames(kexp), rownames(ERCC)), ] 
-  erccAnnotations <- rep(erccSpikeIn, nrow(ERCC))
-  names(erccAnnotations) <- rownames(ERCC)
+  ERCC_annotated <- ERCC_annotated[intersect(rownames(kexp), rownames(ERCC_annotated)), ] 
+  erccAnnotations <- rep(erccSpikeIn, nrow(ERCC_annotated))
+  names(erccAnnotations) <- rownames(ERCC_annotated)
 
   ## annotate by subgroup: as noted in ?ERCC, this corresponds to mix properties
-  erccAnnotations$tx_biotype <- paste0("erccSpikeIn_subgroup", ERCC$subgroup) 
+  erccAnnotations$tx_biotype <- paste0("erccSpikeIn_subgroup", ERCC_annotated$subgroup) 
   feats <- features(kexp)
   feats[names(erccAnnotations)] <- erccAnnotations 
   features(kexp) <- feats

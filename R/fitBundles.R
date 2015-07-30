@@ -4,7 +4,7 @@
 #' @param design      A model matrix 
 #' @param bundleID    The ID to bundle on (default is gene_id)
 #' @param read.cutoff Exclude bundles where the maximum count is < this 
-#'
+#'          
 #' @return            A list with elements (design, voomed, fit)
 #'
 #' @export

@@ -44,7 +44,8 @@ setGeneric("features<-", function(object, value) standardGeneric("features<-"))
 #' @export
 #'
 setMethod("features", "KallistoExperiment", 
-          function (x) rowRanges(x))
+
+          function (x) if (isRSE(x)) x@rowRanges else x@rowData)
 
 #' @describeIn KallistoExperiment 
 #'
@@ -59,6 +60,8 @@ setMethod("features", "KallistoExperiment",
 #'
 setReplaceMethod("features", c("KallistoExperiment", "ANY"),
                  function(object, value) {
+
+              
                    if (isRSE(object)){
                         object@rowRanges <- value
                    }else{
