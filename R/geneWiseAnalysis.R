@@ -72,7 +72,8 @@ geneWiseAnalysis <- function(kexp, design=NULL,
   res$enriched <- enrichPathway(gene=topGenes, 
                                 qvalueCutoff=p.cutoff, 
                                 readable=TRUE) 
-  barplot(res$enriched, showCategory=10, title="Overall Reactome enrichment")
+#adding res$Figures list object for multiplotting  
+res$Figures$barplot<-barplot(res$enriched, showCategory=10, title="Overall Reactome enrichment")
 
   ## cluster profiling within Reactome and/or GO 
   message("Performing clustered enrichment analysis...")
@@ -84,7 +85,19 @@ geneWiseAnalysis <- function(kexp, design=NULL,
   res$clusts <- compareCluster(geneCluster=genes, 
                                fun="enrichPathway", 
                                qvalueCutoff=p.cutoff)
-  plot(res$clusts) ## this is interesting, it turns out 
+#adding ggplot object for multiplotting
+  
+res$Figures$clusts<-plot(res$clusts) ## saving into Figures list
+
+
+#create a plot vector
+#plots<-c("p1","p2")
+
+#FIXME  this outputs lots of print. this generates the plots save
+#from res$Figures
+saveArtemisPlots(res,plots, outName="geneWiseAnalysisJoined",resolution=200)
+
+
 
   ## up vs down genes
   ## enrichedGO <- list()
@@ -113,7 +126,7 @@ geneWiseAnalysis <- function(kexp, design=NULL,
   ##
   ## EnrichmentBrowser is another recent package that may be tremendously handy
   ##
-
+ 
   return(res)
 
 }
