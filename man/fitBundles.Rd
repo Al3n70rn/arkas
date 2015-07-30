@@ -7,7 +7,7 @@
 fitBundles(kexp, design, bundleID = "gene_id", read.cutoff = 1, ...)
 }
 \arguments{
-\item{kexp}{A KallistoExperimenta}
+\item{kexp}{A KallistoExperiment}
 
 \item{design}{A model matrix}
 
