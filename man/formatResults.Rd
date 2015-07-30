@@ -2,24 +2,22 @@
 % Please edit documentation in R/formatResults.R
 \name{formatResults}
 \alias{formatResults}
-\title{downstream results from limma tabulated into a single object showing genes
- and quantified limma fitted values.}
+\title{downstream results from fitBundles tabulated into a single object
+showing genes and quantified limma fitted values.}
 \usage{
-formatResults(kexp, res, topGenes)
+formatResults(res)
 }
 \arguments{
-\item{kexp}{a KallistoExperiment or SummarizedExperiment-like object}
-
-\item{res}{a list w/items design, voomed, fit, top, enriched,
-scaledExprs, clusts, ... (perhaps)}
-
-\item{topGenes}{rownames(res$top) limma object with keys from species library}
+\item{res}{the output from geneWiseAnalysis}
 }
 \value{
-a single merged object with gene names and limma quantified                        values for differential expression
+a single merged object with gene names and limma quantified
+         values for differential expression
 }
 \description{
-downstream results from limma tabulated into a single object showing genes
- and quantified limma fitted values.
+e.g.
+\code{ library("artemisData")
+       data("NS", package="artemisData")
+      formatResults(geneWiseAnalysis(NS, exptData(NS)$design)) }
 }
 

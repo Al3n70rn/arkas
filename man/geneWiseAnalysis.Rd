@@ -5,7 +5,7 @@
 \title{Downstream analysis of bundle-aggregated transcript abundance estimates.}
 \usage{
 geneWiseAnalysis(kexp, design = NULL, p.cutoff = 0.05, fold.cutoff = 1,
-  read.cutoff = 1, species = c("Homo.sapiens", "Mus.musculus"))
+  read.cutoff = 1, species = c("Homo.sapiens", "Mus.musculus"), ...)
 }
 \arguments{
 \item{kexp}{a KallistoExperiment or SummarizedExperiment-like object}
@@ -24,7 +24,8 @@ geneWiseAnalysis(kexp, design = NULL, p.cutoff = 0.05, fold.cutoff = 1,
 }
 \value{
 a list w/items design, voomed, fit, top, enriched,
-                                  scaledExprs, clusts, ... (perhaps)
+                                  Figures, scaledExprs, clusts, species,
+                                  features, ... (perhaps)
 }
 \description{
 Downstream analysis of bundle-aggregated transcript abundance estimates.
