@@ -95,7 +95,7 @@ res$Figures$clusts<-plot(res$clusts) ## saving into Figures list
 
 #FIXME  this outputs lots of print. this generates the plots save
 #from res$Figures
-saveArtemisPlots(res,plots, outName="geneWiseAnalysisJoined",resolution=200)
+saveArtemisPlots(res, outName="geneWiseAnalysisJoined")
 
 
 

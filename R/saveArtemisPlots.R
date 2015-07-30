@@ -23,11 +23,11 @@ if (missing(outName)){
 
 cat("input parameters O.K.")
 
-
+    nFigs<-length(res$Figures)
     cols = 2
     pwidth = 7*cols
     pheight = 7*nFigs/cols
-    nFigs<- 2  #this is 2 for now
+    
 
 #setting up pdf file
 pdf = pdf(file = paste(outName,"pdf",sep="."),
@@ -40,7 +40,7 @@ for(  i in 1:length(res$Figures)){
 
 #need to type check that the list has ggplot in it. Loose checking. Hopefully the user has some discretion
 
-if (all((grepl("ggplot",class(res$Figures)))==FALSE)==TRUE){
+if (all((grepl("ggplot",class(res$Figures[[i]])))==FALSE)==TRUE){
  message("you must have a list of ggplot object")
  return(res)
 }#if
