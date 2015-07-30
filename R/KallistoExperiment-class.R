@@ -9,8 +9,7 @@
 setClass("KallistoExperiment",
          representation(transcriptomes="character", 
                         kallistoVersion="character"),
-              contains="SummarizedExperiment")
-              # contains="RangedSummarizedExperiment")
+              contains="RangedSummarizedExperiment")
 
 .checkAssayNames <- function (object, names) { # {{{
   if (!all(names %in% names(assays(object, withDimnames = FALSE)))) {
@@ -21,6 +20,7 @@ setClass("KallistoExperiment",
   }
 } # }}}
 
+## FIXME: clone kallistoVersion, transcriptomes into metadata/exptData
 setValidity("KallistoExperiment", function(object) { # {{{
   msg <- validMsg(NULL, NULL)
   msg <- .checkAssayNames(object, c("est_counts", "eff_length"))

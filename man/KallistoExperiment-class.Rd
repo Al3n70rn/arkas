@@ -7,6 +7,7 @@
 \alias{covariates,ANY-method}
 \alias{covariates,KallistoExperiment-method}
 \alias{covariates<-,ANY-method}
+\alias{covariates<-,KallistoExperiment-method}
 \alias{eff_length,KallistoExperiment-method}
 \alias{features,KallistoExperiment-method}
 \alias{features,SummarizedExperiment0-method}
@@ -15,6 +16,8 @@
 \alias{features<-,SummarizedExperiment0-method}
 \alias{kallistoVersion,KallistoExperiment-method}
 \alias{mad,KallistoExperiment-method}
+\alias{pData,KallistoExperiment-method}
+\alias{pData<-,KallistoExperiment,DataFrame-method}
 \alias{tpm,KallistoExperiment-method}
 \alias{transcriptomes,KallistoExperiment-method}
 \alias{transcriptsBy,KallistoExperiment-method}
@@ -23,6 +26,12 @@
 \S4method{counts}{KallistoExperiment}(object)
 
 \S4method{covariates}{KallistoExperiment}(object)
+
+\S4method{pData}{KallistoExperiment}(object)
+
+\S4method{covariates}{KallistoExperiment}(object) <- value
+
+\S4method{pData}{KallistoExperiment,DataFrame}(object) <- value
 
 \S4method{features}{KallistoExperiment}(x)
 
@@ -51,30 +60,6 @@
 \S4method{features}{SummarizedExperiment0}(object) <- value
 }
 \arguments{
-\item{object:}{A KallistoExperiment from which to retrieve counts}
-
-\item{object:}{A KallistoExperiment from which to retrieve covariates}
-
-\item{object:}{A KallistoExperiment from which features should be obtained}
-
-\item{object:}{A KallistoExperiment from which features should be obtained}
-
-\item{value:}{Some feature annotations, usually a GRanges or GRangesList}
-
-\item{object:}{A KallistoExperiment with effective transcript lengths}
-
-\item{object:}{A KallistoExperiment with estimated counts & effective lengths}
-
-\item{object:}{A KallistoExperiment}
-
-\item{object:}{A KallistoExperiment}
-
-\item{x:}{A KallistoExperiment}
-
-\item{by:}{The gene_name for which to retrieve transcripts}
-
-\item{object:}{A KallistoExperiment}
-
 \item{object:}{something from which to retrieve covariates}
 
 \item{object:}{something to which covariates should be assigned}
@@ -88,26 +73,6 @@
 \item{value:}{the features to assign (usually a GRanges or GRangesList)}
 }
 \value{
-A matrix of counts.
-
-a DataFrame
-
-a GRanges or GRangesList of feature annotations
-
-the KallistoExperiment object, with updated feature annotations
-
-a matrix of effective transcript lengths
-
-a matrix of tpms (transcripts per million)
-
-a string: the version of Kallisto used for pseudoalignment
-
-a string: the transcriptomes against which reads were pseudoaligned
-
-a subset of the object with features whose gene_name matches
-
-a matrix of bootstrapped tx MADs (rows == txs, columns == samples)
-
 the object, perhaps with updated covariates
 
 a GRanges or GRangesList of feature annotations
@@ -122,6 +87,12 @@ FIXME: add RUVg-derived ERCC-calibrated normalization factors in metadata
 \item \code{counts}: Retrieve the estimated count matrix from a KallistoExperiment.
 
 \item \code{covariates}: Retrieve the sample covariates from a KallistoExperiment.
+
+\item \code{pData}: Retrieve the sample covariates from a KallistoExperiment.
+
+\item \code{covariates<-}: Assign the sample covariates for a KallistoExperiment.
+
+\item \code{pData<-}: Convenience method for people used to ExpressionSet, to set per-sample data.
 
 \item \code{features}: Retrieve the per-row annotations for a KallistoExperiment.
 
