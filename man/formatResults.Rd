@@ -15,9 +15,11 @@ a single merged object with gene names and limma quantified
          values for differential expression
 }
 \description{
-e.g.
-\code{ library("artemisData")
-       data("NS", package="artemisData")
-      formatResults(geneWiseAnalysis(NS, exptData(NS)$design)) }
+example:
+}
+\details{
+\code{ library("artemisData") }
+\code{ data("NS", package="artemisData") }
+\code{ formatResults(geneWiseAnalysis(NS, exptData(NS)$design)) }
 }
 
