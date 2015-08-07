@@ -13,6 +13,8 @@ CountsAndFeaturesToKallistoExperiment(counts, features, transcriptomes, ...)
 \item{features}{GRanges of features with valid lengths}
 
 \item{transcriptomes}{mandatory string or strings naming the transcriptomes}
+
+\item{...}{Other stuff (such as covariates=covs and the like)}
 }
 \value{
 a KallistoExperiment

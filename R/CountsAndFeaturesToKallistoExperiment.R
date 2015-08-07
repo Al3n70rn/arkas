@@ -4,6 +4,7 @@
 #' @param counts          matrix of transcript or bundle counts
 #' @param features        GRanges of features with valid lengths
 #' @param transcriptomes  mandatory string or strings naming the transcriptomes 
+#' @param ...             Other stuff (such as covariates=covs and the like)
 #' 
 #' @return a KallistoExperiment
 #' 
@@ -16,5 +17,5 @@ CountsAndFeaturesToKallistoExperiment <- function(counts,
                                                   ...) {
   stopifnot(is(counts, "matrix"))
   stopifnot(is(features, "GenomicRanges"))
-  SEtoKE(counts=counts, features=features, transcriptomes=transcriptomes) 
+  SEtoKE(counts=counts, features=features, transcriptomes=transcriptomes, ...) 
 }
