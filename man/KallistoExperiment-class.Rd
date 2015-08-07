@@ -100,8 +100,12 @@ FIXME: add RUVg-derived ERCC-calibrated normalization factors in metadata
 
 \item \code{eff_length}: Retrieve the matrix of effective transcript lengths from a KallistoExperiment
 
-\item \code{tpm}: Obtain tpm estimates as shown in
-https://haroldpimentel.wordpress.com/2014/05/08/what-the-fpkm-a-review-rna-seq-expression-units/
+\item \code{tpm}: Obtain tpm from the precomputed matrix ( computed as shown in
+https://haroldpimentel.wordpress.com/2014/05/08/what-the-fpkm-a-review-rna-seq-expression-units/ ), specifically,
+
+\code{ rate <- log(counts(object)) - log(eff_length(object)); }
+
+\code{ tpm <- exp(rate - log(sum(exp(rate))) + log(1e6)) }
 
 \item \code{kallistoVersion}: Retrieve the version of Kallisto used for alignment from a KallistoExperiment
 

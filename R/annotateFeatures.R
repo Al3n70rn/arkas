@@ -1,36 +1,59 @@
-#' annotate features (genes or transcripts) against EnsemblDb
+#' annotate features (genes or transcripts) against (say) EnsemblDb
+#' this is becoming the default dispatcher for almost all annotation
 #' 
-#' @param counts        a matrix of counts (or anything with rownames, really)
-#' @param transcriptome a character string naming the transcriptome
+#' @param x             a kexp, a matrix of counts, or something with rownames
+#' @param transcriptome a character string naming the transcriptome (EnsDb v75)
 #' @param level         at what level has the data been summarized? (guess)
 #'
-#' @return              a GRanges, perhaps containing annotations for the rows
+#' @return              a GRanges, perhaps with annotations for the rows
 #'
 #' @export
 #'
-annotateFeatures <- function(counts, transcriptome="EnsDb.Hsapiens.v75", 
-                             level=c("unknown", "gene", "transcript"), ...) { 
+annotateFeatures <- function(x, 
+                             transcriptome="EnsDb.Hsapiens.v80", 
+                             level=c(NA,"gene","transcript","ercc","repeats"), 
+                             ...) { 
 
   level <- match.arg(level)
-  if (level == "unknown") {
-    if (sum(grepl("^ENST", rownames(counts))) > 1) level <- "transcript"
-    else if (sum(grepl("^ENSG", rownames(counts))) > 1) level <- "gene"
-    else stop("Can't figure out whether these are transcripts or genes!")
-  }
 
-  ## actually annotate something, perhaps
-  if (grepl("EnsDb", ignore.case=TRUE, transcriptome)) {
+  ## ENSEMBL-specific annotation routines:
+  if (level %in% c(NA, "gene", "transcript") && 
+      tolower(substr(transcriptome, 1, 3)) == "ens") {
+    if (is.na(level)) {
+      if (sum(grepl("^ENST", rownames(x))) > 1) level <- "transcript"
+      else if (sum(grepl("^ENSG", rownames(x))) > 1) level <- "gene"
+      else stop("Can't figure out whether these are transcripts or genes!")
+    } 
+    
+    txcol <- c("gene_id", "gene_name", "entrezid", "tx_biotype", "gene_biotype")
+    genecol <- c("gene_id","gene_name","entrezid","gene_biotype")
+
     library(transcriptome, character.only=TRUE)
-    columns <- c("gene_id", "gene_name", "entrezid", "tx_biotype")
-    map <- switch(level, 
-                  transcript=transcripts(get(transcriptome), columns=columns),
-                  gene=genes(get(transcriptome), columns=columns))
+    message("Attempting to annotate against ENSEMBL...")
+
+    if (level == "gene") {
+      map <- genes(get(transcriptome), columns=genecol)
+      mcols(map)$tx_biotype <- mcols(map)$gene_biotype
+      mcols(map) <- mcols(map)[, txcol]
+    } else if (level == "transcript") {
+      map <- transcripts(get(transcriptome), columns=txcol)
+    }
     seqlevelsStyle(map) <- "UCSC"
-    found <- intersect(rownames(counts), names(map))
-    return(map[found])
-  } else {       
-    message(paste("Don't know how to annotate", transcriptome))
+
+    ## add biotype "class" (compiled manually) from data, empty or otherwise
+
+  } else if (level == "ercc") {       
+
+
+  } else if (level == "repeats") {       
+
+
+  } else {
+    message(paste("Don't know how to annotate", transcriptome, "for", level))
     return(NULL)
   } 
 
+  ## return annotations for the features found
+  found <- intersect(rownames(x), names(map))
+  return(map[found])
 }
