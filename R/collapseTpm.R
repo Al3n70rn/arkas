@@ -39,6 +39,7 @@ collapseTpm <- function(kexp, bundleID="gene_id", minTPM=1,
   tpms <- tpms[sapply(tpms, function(x) max(count(x)) >= minTPM)]
   bundled <- do.call(rbind, lapply(tpms, count))
   joined <- grep(";", invert=TRUE, rownames(bundled))
+  unjoined<-grep(";",invert=FALSE,rownames(bundled)) 
   if (discardjoined) return(bundled[unjoined,])
   else return(bundled)
 
