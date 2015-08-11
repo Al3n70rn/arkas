@@ -2,22 +2,34 @@
 % Please edit documentation in R/icgcImport.R
 \name{icgcImport}
 \alias{icgcImport}
-\title{import RNAseq data from ICGC (at least the way it comes from their DCC)}
+\title{import RNAseq data from ICGC (at least the way it comes from their DCC)
+right now, this means only accepting gene-level summaries; may change later.}
 \usage{
-icgcImport(counts, transcriptome, level = c("gene", "transcript"), ...)
+icgcImport(counts = NULL, filename = NULL, filepath = ".", transcriptome,
+  level = c("gene", "transcript"), cols = c("submitted_sample_id",
+  "gene_id", "raw_read_count"), ...)
 }
 \arguments{
-\item{counts}{A matrix of counts}
+\item{counts}{A matrix of counts (else provide filename)}
+
+\item{filename}{A filename to pull in (if counts == NULL)}
+
+\item{filepath}{Where the above-specified file resides (".")}
 
 \item{transcriptome}{what transcriptome these were derived from}
 
 \item{level}{At what level shall features be annotated? (gene)}
+
+\item{cols}{Which columns matter in the data? (see function code)}
+
+\item{...}{Other stuff (such as covariates=covs and the like)}
 }
 \value{
-a KallistoExperiment attempting to derive effective lengths
+KallistoExperiment with derived effective lengths
 }
 \description{
 import RNAseq data from ICGC (at least the way it comes from their DCC)
+right now, this means only accepting gene-level summaries; may change later.
 }
 \seealso{
 CountsAndFeaturesToKallistoExperiment
