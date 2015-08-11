@@ -88,7 +88,12 @@ mergeKallisto <- function(outputDirs=NULL,
                             features=rowdat,
                             ...)
   colnames(res) <- covariates(res)$ID 
-  if(!is.null(transcriptomes)) res <- annotateBundles(res, transcriptomes)
+  if(!is.null(transcriptomes)) {
+    feats <- features(res)
+    mapped <- annotateBundles(res, transcriptomes)
+    feats[names(mapped)] <- mapped
+    features(res) <- feats
+  }
   return(res)
 
 }

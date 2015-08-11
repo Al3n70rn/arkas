@@ -21,6 +21,8 @@ SEtoKE(SE = NULL, counts = NULL, features = NULL, covariates = NULL,
 \item{transcriptomes}{mandatory string or strings naming the transcriptomes}
 
 \item{fraglen}{optional mean fragment length estimate for PE runs}
+
+\item{...}{Other stuff (arguments passed to KallistoExperiment)}
 }
 \value{
 a KallistoExperiment
