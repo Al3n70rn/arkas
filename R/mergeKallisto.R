@@ -93,10 +93,20 @@ mergeKallisto <- function(outputDirs=NULL,
   if(!is.null(transcriptomes)) {
     feats <- features(res)
     feats<-updateObject(feats)
-    mapped <- annotateBundles(updateObject(res), transcriptomes)
+    mapped <- annotateBundles(res, transcriptomes)
+    #FIXME : feats is genomicRanges ,  mapped is KallistoExperiment, class conflict
+    if( class(feats[names(mapped)])==class(mapped)){
     feats[names(mapped)] <- mapped
     features(res) <- feats
-  }
+    } #if class mapped is genomic Ranges
+ 
+   if(class(feats[names(mapped)])==class(features(mapped))) {
+   feats[names(mapped)] <- features(mapped)
+   features(res) <- feats
+  }#if class(features(mapped) is genomic Ranges
+
+   }
+
   return(res)
 
 }
