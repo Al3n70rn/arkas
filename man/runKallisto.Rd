@@ -5,7 +5,8 @@
 \title{run kallisto with fastq.gz files on freshly generated or existing index}
 \usage{
 runKallisto(sampleDir, indexName = NULL, fastaPath = ".",
-  fastaFiles = NULL, fastqPath = ".", outputPath = ".", bootstraps = 0)
+  fastaFiles = NULL, fastqPath = ".", outputPath = ".",
+  pseudoBAM = NULL, bootstraps = 0)
 }
 \arguments{
 \item{sampleDir}{character, subdirectory for sample's FASTQ files}
@@ -19,6 +20,8 @@ runKallisto(sampleDir, indexName = NULL, fastaPath = ".",
 \item{fastqPath}{character, where sampleDir is located under (".")}
 
 \item{outputPath}{character, output in outputPath/sampleDir (".")}
+
+\item{pseudoBAM}{character, y for pseudobam, otherwise NULL}
 
 \item{bootstraps}{integer, how many bootstrap replicates to run? (0)}
 }

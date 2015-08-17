@@ -70,7 +70,8 @@ else {
                    "-b", bootstraps,
                    "--pseudobam",
                    sampleFiles,
-                    "| samtools view -Sb - > out.pbam")
+                    "| samtools view -Sb - >",
+                     lapply(sampleDir,function(x) paste(x,".pbam",sep="")))
   retval <- system(command)
   res <- list(command=command, outputPath=outputPath, bootstraps=bootstraps)
   if (retval == 0 && file.exists(paste0(outputDir, "/abundance.h5"))) {
