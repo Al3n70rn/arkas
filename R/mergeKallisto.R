@@ -77,6 +77,7 @@ mergeKallisto <- function(outputDirs=NULL,
   ## }
 
   data(unannotatedTranscript)
+  unannotatedTranscript<-updateObject(unannotatedTranscript)
   rowdat <- rep(unannotatedTranscript, nrow(asys$est_counts))
   names(rowdat) <- rownames(asys$est_counts)
   res <- KallistoExperiment(est_counts=asys$est_counts,
@@ -85,9 +86,10 @@ mergeKallisto <- function(outputDirs=NULL,
                             transcriptomes=transcriptomes,
                             kallistoVersion=kallistoVersion,
                             covariates=coldat,
-                            features=rowdat,
+                           features=rowdat,
                             ...)
   colnames(res) <- covariates(res)$ID 
+  res<-updateObject(res)
   if(!is.null(transcriptomes)) {
     feats <- features(res)
     mapped <- annotateBundles(res, transcriptomes)
