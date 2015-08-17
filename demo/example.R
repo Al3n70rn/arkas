@@ -40,6 +40,10 @@ merged <- mergeKallisto(samples, outputPath=".")
 topKbyMAD <- function(kexp, k=25) {
   tpm(kexp)[rev(order(rowMeans(counts(kexp) / mad(kexp))))[1:k],]
 }
+pdf("ExamplePlot.pdf")
 heatmap(log1p(topKbyMAD(merged)), scale="none", 
         col=colorRampPalette(c("white","red","darkred"))(255),
         main="Repeat transcription, teratoma vs. normal")
+dev.off()tmap(log1p(topKbyMAD(merged)), scale="none",
+col=colorRampPalette(c("white","red","darkred"))(255),
+main="Repeat transcription, teratoma vs. normal")
