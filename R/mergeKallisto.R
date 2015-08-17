@@ -92,7 +92,8 @@ mergeKallisto <- function(outputDirs=NULL,
   res<-updateObject(res)
   if(!is.null(transcriptomes)) {
     feats <- features(res)
-    mapped <- annotateBundles(res, transcriptomes)
+    feats<-updateObject(feats)
+    mapped <- annotateBundles(updateObject(res), transcriptomes)
     feats[names(mapped)] <- mapped
     features(res) <- feats
   }
