@@ -77,7 +77,7 @@ mergeKallisto <- function(outputDirs=NULL,
   ## }
 
   data(unannotatedTranscript)
-  unannotatedTranscript<-updateObject(unannotatedTranscript)
+ # unannotatedTranscript<-updateObject(unannotatedTranscript)
   rowdat <- rep(unannotatedTranscript, nrow(asys$est_counts))
   names(rowdat) <- rownames(asys$est_counts)
   res <- KallistoExperiment(est_counts=asys$est_counts,
