@@ -10,7 +10,7 @@
 #' @export
 #'
 annotateFeatures <- function(x, 
-                             transcriptome="EnsDb.Hsapiens.v80", 
+                             transcriptome="EnsDbLite.Hsapiens.v80", 
                              level=c(NA,"gene","transcript","ercc","repeats"), 
                              ...) { 
 

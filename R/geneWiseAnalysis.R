@@ -34,9 +34,12 @@
 #'
 #' @export
 #' 
-geneWiseAnalysis <- function(kexp, design=NULL,
+geneWiseAnalysis <- function(kexp, design=NULL, how=c("cpm","tpm"), 
                              p.cutoff=0.05, fold.cutoff=1, read.cutoff=1, 
-                             species=c("Homo.sapiens","Mus.musculus"), ...) {
+                             species=c("Homo.sapiens",
+                                       "Mus.musculus",
+                                       "Rattus.norvegicus"), 
+                             ...) {
 
   ## this is really only meant for a KallistoExperiment
   if (!is(kexp, "KallistoExperiment")) {
@@ -52,24 +55,32 @@ geneWiseAnalysis <- function(kexp, design=NULL,
     }
   }
 
-  ## only two supported for now (would be simple to expand, though)
+  ## only ones supported for now (would be simple to expand, though)
   species <- match.arg(species) ## NOT to be confused with KEGG species ID
-  commonName <- switch(species, Mus.musculus="mouse", Homo.sapiens="human")
+  commonName <- switch(species, 
+                       Mus.musculus="mouse", 
+                       Homo.sapiens="human",
+                       Rattus.norvegicus="rat")
 
   message("Fitting bundles...")
-  res <- fitBundles(kexp, design, bundleID="entrezid", read.cutoff=read.cutoff)
+
+  ## default to ensembl gene id (not entrez)
+  res <- fitBundles(kexp, design, read.cutoff=read.cutoff)
   res$top <- with(res, topTable(fit, coef=2, p=p.cutoff, n=nrow(kexp)))
   res$top <- res$top[ abs(res$top$logFC) >= fold.cutoff, ] ## per SEQC
   topGenes <- rownames(res$top)
 
   ## match species to map top genes to Entrez IDs 
-  message("Matching species...")
-  library(species, character.only=TRUE)
-  topGenes <- topGenes[topGenes %in% keys(get(species), "ENTREZID")]
+  # message("Matching species...")
+  # library(species, character.only=TRUE) ## can ignore this now 
+  # topGenes <- topGenes[topGenes %in% keys(get(species), "ENTREZID")]
 
   ## overall
   message("Performing Reactome enrichment analysis...")
-  res$enriched <- enrichPathway(gene=topGenes, 
+  message("Matching species...")
+  library(species, character.only=TRUE) ## can ignore this now 
+  enrich <- topGenes[topGenes %in% keys(get(species), "ENTREZID")]
+  res$enriched <- enrichPathway(gene=enrich, 
                                 qvalueCutoff=p.cutoff, 
                                 readable=TRUE) 
 
@@ -81,7 +92,7 @@ geneWiseAnalysis <- function(kexp, design=NULL,
 
   ## cluster profiling within Reactome and/or GO 
   message("Performing clustered enrichment analysis...")
-  res$scaledExprs <- t(scale(t(res$voomed$E[ topGenes, ])))
+  res$scaledExprs <- t(scale(t(res$voomed$E[ enrich, ])))
   ## turns out it's pretty easy: there's an "up" cluster, and a "down" cluster
   clust <- cutree(hclust(dist(res$scaledExprs), method="ward"), k=2)
   genes <- split(names(clust), clust)

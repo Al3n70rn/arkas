@@ -67,3 +67,39 @@ SEtoKE <- function(SE=NULL, counts=NULL, features=NULL, covariates=NULL,
                      features=features,
                      ...)
 }
+
+#' @describeIn SEtoKE
+#' 
+#' @param SE              SummarizedExperiment w/fully annotated rows (features)
+#' @param transcriptomes  mandatory string or strings naming the transcriptomes 
+#' 
+#' @return a KallistoExperiment
+#'
+#' @seealso SEtoKE
+#' 
+#' @export
+SummarizedExperimentToKallistoExperiment <- function(SE, transcriptomes) {
+  SEtoKE(SE=SE, transcriptomes=transcriptomes) 
+}
+
+
+#' @describeIn SEtoKE
+#'
+#' @param counts          matrix of transcript or bundle counts
+#' @param features        GRanges of features with valid lengths
+#' @param transcriptomes  mandatory string or strings naming the transcriptomes 
+#' @param ...             Other stuff (such as covariates=covs and the like)
+#' 
+#' @return a KallistoExperiment
+#' 
+#' @seealso SEtoKE
+#' 
+#' @export 
+CountsAndFeaturesToKallistoExperiment <- function(counts, 
+                                                  features, 
+                                                  transcriptomes,
+                                                  ...) {
+  stopifnot(is(counts, "matrix"))
+  stopifnot(is(features, "GenomicRanges"))
+  SEtoKE(counts=counts, features=features, transcriptomes=transcriptomes, ...) 
+}
