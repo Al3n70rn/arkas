@@ -1,4 +1,4 @@
-library(artemis)
+suppressPackageStartupMessages(library(artemis))
 
 jsonFile <- system.file("extdata", "NS.JSON", package="artemis")
 appSession <- fetchAppSession(jsonFile) ## autofill APPSESSION in paths
