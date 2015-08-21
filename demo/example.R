@@ -44,6 +44,4 @@ pdf("ExamplePlot.pdf")
 heatmap(log1p(topKbyMAD(merged)), scale="none", 
         col=colorRampPalette(c("white","red","darkred"))(255),
         main="Repeat transcription, teratoma vs. normal")
-dev.off()tmap(log1p(topKbyMAD(merged)), scale="none",
-col=colorRampPalette(c("white","red","darkred"))(255),
-main="Repeat transcription, teratoma vs. normal")
+dev.off()
