@@ -52,7 +52,6 @@ indexKallisto <- function(fastaFiles, fastaPath, fastaTxDbLite=TRUE, ...) {
     retval <- system(command=command)
     setwd(oldwd)
     if (retval == 0) {
-      res$indexDigestFile <- .makeIndexDigest(indexPath)
       return(res)
     } else { 
       stop("Index generation failed.")
