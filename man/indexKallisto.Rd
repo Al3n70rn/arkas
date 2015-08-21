@@ -2,16 +2,22 @@
 % Please edit documentation in R/indexKallisto.R
 \name{indexKallisto}
 \alias{indexKallisto}
-\title{index transcriptome/transcriptomes (w/MD5 digest to avoid duplicating work)}
+\title{index transcriptome/transcriptomes (w/MD5 digest to avoid duplicating work)
+NOTE: This function will seek to disambiguate any duplicate-named sequences
+FIXME: automatically annotate heretofore-unseen Ensembl/RepBase/ERCC FASTAs}
 \usage{
-indexKallisto(fastaFiles, fastaPath)
+indexKallisto(fastaFiles, fastaPath, fastaTxDbLite = FALSE, ...)
 }
 \arguments{
-\item{fastaFiles}{a character string or vector of source transcriptomes}
+\item{fastaFiles}{a character string or vector of FASTA transcriptomes}
 
 \item{fastaPath}{where to find the preceding FASTA files}
+
+\item{fastaTxDbLite}{boolean: should we try to annotate new FASTAs?}
 }
 \description{
 index transcriptome/transcriptomes (w/MD5 digest to avoid duplicating work)
+NOTE: This function will seek to disambiguate any duplicate-named sequences
+FIXME: automatically annotate heretofore-unseen Ensembl/RepBase/ERCC FASTAs
 }
 

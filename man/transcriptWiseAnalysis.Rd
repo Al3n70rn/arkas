@@ -3,7 +3,7 @@
 \name{transcriptWiseAnalysis}
 \alias{transcriptWiseAnalysis}
 \title{Downstream analysis of raw transcript abundance estimates.
-FIXME: add bundle-wise annotation for pathway/functional enrichment}
+(This is delegated to the methods from Sleuth; results processed in artemis)}
 \usage{
 transcriptWiseAnalysis(kexp, design, p.cutoff = 0.05, fold.cutoff = 1,
   annotation = NULL, coef = 2, ...)
@@ -20,7 +20,7 @@ transcriptWiseAnalysis(kexp, design, p.cutoff = 0.05, fold.cutoff = 1,
 \item{annotation}{functional annotations for individual transcripts (varies)}
 }
 \description{
-Downstream analysis of raw transcript abundance estimates.
 FIXME: add bundle-wise annotation for pathway/functional enrichment
+FIXME: add promoter-wise annotation for pathway/functional enrichment
 }
 

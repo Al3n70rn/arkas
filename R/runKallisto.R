@@ -1,4 +1,4 @@
-#' run kallisto with fastq.gz files on freshly generated or existing index
+#' run kallisto with fastq.gz files on a freshly generated or existing index
 #' 
 #' @param sampleDir   character, subdirectory for sample's FASTQ files 
 #' @param indexName   character or NULL, optional name of the index
@@ -6,8 +6,10 @@
 #' @param fastaFiles  character vector of FASTA transcriptomes, or NULL
 #' @param fastqPath   character, where sampleDir is located under (".")
 #' @param outputPath  character, output in outputPath/sampleDir (".")
-#' @param pseudoBAM   character, y for pseudobam, otherwise NULL
-#' @param bootstraps  integer, how many bootstrap replicates to run? (0)
+#' @param bootstraps  integer, how many bootstrap replicates to run? (100)
+#' @param threads     integer, how many threads to use for bootstraps? (4)
+#' @param bias        boolean, perform bias correction? (TRUE)
+#' @param pseudobam   boolean, produce pseudoBAM output? (FALSE)
 #'
 #' @export
 runKallisto <- function(sampleDir, 
@@ -16,8 +18,11 @@ runKallisto <- function(sampleDir,
                         fastaFiles=NULL,
                         fastqPath=".",
                         outputPath=".",
-                        pseudoBAM=NULL,
-                        bootstraps=0) {
+                        bootstraps=100,
+                        threads=1,
+                        bias=TRUE,
+                        pseudobam=FALSE,
+                        ...) {
 
   if (is.null(indexName) && is.null(fastaFiles)) {
     stop("Exactly one of indexName or fastaFiles must be non-null to run.")
@@ -53,6 +58,9 @@ if (is.null(pseudoBAM)) {
                    "-i", indexFile, 
                    "-o", outputDir, 
                    "-b", bootstraps, 
+                   "-t", threads, 
+                   ifelse(bias, "--bias", ""), 
+                   ifelse(pseudobam, "--pseudobam", ""), 
                    sampleFiles)
   retval <- system(command)
   res <- list(command=command, outputPath=outputPath, bootstraps=bootstraps)
@@ -63,27 +71,24 @@ if (is.null(pseudoBAM)) {
   }
 } #if no pseudoBAM 
 
-else { 
-  command <- paste("kallisto quant",
-                   "-i", indexFile,
-                   "-o", outputDir,
-                   "-b", bootstraps,
-                   "--pseudobam",
-                   sampleFiles,
-                    "| samtools view -Sb - >",
-                     lapply(sampleDir,function(x) paste(x,".pbam",sep="")))
-  retval <- system(command)
-  res <- list(command=command, outputPath=outputPath, bootstraps=bootstraps)
-  if (retval == 0 && file.exists(paste0(outputDir, "/abundance.h5"))) {
-    return(res)
-  } else {
-    stop(paste("Quantification failed; command",command,"did not produce hdf5"))
-  }
+#else { 
+ # command <- paste("kallisto quant",
+  #                 "-i", indexFile,
+   #                "-o", outputDir,
+    #               "-b", bootstraps,
+     #              "--pseudobam",
+      #             sampleFiles,
+       #             "| samtools view -Sb - >",
+        #             lapply(sampleDir,function(x) paste(x,".pbam",sep="")))
+ # retval <- system(command)
+ # res <- list(command=command, outputPath=outputPath, bootstraps=bootstraps)
+ # if (retval == 0 && file.exists(paste0(outputDir, "/abundance.h5"))) {
+  #  return(res)
+ # } else {
+  #  stop(paste("Quantification failed; command",command,"did not produce hdf5"))
+ # }
 
 
 
-}#else pseudoBAM desired
-}#main
-
-
-
+#}#else pseudoBAM desired
+}
