@@ -11,7 +11,6 @@ if (require(artemisData)) {
   appSession$outputPath <- system.file("extdata", "", package="artemisData")
   NS <- mergeKallisto(appSession$samples, 
                       outputPath=appSession$outputPath)
-  
 
 } else { 
 
