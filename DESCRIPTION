@@ -1,12 +1,12 @@
 Package: artemis
 Type: Package
 Title: A package that complements Kallisto for quick, informative *seq analysis
-Version: 0.3.08
-Date: 2015-08-11
+Version: 0.3.10
+Date: 2015-08-21
 Author: Tim Triche, Jr., Anthony Colombo, Harold Pimentel
-Depends: parallel, jsonlite, GenomeInfoDb, ReactomePA, limma, 
+Depends: parallel, jsonlite, GenomeInfoDb, ReactomePA, limma, Biobase,
          SummarizedExperiment, EnrichmentBrowser, Homo.sapiens, Mus.musculus,
-         erccdashboard, RUVSeq, ssizeRNA, tools, clusterProfiler, RUVSeq
+         erccdashboard, RUVSeq, tools, clusterProfiler, ensembldb, TxDbLite 
 Imports: rhdf5, matrixStats, GenomicRanges, GenomicFeatures, Matrix, KEGGREST 
 Suggests: roxygen2, knitr, EnsDb.Hsapiens.v80, EnsDb.Mmusculus.v80, Seurat
 VignetteBuilder: knitr
