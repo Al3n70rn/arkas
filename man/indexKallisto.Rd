@@ -6,14 +6,14 @@
 NOTE: This function will seek to disambiguate any duplicate-named sequences
 FIXME: automatically annotate heretofore-unseen Ensembl/RepBase/ERCC FASTAs}
 \usage{
-indexKallisto(fastaFiles, fastaPath, fastaTxDbLite = FALSE, ...)
+indexKallisto(fastaFiles, fastaPath, fastaTxDbLite = TRUE, ...)
 }
 \arguments{
 \item{fastaFiles}{a character string or vector of FASTA transcriptomes}
 
 \item{fastaPath}{where to find the preceding FASTA files}
 
-\item{fastaTxDbLite}{boolean: should we try to annotate new FASTAs?}
+\item{fastaTxDbLite}{boolean: should we try to annotate new FASTAs? (yes)}
 }
 \description{
 index transcriptome/transcriptomes (w/MD5 digest to avoid duplicating work)

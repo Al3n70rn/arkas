@@ -2,10 +2,11 @@
 % Please edit documentation in R/runKallisto.R
 \name{runKallisto}
 \alias{runKallisto}
-\title{run kallisto with fastq.gz files on freshly generated or existing index}
+\title{run kallisto with fastq.gz files on a freshly generated or existing index}
 \usage{
 runKallisto(sampleDir, indexName = NULL, fastaPath = ".",
-  fastaFiles = NULL, fastqPath = ".", outputPath = ".", bootstraps = 0)
+  fastaFiles = NULL, fastqPath = ".", outputPath = ".",
+  bootstraps = 100, threads = 1, bias = TRUE, pseudobam = FALSE, ...)
 }
 \arguments{
 \item{sampleDir}{character, subdirectory for sample's FASTQ files}
@@ -20,9 +21,15 @@ runKallisto(sampleDir, indexName = NULL, fastaPath = ".",
 
 \item{outputPath}{character, output in outputPath/sampleDir (".")}
 
-\item{bootstraps}{integer, how many bootstrap replicates to run? (0)}
+\item{bootstraps}{integer, how many bootstrap replicates to run? (100)}
+
+\item{threads}{integer, how many threads to use for bootstraps? (4)}
+
+\item{bias}{boolean, perform bias correction? (TRUE)}
+
+\item{pseudobam}{boolean, produce pseudoBAM output? (FALSE)}
 }
 \description{
-run kallisto with fastq.gz files on freshly generated or existing index
+run kallisto with fastq.gz files on a freshly generated or existing index
 }
 
