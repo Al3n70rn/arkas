@@ -5,7 +5,7 @@
 \title{annotate features (genes or transcripts) against (say) EnsemblDb
 this is becoming the default dispatcher for almost all annotation}
 \usage{
-annotateFeatures(x, transcriptome = "EnsDb.Hsapiens.v80", level = c(NA,
+annotateFeatures(x, transcriptome = "EnsDbLite.Hsapiens.v80", level = c(NA,
   "gene", "transcript", "ercc", "repeats"), ...)
 }
 \arguments{
