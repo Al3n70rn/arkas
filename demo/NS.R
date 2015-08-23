@@ -23,6 +23,7 @@ if (require(artemisData)) {
                     fastqPath=appSession$fastqPath,
                     fastaPath=appSession$fastaPath,
                     bootstraps=appSession$bootstraps,
+                    threads=appSession$threads,
                     outputPath=appSession$outputPath)
 
   message("AppSession variables:")

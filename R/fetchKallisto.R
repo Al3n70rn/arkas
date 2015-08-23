@@ -3,6 +3,7 @@
 #' @param sampleDir       character string: the path to h5/json files 
 #' @param h5file          character string: the file to read
 #' @param checkRunInfo    boolean: check run_info.json against HDF5 call? (TRUE)
+#' @param collapse        string: collapsing string for indices ("_mergedWith_")
 #'
 #' @import rhdf5 
 #' @import Matrix
@@ -11,7 +12,11 @@
 #' @importFrom matrixStats rowMedians
 #'
 #' @export
-fetchKallisto <- function(sampleDir=".", h5file="abundance.h5", checkRunInfo=T){
+fetchKallisto <- function(sampleDir=".", 
+                          h5file="abundance.h5", 
+                          checkRunInfo=TRUE,
+                          collapse="_mergedWith_", 
+                          ...){
 
   hdf5 <- paste0(path.expand(sampleDir), "/", h5file) 
   bootstraps <- h5read(hdf5, "aux/num_bootstrap")
@@ -40,13 +45,35 @@ fetchKallisto <- function(sampleDir=".", h5file="abundance.h5", checkRunInfo=T){
     runinfo <- fetchRunInfo(sub("abundance.h5", "run_info.json", hdf5))
     if (runinfo$call != h5read(hdf5, "aux/call")) {
       stop("JSON run_info does not match hdf5 file! Something is likely wrong.")
+    } else {
+      ## parse index, get annotations, determine if bias corrected, etc.
+      fullruninfo <- .extractRunInfo(runinfo, collapse=collapse)
     }
+
     ## for sanity checking in mergeKallisto
-    for (i in names(runinfo)) {
-      attr(res, i) <- runinfo[[i]]
+    for (i in names(fullruninfo)) {
+      attr(res, i) <- fullruninfo[[i]]
     }
+
+  } else {
+    message("You have elected not to verify the run info for this sample.")
+    message("This means you will need to supply your own transcriptome IDs.")
   }
 
   return(res)
+
+}
+
+.extractRunInfo <- function(runinfo, collapse="_mergedWith_") {
+
+  pop <- function(x) x[length(x)] 
+  popsplit <- function(x, y="/") pop(strsplit(x, y)[[1]])
+  callinfo <- strsplit(runinfo$call, " ", fixed=TRUE)[[1]]
+  index <- sub(".fa.kidx", "", popsplit(callinfo[ grep("^-i$", callinfo) + 1 ]))
+  runinfo$transcriptomes <- strsplit(index, collapse)[[1]]
+  runinfo$annotations <- sapply(runinfo$transcriptomes, 
+                                TxDbLite::getTxDbLiteName)
+  runinfo$biascorrected <- any(grepl("--bias", callinfo))
+  return(runinfo)
 
 }

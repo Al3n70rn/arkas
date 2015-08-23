@@ -5,8 +5,7 @@
 \title{Merge multiple Kallisto results, yielding a KallistoExperiment.}
 \usage{
 mergeKallisto(outputDirs = NULL, outputPath = ".", covariates = NULL,
-  transcriptomes = c("ERCC", "EnsDb.Hsapiens.v80", "RepBase.v20_05"),
-  parallel = TRUE, ...)
+  collapse = "_mergedWith_", parallel = TRUE, ...)
 }
 \arguments{
 \item{outputDirs}{character: directories holding Kallisto results (NULL)}
@@ -15,7 +14,7 @@ mergeKallisto(outputDirs = NULL, outputPath = ".", covariates = NULL,
 
 \item{covariates}{data.frame or DataFrame: per-sample covariates (NULL)}
 
-\item{transcriptomes}{vector: target transcriptomes (EnsDb.Hsapiens.v80)}
+\item{collapse}{string: collapsing string for indices ("_mergedWith_")}
 
 \item{parallel}{boolean: try to run the merge in parallel? (TRUE)}
 }
@@ -29,6 +28,6 @@ for transcript ID, gene ID, gene name, entrez ID, and transcript biotype,
 provided that these fields are supported in the annotation resources.
 }
 \details{
-FIXME: automatically determine which transcriptomes were used
+FIXME: automatically determine which transcriptomes were used (in process!)
 }
 

@@ -6,7 +6,8 @@
 \usage{
 runKallisto(sampleDir, indexName = NULL, fastaPath = ".",
   fastaFiles = NULL, fastqPath = ".", outputPath = ".",
-  bootstraps = 100, threads = 1, bias = TRUE, pseudobam = FALSE, ...)
+  bootstraps = 100, threads = 1, bias = TRUE, pseudobam = FALSE,
+  collapse = "_mergedWith_", ...)
 }
 \arguments{
 \item{sampleDir}{character, subdirectory for sample's FASTQ files}
@@ -28,6 +29,8 @@ runKallisto(sampleDir, indexName = NULL, fastaPath = ".",
 \item{bias}{boolean, perform bias correction? (TRUE)}
 
 \item{pseudobam}{boolean, produce pseudoBAM output? (FALSE)}
+
+\item{collapse}{string to name multi-FASTA indices ("_mergedWith_")}
 }
 \description{
 run kallisto with fastq.gz files on a freshly generated or existing index

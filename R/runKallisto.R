@@ -10,6 +10,7 @@
 #' @param threads     integer, how many threads to use for bootstraps? (4)
 #' @param bias        boolean, perform bias correction? (TRUE)
 #' @param pseudobam   boolean, produce pseudoBAM output? (FALSE)
+#' @param collapse    string to name multi-FASTA indices ("_mergedWith_")
 #'
 #' @export
 runKallisto <- function(sampleDir, 
@@ -22,6 +23,7 @@ runKallisto <- function(sampleDir,
                         threads=1,
                         bias=TRUE,
                         pseudobam=FALSE,
+                        collapse="_mergedWith_", 
                         ...) {
 
   if (is.null(indexName) && is.null(fastaFiles)) {
@@ -38,7 +40,7 @@ runKallisto <- function(sampleDir,
   ## create an index if needed 
   if (is.null(indexName)) {
     message("Creating index from ", paste(fastaFiles, collapse=" & "), "...")
-    res <- indexKallisto(fastaFiles, fastaPath=fastaPath)
+    res <- indexKallisto(fastaFiles, fastaPath=fastaPath, collapse=collapse)
     message("Created index ", res$indexName, " in ", res$fastaPath, "...")
     indexFile <- paste0(fastaPath, "/", res$indexName)
   } else { 
@@ -55,7 +57,6 @@ runKallisto <- function(sampleDir,
   command <- paste("kallisto quant", 
                    "-i", indexFile, 
                    "-o", outputDir, 
-                   "-b", bootstraps, 
                    "-b", bootstraps, 
                    "-t", threads, 
                    ifelse(bias, "--bias", ""), 
