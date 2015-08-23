@@ -68,7 +68,27 @@ geneWiseAnalysis <- function(kexp, design=NULL, how=c("cpm","tpm"),
   res <- fitBundles(kexp, design, read.cutoff=read.cutoff)
   res$top <- with(res, topTable(fit, coef=2, p=p.cutoff, n=nrow(kexp)))
   res$top <- res$top[ abs(res$top$logFC) >= fold.cutoff, ] ## per SEQC
-  topGenes <- rownames(res$top)
+  topGenes <- rownames(res$top) #ensmblGene Ids
+
+ #for ReactomePA it is needed to have entrezGene id,  adding to res list
+  if (commonName=="human") {
+    speciesMart<-useMart("ensembl",dataset="hsapiens_gene_ensembl")
+
+}#human
+
+  if(commonName=="mouse"){
+   speciesMart<-useMart("ensembl",dataset="mmusculus_gene_ensembl")
+}#mouse
+  if (commonName=="rat"){
+   speciesMart<-useMart("ensembl",dataset="rnorvegicus_gene_ensembl")
+}#rat
+  
+res$entrezID<-getBM(filters="ensembl_gene_id",
+      attributes=c("ensembl_gene_id","entrezgene"),
+      values=topGenes, #fitBundles ensembl Gene Ids
+      mart=speciesMart)
+
+topEntrez<-res$entrezID[,1]
 
   ## match species to map top genes to Entrez IDs 
   # message("Matching species...")
@@ -79,7 +99,8 @@ geneWiseAnalysis <- function(kexp, design=NULL, how=c("cpm","tpm"),
   message("Performing Reactome enrichment analysis...")
   message("Matching species...")
   library(species, character.only=TRUE) ## can ignore this now 
-  enrich <- topGenes[topGenes %in% keys(get(species), "ENTREZID")]
+ # enrich <- topGenes[topGenes %in% keys(get(species), "ENTREZID")]
+  enrich<-topEntrez[topEntrez %in% keys(get(species),"ENTREZID")]
   res$enriched <- enrichPathway(gene=enrich, 
                                 qvalueCutoff=p.cutoff, 
                                 readable=TRUE) 
@@ -91,15 +112,39 @@ geneWiseAnalysis <- function(kexp, design=NULL, how=c("cpm","tpm"),
                                  title="Overall Reactome enrichment")
 
   ## cluster profiling within Reactome and/or GO 
+  #enrich is in entrezID
+   indx<-NULL
+   for(i in 1:length(enrich)){
+   indx[i]<-which(res$entrezID[,2]==enrich[i])
+  }#for grabbing ensmbl IDs corresponding to keyed entrez
+
+  topEnsmbl<-res$entrezID[indx,1] #keyed ensmbl IDs  
+
   message("Performing clustered enrichment analysis...")
-  res$scaledExprs <- t(scale(t(res$voomed$E[ enrich, ])))
-  ## turns out it's pretty easy: there's an "up" cluster, and a "down" cluster
+ # res$scaledExprs <- t(scale(t(res$voomed$E[ enrich, ])))
+  res$scaledExprs<-t(scale(t(res$voomed$E[topEnsmbl,]))) 
+ ## turns out it's pretty easy: there's an "up" cluster, and a "down" cluster
   clust <- cutree(hclust(dist(res$scaledExprs), method="ward"), k=2)
   genes <- split(names(clust), clust)
   names(genes) <- c("down", "up")
-  res$clusts <- compareCluster(geneCluster=genes, 
-                               fun="enrichPathway", 
-                               qvalueCutoff=p.cutoff)
+
+
+  IDX1<-res$entrezID[,1] %in% genes[[1]]
+  fighton1<-res$entrezID[IDX1,2]
+  IDX2<-res$entrezID[,1] %in% genes[[2]]
+  fighton2<-res$entrezID[IDX2,2]
+  entrezList<-list(fighton1,fighton2)
+  names(entrezList)<-c("down","up")
+  
+
+ # res$clusts <- compareCluster(geneCluster=genes, 
+  #                             fun="enrichPathway", 
+   #                            qvalueCutoff=p.cutoff)
+#this maps everything from entrezId ReactomPA
+  res$clusts<-compareCluster(geneCluster=entrezList,
+                              fun="enrichPathway",
+                                qvalueCutoff=p.cutoff)
+
 
   #adding ggplot object for multiplotting
   res$Figures$clusts <- plot(res$clusts) ## saving into Figures list
