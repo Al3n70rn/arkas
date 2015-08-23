@@ -8,12 +8,12 @@
 #' for transcript ID, gene ID, gene name, entrez ID, and transcript biotype, 
 #' provided that these fields are supported in the annotation resources.
 #'
-#' FIXME: automatically determine which transcriptomes were used 
+#' FIXME: automatically determine which transcriptomes were used (in process!)
 #'
 #' @param outputDirs    character: directories holding Kallisto results (NULL)
 #' @param outputPath     character: base path to the outputDirs (default is .)
 #' @param covariates     data.frame or DataFrame: per-sample covariates (NULL)
-#' @param transcriptomes vector: target transcriptomes (EnsDb.Hsapiens.v80)
+#' @param collapse       string: collapsing string for indices ("_mergedWith_")
 #' @param parallel       boolean: try to run the merge in parallel? (TRUE)
 #'
 #' @export
@@ -21,9 +21,7 @@
 mergeKallisto <- function(outputDirs=NULL,
                           outputPath=".",
                           covariates=NULL,
-                          transcriptomes=c("ERCC",
-                                           "EnsDb.Hsapiens.v80",
-                                           "RepBase.v20_05"),
+                          collapse="_mergedWith_",
                           parallel=TRUE,
                           ...) { 
 
@@ -65,7 +63,9 @@ mergeKallisto <- function(outputDirs=NULL,
   stopifnot(identical(colnames(asys[[1]]), colnames(asys[[2]])))
   coldat <- DataFrame(ID=colnames(asys[[1]]))
   rownames(coldat) <- coldat$ID
-  
+ 
+  message("FIXME: split and automatically annotate the indexed transcriptomes!")
+
   ## FIXME: ensure they all used the same transcriptomes/aggregate-index
   ## ktxs <- sapply(res, extractTranscriptomeFromCall)
   ## 
@@ -95,5 +95,9 @@ mergeKallisto <- function(outputDirs=NULL,
     features(res) <- feats
   }
   return(res)
+
+}
+
+.extractTranscriptomeFromCall <- function(res) {
 
 }

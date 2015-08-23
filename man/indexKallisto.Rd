@@ -4,9 +4,11 @@
 \alias{indexKallisto}
 \title{index transcriptome/transcriptomes (w/MD5 digest to avoid duplicating work)
 NOTE: This function will seek to disambiguate any duplicate-named sequences
-FIXME: automatically annotate heretofore-unseen Ensembl/RepBase/ERCC FASTAs}
+FIXME: automatically annotate heretofore-unseen Ensembl/RepBase/ERCC FASTAs
+FIXME: notify the user how the automatic annotation of merged FASTAs happens}
 \usage{
-indexKallisto(fastaFiles, fastaPath, fastaTxDbLite = TRUE, ...)
+indexKallisto(fastaFiles, fastaPath, fastaTxDbLite = TRUE,
+  collapse = "_mergedWith_", ...)
 }
 \arguments{
 \item{fastaFiles}{a character string or vector of FASTA transcriptomes}
@@ -14,10 +16,13 @@ indexKallisto(fastaFiles, fastaPath, fastaTxDbLite = TRUE, ...)
 \item{fastaPath}{where to find the preceding FASTA files}
 
 \item{fastaTxDbLite}{boolean: should we try to annotate new FASTAs? (yes)}
+
+\item{collapse}{string to name multi-FASTA indices ("_mergedWith_")}
 }
 \description{
 index transcriptome/transcriptomes (w/MD5 digest to avoid duplicating work)
 NOTE: This function will seek to disambiguate any duplicate-named sequences
 FIXME: automatically annotate heretofore-unseen Ensembl/RepBase/ERCC FASTAs
+FIXME: notify the user how the automatic annotation of merged FASTAs happens
 }
 
