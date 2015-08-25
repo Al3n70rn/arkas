@@ -16,7 +16,7 @@ if (require(artemisData)) {
 
   ## may not need to 
   appSession$indexName <- indexKallisto(fastaFiles=appSession$fastaFiles,
-                            fastaPath=appSession$fastaPath)$indexName
+                                        fastaPath=appSession$fastaPath)$indexName
   results <- lapply(appSession$samples,
                     runKallisto,
                     indexName=appSession$indexName,
