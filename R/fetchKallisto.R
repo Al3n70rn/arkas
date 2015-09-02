@@ -46,20 +46,22 @@ fetchKallisto <- function(sampleDir=".",
                                 c("est_counts", "eff_length")))
   }
 
-  runinfo <- .extractCall(h5read(hdf5, "aux/call"), collapse=collapse, ...)
+  runinfo <- .extractRuninfo(hdf5, collapse=collapse, ...)
   for (i in names(runinfo)) attr(res, i) <- runinfo[[i]]
   return(res)
 
 }
 
 #' @import TxDbLite
-.extractCall <- function(callinfo, collapse="_mergedWith_") { # {{{
+.extractRuninfo <- function(hdf5, collapse="_mergedWith_") { # {{{
 
-  runinfo <- list()
+  aux <- h5read(hdf5, "/aux")
+  dims <- lapply(aux, dim)
+  runinfo <- aux[dims == 1] 
   pop <- function(x) x[length(x)] 
-  platsep <- .Platform$file.sep
-  popsplit <- function(x, y=platsep) pop(strsplit(x, y)[[1]])
+  popsplit <- function(x, y=.Platform$file.sep) pop(strsplit(x, y)[[1]])
 
+  callinfo <- aux$call
   tokens <- strsplit(callinfo, " ", fixed=T)[[1]]
   indexname <- popsplit(tokens[grep("^-i$", tokens) + 1])
 
@@ -71,6 +73,7 @@ fetchKallisto <- function(sampleDir=".",
       for(s in names(subs)) x <- gsub(s, subs[s], x)
       return(x)
     }
+    # remove uninformative underscores
     subs <- c(Homo_sapiens="Hsapiens", 
               Mus_musculus="Mmusculus", 
               Rattus_norvegicus="Rnorvegicus",
@@ -95,4 +98,5 @@ fetchKallisto <- function(sampleDir=".",
   runinfo$transcriptomes <- sapply(runinfo$fastaFiles, getTxDbLiteName)
   runinfo$biascorrected <- any(grepl("--bias", callinfo))
   return(runinfo)
+
 } # }}}
