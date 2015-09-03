@@ -58,12 +58,8 @@ fetchKallisto <- function(sampleDir=".",
   aux <- h5read(hdf5, "/aux")
   dims <- lapply(aux, dim)
   runinfo <- aux[dims == 1] 
-  pop <- function(x) x[length(x)] 
-  popsplit <- function(x, y=.Platform$file.sep) pop(strsplit(x, y)[[1]])
-
-  callinfo <- aux$call
-  tokens <- strsplit(callinfo, " ", fixed=T)[[1]]
-  indexname <- popsplit(tokens[grep("^-i$", tokens) + 1])
+  callinfo <- runinfo$call
+  indexname <- extractIndexName(callinfo) 
 
   if (!grepl(collapse, callinfo)) {
     ## sometimes we can split even without a proper collapsing string
