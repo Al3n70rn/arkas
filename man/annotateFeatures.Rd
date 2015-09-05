@@ -5,13 +5,10 @@
 \title{annotate features (genes or transcripts) against (say) EnsemblDb
 this is becoming the default dispatcher for almost all annotation}
 \usage{
-annotateFeatures(x, transcriptome = "EnsDbLite.Hsapiens.v80", level = c(NA,
-  "gene", "transcript", "ercc", "repeats"), ...)
+annotateFeatures(kexp, level = c(NA, "gene", "transcript"), ...)
 }
 \arguments{
-\item{x}{a kexp, a matrix of counts, or something with rownames}
-
-\item{transcriptome}{a character string naming the transcriptome (EnsDb v75)}
+\item{kexp}{a kexp}
 
 \item{level}{at what level has the data been summarized? (guess)}
 }
