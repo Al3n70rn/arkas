@@ -1,18 +1,14 @@
 #' annotate features (genes or transcripts) against (say) EnsemblDb
 #' this is becoming the default dispatcher for almost all annotation
 #' 
-#' @param x             a kexp, a matrix of counts, or something with rownames
-#' @param transcriptome a character string naming the transcriptome (EnsDb v75)
+#' @param kexp          a kexp
 #' @param level         at what level has the data been summarized? (guess)
 #'
 #' @return              a GRanges, perhaps with annotations for the rows
 #'
 #' @export
 #'
-annotateFeatures <- function(x, 
-                             transcriptome="EnsDbLite.Hsapiens.v80", 
-                             level=c(NA,"gene","transcript","ercc","repeats"), 
-                             ...) { 
+annotateFeatures <- function(kexp, level=c(NA,"gene","transcript"), ...) { 
 
   level <- match.arg(level)
 
@@ -20,8 +16,8 @@ annotateFeatures <- function(x,
   if (level %in% c(NA, "gene", "transcript") && 
       tolower(substr(transcriptome, 1, 3)) == "ens") {
     if (is.na(level)) {
-      if (sum(grepl("^ENST", rownames(x))) > 1) level <- "transcript"
-      else if (sum(grepl("^ENSG", rownames(x))) > 1) level <- "gene"
+      if (sum(grepl("^ENST", rownames(kexp))) > 1) level <- "transcript"
+      else if (sum(grepl("^ENSG", rownames(kexp))) > 1) level <- "gene"
       else stop("Can't figure out whether these are transcripts or genes!")
     } 
     
@@ -54,6 +50,6 @@ annotateFeatures <- function(x,
   } 
 
   ## return annotations for the features found
-  found <- intersect(rownames(x), names(map))
+  found <- intersect(rownames(kexp), names(map))
   return(map[found])
 }

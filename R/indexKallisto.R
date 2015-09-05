@@ -1,7 +1,4 @@
-#' index transcriptome/transcriptomes (w/MD5 digest to avoid duplicating work)
-#' NOTE: This function will seek to disambiguate any duplicate-named sequences
-#' FIXME: automatically annotate heretofore-unseen Ensembl/RepBase/ERCC FASTAs
-#' FIXME: notify the user how the automatic annotation of merged FASTAs happens
+#' index transcriptome/transcriptomes
 #' 
 #' @param fastaFiles      a character string or vector of FASTA transcriptomes
 #' @param fastaPath       where to find the preceding FASTA files 
@@ -64,8 +61,7 @@ indexKallisto <- function(fastaFiles, fastaPath, fastaTxDbLite=TRUE,
     if (fastaTxDbLite) {
       for (fastaFile in fastaFiles) { 
         if (!.checkForAnnotation(fastaFile, fastaPath)) {
-          TxDbLite::createAnnotationPackage(fastaFile, 
-                                            author="Automatic <dev@null.com>")
+          TxDbLite::createAnnotationPackage(fastaFile) 
         }
       }
     }
