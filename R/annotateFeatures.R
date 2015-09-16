@@ -16,6 +16,7 @@ annotateFeatures <- function(kexp,
                              what=c("GRanges", "KallistoExperiment"), 
                              ...) { 
 
+  what <- match.arg(what)
   level <- match.arg(level)
   txomes <- strsplit(transcriptomes(kexp), ", ")[[1]]
   if (is.na(level)) {
