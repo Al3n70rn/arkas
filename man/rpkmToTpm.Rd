@@ -10,7 +10,7 @@ rpkmToTpm(rpkm, ...)
 .tpmBySample(rpkm)
 }
 \arguments{
-\item{rpkm}{a matrix of RPKM estimates}
+\item{rpkm}{a matrix of RPKM or FPKM estimates}
 
 \item{rpkm}{a vector of possibly-zero RPKM estimates}
 }
