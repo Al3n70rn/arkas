@@ -5,7 +5,7 @@ Version: 0.3.25
 Date: 2015-09-16
 Author: Tim Triche, Jr., Anthony Colombo, Harold Pimentel
 Depends: parallel, jsonlite, GenomeInfoDb, ReactomePA, limma, Biobase, TxDbLite,
-         SummarizedExperiment, EnrichmentBrowser, tools, clusterProfiler,
+         SummarizedExperiment, SPIA, EnrichmentBrowser, clusterProfiler, tools
 Imports: rhdf5, matrixStats, GenomicRanges, GenomicFeatures, Matrix, KEGGREST 
 Suggests: roxygen2, knitr, EnsDbLite.Hsapiens.80, RepDbLite.Hsapiens.2005
 VignetteBuilder: knitr
