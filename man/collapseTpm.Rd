@@ -9,7 +9,7 @@ this function may or may not be optimal for your RNAseq experiment. Please
 refer to 'Details' for some thought exercises about the nature of 'genes'.}
 \usage{
 collapseTpm(kexp, bundleID = "gene_id", minTPM = 1, discardjoined = TRUE,
-  gene_biotype = NULL, ...)
+  tx_biotype = NULL, gene_biotype = NULL, biotype_class = NULL, ...)
 }
 \arguments{
 \item{kexp}{A KallistoExperiment (or something very much like it)}
@@ -20,7 +20,11 @@ collapseTpm(kexp, bundleID = "gene_id", minTPM = 1, discardjoined = TRUE,
 
 \item{discardjoined}{Discard bundles with IDs "joined" by a ";"? (TRUE)}
 
+\item{tx_biotype}{Restrict to a specific mcols(kexp)$tx_biotype? (NULL)}
+
 \item{gene_biotype}{Restrict to a specific mcols(kexp)$gene_biotype? (NULL)}
+
+\item{biotype_class}{Restrict to a specific mcols(kexp)$biotype_class? (No)}
 }
 \value{
 a matrix of TPMs by bundle for each sample
