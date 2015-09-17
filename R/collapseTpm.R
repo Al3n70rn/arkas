@@ -8,6 +8,7 @@
 #' @param bundleID      The column (in mcols(features(kexp))) of the bundle IDs
 #' @param minTPM        Discard transcripts and bundles with < this many TPMs 
 #' @param discardjoined Discard bundles with IDs "joined" by a ";"? (TRUE) 
+#' @param tx_biotype    Restrict to a specific mcols(kexp)$tx_biotype? (NULL)
 #' @param gene_biotype  Restrict to a specific mcols(kexp)$gene_biotype? (NULL)
 #' 
 #' @details This function sums transcripts per million (TPM) of each transcript
@@ -27,17 +28,24 @@
 #' @export 
 #'
 collapseTpm <- function(kexp, bundleID="gene_id", minTPM=1, 
-                        discardjoined=TRUE, gene_biotype=NULL, ...) {
+                        discardjoined=TRUE, 
+                        gene_biotype=NULL, 
+                        tx_biotype=NULL, ...) {
 
   hasId <- which(!is.na(mcols(kexp)[,bundleID]))
   if (!is.null(gene_biotype)) {
     hasId <- intersect(which(mcols(kexp)$gene_biotype == gene_biotype), hasId)
   } 
+  if (!is.null(tx_biotype)) {
+    hasId <- intersect(which(mcols(kexp)$tx_biotype == tx_biotype), hasId)
+  } 
+
   tpms <- split.data.frame(tpm(kexp)[hasId,], mcols(kexp)[hasId, bundleID])
   count <- function(x) if(!is.null(nrow(x))) colSums(x) else x
   tpms <- tpms[sapply(tpms, function(x) max(count(x)) >= minTPM)]
   bundled <- do.call(rbind, lapply(tpms, count))
   joined <- grep(";", invert=TRUE, rownames(bundled))
+  unjoined <- setdiff(rownames(bundled), joined)
   if (discardjoined) return(bundled[unjoined,])
   else return(bundled)
 
