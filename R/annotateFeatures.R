@@ -23,11 +23,12 @@ annotateFeatures <- function(kexp,
     orgs <- sapply(getSupportedAbbreviations(), 
                    function(x) any(grepl(x, txomes)))
     organism <- names(orgs)[which(orgs == TRUE)] 
-    gxpre <- getOrgDetails(organism)$gxpre ## will fail for yeast :-(
+    gxpre <- getOrgDetails(organism)$gxpre # will fail for yeast :-(
     level <- ifelse(any(grepl(gxpre, rownames(kexp))), "gene", "transcript")
   }
-  
-  feats <- features(kexp)
+
+  # bizarre bug, bizarre fix  
+  feats <- GRanges()
   for (txome in txomes) {
     if (!require(txome, character.only=TRUE)) {
       message("Please install the annotation package ", txome, ".")
@@ -35,10 +36,11 @@ annotateFeatures <- function(kexp,
       annots <- switch(level, 
                        gene=genes(get(txome)),
                        transcript=transcripts(get(txome)))
-      annotated <- intersect(names(feats), names(annots))
-      feats[annotated] <- annots[annotated]
+      annotated <- intersect(rownames(kexp), names(annots))
+      feats <- c(feats, annots[annotated])
     }
   }
+  feats <- feats[rownames(kexp)] 
   if (what == "KallistoExperiment") {
     features(kexp) <- feats
     return(kexp)
