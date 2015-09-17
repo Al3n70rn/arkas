@@ -10,6 +10,7 @@
 #' @param discardjoined Discard bundles with IDs "joined" by a ";"? (TRUE) 
 #' @param tx_biotype    Restrict to a specific mcols(kexp)$tx_biotype? (NULL)
 #' @param gene_biotype  Restrict to a specific mcols(kexp)$gene_biotype? (NULL)
+#' @param biotype_class  Restrict to a specific mcols(kexp)$biotype_class? (No)
 #' 
 #' @details This function sums transcripts per million (TPM) of each transcript
 #' within bundle of transcripts ("bundle" being a user-defined identifier, often
@@ -29,15 +30,20 @@
 #'
 collapseTpm <- function(kexp, bundleID="gene_id", minTPM=1, 
                         discardjoined=TRUE, 
+                        tx_biotype=NULL, 
                         gene_biotype=NULL, 
-                        tx_biotype=NULL, ...) {
+                        biotype_class=NULL, 
+                        ...) {
 
   hasId <- which(!is.na(mcols(kexp)[,bundleID]))
+  if (!is.null(tx_biotype)) {
+    hasId <- intersect(which(mcols(kexp)$tx_biotype == tx_biotype), hasId)
+  } 
   if (!is.null(gene_biotype)) {
     hasId <- intersect(which(mcols(kexp)$gene_biotype == gene_biotype), hasId)
   } 
-  if (!is.null(tx_biotype)) {
-    hasId <- intersect(which(mcols(kexp)$tx_biotype == tx_biotype), hasId)
+  if (!is.null(biotype_class)) {
+    hasId <- intersect(which(mcols(kexp)$biotype_class == biotype_class), hasId)
   } 
 
   tpms <- split.data.frame(tpm(kexp)[hasId,], mcols(kexp)[hasId, bundleID])
