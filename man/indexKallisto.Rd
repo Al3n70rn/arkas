@@ -2,16 +2,21 @@
 % Please edit documentation in R/indexKallisto.R
 \name{indexKallisto}
 \alias{indexKallisto}
-\title{index transcriptome/transcriptomes (w/MD5 digest to avoid duplicating work)}
+\title{index transcriptome/transcriptomes}
 \usage{
-indexKallisto(fastaFiles, fastaPath)
+indexKallisto(fastaFiles, fastaPath, fastaTxDbLite = TRUE,
+  collapse = "_mergedWith_", ...)
 }
 \arguments{
-\item{fastaFiles}{a character string or vector of source transcriptomes}
+\item{fastaFiles}{a character string or vector of FASTA transcriptomes}
 
 \item{fastaPath}{where to find the preceding FASTA files}
+
+\item{fastaTxDbLite}{boolean: should we try to annotate new FASTAs? (yes)}
+
+\item{collapse}{string to name multi-FASTA indices ("_mergedWith_")}
 }
 \description{
-index transcriptome/transcriptomes (w/MD5 digest to avoid duplicating work)
+index transcriptome/transcriptomes
 }
 

@@ -1,6 +1,8 @@
 #' Downstream analysis of raw transcript abundance estimates.
-
+#' (This is delegated to the methods from Sleuth; results processed in artemis)
+#' 
 #' FIXME: add bundle-wise annotation for pathway/functional enrichment 
+#' FIXME: add promoter-wise annotation for pathway/functional enrichment 
 #'
 #' @param kexp        a KallistoExperiment or SummarizedExperiment-like object 
 #' @param design      a design matrix w/contrast or coefficient to test in col2

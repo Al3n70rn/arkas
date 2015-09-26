@@ -2,22 +2,24 @@
 % Please edit documentation in R/annotateFeatures.R
 \name{annotateFeatures}
 \alias{annotateFeatures}
-\title{annotate features (genes or transcripts) against EnsemblDb}
+\title{annotate features (genes or transcripts) against (say) EnsemblDb
+this is becoming the default dispatcher for almost all annotation}
 \usage{
-annotateFeatures(counts, transcriptome = "EnsDb.Hsapiens.v75",
-  level = c("unknown", "gene", "transcript"), ...)
+annotateFeatures(kexp, level = c(NA, "gene", "transcript"),
+  what = c("KallistoExperiment", "GRanges"), ...)
 }
 \arguments{
-\item{counts}{a matrix of counts (or anything with rownames, really)}
-
-\item{transcriptome}{a character string naming the transcriptome}
+\item{kexp}{a kexp}
 
 \item{level}{at what level has the data been summarized? (guess)}
+
+\item{what}{what data structure shall we return (KallistoExperiment)}
 }
 \value{
-a GRanges, perhaps containing annotations for the rows
+a GRanges or a KallistoExperiment, depending on `what`
 }
 \description{
-annotate features (genes or transcripts) against EnsemblDb
+annotate features (genes or transcripts) against (say) EnsemblDb
+this is becoming the default dispatcher for almost all annotation
 }
 

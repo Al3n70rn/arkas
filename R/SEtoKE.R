@@ -15,6 +15,7 @@
 #' @param transcriptomes  mandatory string or strings naming the transcriptomes 
 #' @param covariates      optional data.frame or DataFrame if SE is not present
 #' @param fraglen         optional mean fragment length estimate for PE runs
+#' @param ...             Other stuff (arguments passed to KallistoExperiment)
 #' 
 #' @return a KallistoExperiment
 #'
@@ -33,8 +34,8 @@ SEtoKE <- function(SE=NULL, counts=NULL, features=NULL, covariates=NULL,
     if (is.null(covariates)) {
       covariates <- DataFrame(ID=colnames(counts), row.names=colnames(counts))
     } else { 
-      covariates <- covariates[colnames(counts),] 
-      if (nrow(covariates) != colnames(counts)) {
+      covariates <- DataFrame(covariates[colnames(counts),] )
+      if (!identical(rownames(covariates), colnames(counts))) {
         stop("Your covariates dataframe lacks columns found in your counts!")
       }
     }
@@ -46,11 +47,10 @@ SEtoKE <- function(SE=NULL, counts=NULL, features=NULL, covariates=NULL,
     covariates <- colData(SE) 
   }
 
-  if (!is.null(SE) & "eff_length" %in% names(assays(SE))) {
+  if (!is.null(SE) && "eff_length" %in% names(assays(SE))) {
     eff_lengths <- assays(SE)$eff_length
   } else { 
-    ## FIXME: this is silly, although it's what Kallisto does
-    biased_efflen <- width(features) - fraglen + 1
+    biased_efflen <- pmax(width(features) - fraglen + 1, 1)
     eff_lengths <- matrix(rep(biased_efflen, ncol(counts)), ncol=ncol(counts))
     colnames(eff_lengths) <- colnames(counts)
   }
@@ -66,4 +66,40 @@ SEtoKE <- function(SE=NULL, counts=NULL, features=NULL, covariates=NULL,
                      covariates=covariates,
                      features=features,
                      ...)
+}
+
+#' @describeIn SEtoKE
+#' 
+#' @param SE              SummarizedExperiment w/fully annotated rows (features)
+#' @param transcriptomes  mandatory string or strings naming the transcriptomes 
+#' 
+#' @return a KallistoExperiment
+#'
+#' @seealso SEtoKE
+#' 
+#' @export
+SummarizedExperimentToKallistoExperiment <- function(SE, transcriptomes) {
+  SEtoKE(SE=SE, transcriptomes=transcriptomes) 
+}
+
+
+#' @describeIn SEtoKE
+#'
+#' @param counts          matrix of transcript or bundle counts
+#' @param features        GRanges of features with valid lengths
+#' @param transcriptomes  mandatory string or strings naming the transcriptomes 
+#' @param ...             Other stuff (such as covariates=covs and the like)
+#' 
+#' @return a KallistoExperiment
+#' 
+#' @seealso SEtoKE
+#' 
+#' @export 
+CountsAndFeaturesToKallistoExperiment <- function(counts, 
+                                                  features, 
+                                                  transcriptomes,
+                                                  ...) {
+  stopifnot(is(counts, "matrix"))
+  stopifnot(is(features, "GenomicRanges"))
+  SEtoKE(counts=counts, features=features, transcriptomes=transcriptomes, ...) 
 }
