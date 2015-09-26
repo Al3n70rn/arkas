@@ -103,16 +103,17 @@ setGeneric("tpm", function(object) standardGeneric("tpm"))
 
 #' @describeIn KallistoExperiment
 #'
-#' Obtain tpm estimates as shown in 
-#' https://haroldpimentel.wordpress.com/2014/05/08/what-the-fpkm-a-review-rna-seq-expression-units/
+#' Obtain tpm from the precomputed matrix ( computed as shown in 
+#' https://haroldpimentel.wordpress.com/2014/05/08/what-the-fpkm-a-review-rna-seq-expression-units/ ), specifically,
+#' 
+#' \code{ rate <- log(counts(object)) - log(eff_length(object)); }
+#' 
+#' \code{ tpm <- exp(rate - log(sum(exp(rate))) + log(1e6)) } 
 #' 
 #' @export
 #'
 setMethod("tpm", "KallistoExperiment",
-          function (object) {
-            rate <- log(counts(object)) - log(eff_length(object))
-            exp(rate - log(sum(exp(rate))) + log(1e6))
-          })
+          function (object) return(assays(object)$tpm))
 
 # kallistoVersion generic 
 setGeneric("kallistoVersion", 

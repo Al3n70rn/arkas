@@ -10,7 +10,7 @@
 #'
 #' and of course if RPKM == 0 then TPM == 0 as well.
 #' 
-#' @param rpkm    a matrix of RPKM estimates
+#' @param rpkm    a matrix of RPKM or FPKM estimates
 #' 
 #' @return        a matrix of TPM estimates
 #'

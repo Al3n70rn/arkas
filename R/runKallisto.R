@@ -1,4 +1,4 @@
-#' run kallisto with fastq.gz files on freshly generated or existing index
+#' run kallisto with fastq.gz files on a freshly generated or existing index
 #' 
 #' @param sampleDir   character, subdirectory for sample's FASTQ files 
 #' @param indexName   character or NULL, optional name of the index
@@ -6,7 +6,11 @@
 #' @param fastaFiles  character vector of FASTA transcriptomes, or NULL
 #' @param fastqPath   character, where sampleDir is located under (".")
 #' @param outputPath  character, output in outputPath/sampleDir (".")
-#' @param bootstraps  integer, how many bootstrap replicates to run? (0)
+#' @param bootstraps  integer, how many bootstrap replicates to run? (100)
+#' @param threads     integer, how many threads to use for bootstraps? (4)
+#' @param bias        boolean, perform bias correction? (TRUE)
+#' @param pseudobam   boolean, produce pseudoBAM output? (FALSE)
+#' @param collapse    string to name multi-FASTA indices ("_mergedWith_")
 #'
 #' @export
 runKallisto <- function(sampleDir, 
@@ -15,7 +19,12 @@ runKallisto <- function(sampleDir,
                         fastaFiles=NULL,
                         fastqPath=".",
                         outputPath=".",
-                        bootstraps=0) {
+                        bootstraps=100,
+                        threads=1,
+                        bias=TRUE,
+                        pseudobam=FALSE,
+                        collapse="_mergedWith_", 
+                        ...) {
 
   if (is.null(indexName) && is.null(fastaFiles)) {
     stop("Exactly one of indexName or fastaFiles must be non-null to run.")
@@ -31,7 +40,7 @@ runKallisto <- function(sampleDir,
   ## create an index if needed 
   if (is.null(indexName)) {
     message("Creating index from ", paste(fastaFiles, collapse=" & "), "...")
-    res <- indexKallisto(fastaFiles, fastaPath=fastaPath)
+    res <- indexKallisto(fastaFiles, fastaPath=fastaPath, collapse=collapse)
     message("Created index ", res$indexName, " in ", res$fastaPath, "...")
     indexFile <- paste0(fastaPath, "/", res$indexName)
   } else { 
@@ -49,6 +58,9 @@ runKallisto <- function(sampleDir,
                    "-i", indexFile, 
                    "-o", outputDir, 
                    "-b", bootstraps, 
+                   "-t", threads, 
+                   ifelse(bias, "--bias", ""), 
+                   ifelse(pseudobam, "--pseudobam", ""), 
                    sampleFiles)
   retval <- system(command)
   res <- list(command=command, outputPath=outputPath, bootstraps=bootstraps)
@@ -57,5 +69,4 @@ runKallisto <- function(sampleDir,
   } else { 
     stop(paste("Quantification failed; command",command,"did not produce hdf5"))
   }
-
 }

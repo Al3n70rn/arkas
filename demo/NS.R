@@ -1,4 +1,4 @@
-library(artemis)
+suppressPackageStartupMessages(library(artemis))
 
 jsonFile <- system.file("extdata", "NS.JSON", package="artemis")
 appSession <- fetchAppSession(jsonFile) ## autofill APPSESSION in paths
@@ -11,19 +11,19 @@ if (require(artemisData)) {
   appSession$outputPath <- system.file("extdata", "", package="artemisData")
   NS <- mergeKallisto(appSession$samples, 
                       outputPath=appSession$outputPath)
-  
 
 } else { 
 
   ## may not need to 
   appSession$indexName <- indexKallisto(fastaFiles=appSession$fastaFiles,
-                            fastaPath=appSession$fastaPath)$indexName
+                                        fastaPath=appSession$fastaPath)$indexName
   results <- lapply(appSession$samples,
                     runKallisto,
                     indexName=appSession$indexName,
                     fastqPath=appSession$fastqPath,
                     fastaPath=appSession$fastaPath,
                     bootstraps=appSession$bootstraps,
+                    threads=appSession$threads,
                     outputPath=appSession$outputPath)
 
   message("AppSession variables:")
