@@ -1,13 +1,15 @@
 #' find any duplicate seqnames in FASTA files BEFORE creating an index...
+#' FIXME: remove them, write out a de-duped merged FASTA, and index that.
 #' 
-#' @param fastaFiles  the FASTA file names (may be compressed, doesn't matter)
+#' @param  ...        the FASTA file names (may be compressed, doesn't matter)
 #'
-#' @return a data.frame of duplicate seqnames and fasta filenames, else NULL
+#' @return     data.frame of duplicate seqnames and fasta filenames, else NULL
 #'
 #' @import Rsamtools
 #' 
 #' @export
-findDupes <- function(fastaFiles, ...) { 
+#'
+findDupes <- function(...) { 
   indexIfNoneFound <- function(fastaFile) {
     if (!file.exists(paste0(fastaFile, ".fai"))) {
       message("Indexing ", fastaFile, " to extract sequence names...")
@@ -30,7 +32,7 @@ findDupes <- function(fastaFiles, ...) {
     gr <- namedGr(scanFaIndex(faFile))[seqname]
     as.character(getSeq(faFile, gr))
   }
-  allChrs <- do.call(rbind, lapply(fastaFiles, chrs))
+  allChrs <- do.call(rbind, lapply(list(...), chrs))
   if (anyDuplicated(allChrs$seqnames)) {
     dupes <- allChrs$seqnames[duplicated(allChrs$seqnames)]
     duped <- allChrs[which(allChrs$seqnames %in% dupes),]

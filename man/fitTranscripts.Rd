@@ -2,7 +2,8 @@
 % Please edit documentation in R/fitTranscripts.R
 \name{fitTranscripts}
 \alias{fitTranscripts}
-\title{encapsulate limma/voom analysis and TMM normalization at transcript level}
+\title{encapsulate limma/voom analysis and TMM normalization at transcript level
+FIXME: just farm it out to sleuth, e.g. as seen in ?artemisData::withSleuth}
 \usage{
 fitTranscripts(kexp, design, read.cutoff = 1, ...)
 }
@@ -18,5 +19,6 @@ A list with elements (design, voomed, fit)
 }
 \description{
 encapsulate limma/voom analysis and TMM normalization at transcript level
+FIXME: just farm it out to sleuth, e.g. as seen in ?artemisData::withSleuth
 }
 
