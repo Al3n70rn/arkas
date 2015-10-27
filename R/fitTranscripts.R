@@ -1,4 +1,5 @@
 #' encapsulate limma/voom analysis and TMM normalization at transcript level 
+#' FIXME: just farm it out to sleuth, e.g. as seen in ?artemisData::withSleuth
 #' 
 #' @param kexp        A KallistoExperiment
 #' @param design      A model matrix 
@@ -8,7 +9,7 @@
 #'
 #' @export
 #' 
-
+#'
 fitTranscripts <- function(kexp, design, read.cutoff=1, ...) { 
 
   res <- list()
