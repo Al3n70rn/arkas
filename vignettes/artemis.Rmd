@@ -1,11 +1,55 @@
 # Artemis: Reads To Results In Less Time
-author: "Timothy J. Triche, Jr, Anthony R. Colombo, Harold Pimentel"   
-date: "`r Sys.Date()`"   
-output: html_document:    
+author: Timothy J. Triche, Jr, Anthony R. Colombo, Harold Pimentel       
+date:  `r Sys.Date()`                 
+output: html_document:        
         
           
 ##Introduction
 Kallisto is software developed by Nicolas Bray, Harold Pimentel, Pall Melsted, and Lior Pachter (UC Berkeley) that analyzes 30 million unaligned paired-end RNA-Seq reads in less than 5 minutes on a standard laptop computer.   Kallisto quantifies transcript abundance from input RNA-Seq reads by using a process, known as pseudoalignment, which identifies the read-transcript compatibility matrix. Artemis is a BioConductor package that extends functions and utilities for RNA-Seq analysis from raw reads to results in minutes.
+
+##Reads to Quantification to Annotation
+Artemis was designed to reduce the programmative steps required to quantify and annotate multitudes of sample directories. Artemis calls Kallisto to perform on- the-fly transcriptome indexing and quantification recursively for numerous sample directories. For RNA- Seq projects with numerous sequenced samples, Artemis encapsulates expensive preparatory routines. Artemis programmatically orders FASTQ files output from DNA sequencers and inputs a list required by
+Kallisto for processing multitudes of demultiplexed reads. The Artemis function 'runKallisto' recursively indexes transcriptomes and quantifies abundances for any number of samples. The function 'mergeKallisto' merges quantified output into an object of ofsubclass a KallistoExperiment-class, SummarizedExperiment-class. Standard mutators and accessor methods from SummarizedExperiment- methods are preserved in KallistoExperiment-methods. Gene annotation is performed from user-selected bundled transcriptomes (ERCC, Ensembl, and/or
+RepBase) simultaneously merging annotated samples into one R object: KallistoExperiment. Artemis annotates genes for Homo-Sapiens GrCh38 and Mouse GrCm38 (NCBI). Routines such as 'annotateBundles' yields annotated genes from transcriptomes such as External RNA Control Consortium (ERCC), Ensembl release 81 of non-coding RNA, coding RNA, and a hg38 repeatome for both species.
+
+###Kallisto Installation
+For linux systems, after installing the dependencies, kallisto is installed via:
+``` mkdir /KallistoSource        
+cd /KallistoSource           
+git clone https://github.com/pachterlab/kallisto.git      
+cd ./kallisto     
+mkdir ./build     
+cd ./build       
+cmake ..              
+make          
+make install ```       
+
+
+
+###Fastq Quantification
+Kallisto source must be built locally, and then quantifying the raw fastq's requires calling quant option:
+
+```{r}
+library(artemis)      
+library(artemisData)        
+pathBase<-system.file("extdata",package="artemisData")       
+fastaPath <- paste0(pathBase, "/fasta")                
+fastqPath <- paste0(pathBase, "/fastq")            
+samples <- c(MrN="MrN", MrT="MrT")              
+fastaFiles <- c( "ERCC.fa.gz", ## spike-in controls             
+                 "Homo_sapiens.RepBase.20_05.humrep.fa.gz", ## repeats         
+                 "Homo_sapiens.RepBase.20_05.humsub.fa.gz")  ## ALUs and such             
+indexName <- indexKallisto(fastaFiles=fastaFiles, fastaPath=fastaPath)$indexName
+library(parallel)
+results <- mclapply(samples, 
+                    runKallisto,
+                    indexName=indexName,
+                    fastqPath=fastqPath,
+                    fastaPath=fastaPath,
+                    bootstraps=100,
+                    outputPath=".")
+```
+
 
 ## Loading already-processed transcript abundance estimates
 
