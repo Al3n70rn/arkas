@@ -2,17 +2,19 @@
 % Please edit documentation in R/findDupes.R
 \name{findDupes}
 \alias{findDupes}
-\title{find any duplicate seqnames in FASTA files BEFORE creating an index...}
+\title{find any duplicate seqnames in FASTA files BEFORE creating an index...
+FIXME: remove them, write out a de-duped merged FASTA, and index that.}
 \usage{
-findDupes(fastaFiles, ...)
+findDupes(...)
 }
 \arguments{
-\item{fastaFiles}{the FASTA file names (may be compressed, doesn't matter)}
+\item{...}{the FASTA file names (may be compressed, doesn't matter)}
 }
 \value{
-a data.frame of duplicate seqnames and fasta filenames, else NULL
+data.frame of duplicate seqnames and fasta filenames, else NULL
 }
 \description{
 find any duplicate seqnames in FASTA files BEFORE creating an index...
+FIXME: remove them, write out a de-duped merged FASTA, and index that.
 }
 
