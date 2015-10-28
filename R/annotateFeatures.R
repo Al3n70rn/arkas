@@ -10,7 +10,6 @@
 #' @import TxDbLite
 #'
 #' @export
-#'
 annotateFeatures <- function(kexp, 
                              level=c(NA, "gene", "transcript"), 
                              what=c("KallistoExperiment", "GRanges"), 
