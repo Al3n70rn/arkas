@@ -4,11 +4,6 @@
 #' 
 #' @import erccdashboard
 #' @import RUVSeq 
-#' 
-#' @export 
-#'
-
- 
 erccAnalysis <- function(kexp, ...) {
 
   data(ERCC_annotated)
@@ -18,54 +13,48 @@ erccAnalysis <- function(kexp, ...) {
   ## FIXME: plot the ERCC controls for each sample
   ## FIXME: remind the user that RUVg on ERCCs >> raw data >> ERCC-regressed
  
- # stop("ERCC QC is not yet finished (but needs to be by 7/14/15!)")
+  stop("ERCC QC is not yet finished (but needs to be, after de-crufting it)")
 
-#this analysis works for n X 7 data frame.  
+  #this analysis works for n X 7 data frame:  
+  options(width=60, continue = "  ")
+  counts<-assays(kexp)$est_counts
+  Feature<-rownames(counts)
 
+  countsDF<-data.frame(Feature,counts)
+  rownames(countsDF)<-c(1:nrow(countsDF))
 
-options(width=60, continue = "  ")
-counts<-assays(kexp)$est_counts
-Feature<-rownames(counts)
+  #formatting for erccDashboard processing
+  for(i in 2:ncol(countsDF)){
+   
+     colnames(countsDF)[i]->tmp
+     tmp<-strsplit(tmp,"")[[1]]
+     tmp<-paste(tmp[1],tmp[2],sep="_")
+     colnames(countsDF)[i]<-tmp
+  }
 
-countsDF<-data.frame(Feature,counts)
-rownames(countsDF)<-c(1:nrow(countsDF))
+  #must be integer values
+  for(i in 2:ncol(countsDF))countsDF[,i]<-as.integer(countsDF[,i])
 
-#formatting for erccDashboard processing
-for(i in 2:ncol(countsDF)){
- 
-   colnames(countsDF)[i]->tmp
-   tmp<-strsplit(tmp,"")[[1]]
-   tmp<-paste(tmp[1],tmp[2],sep="_")
-   colnames(countsDF)[i]<-tmp
-}
-
-
-#must be integer values
-for(i in 2:ncol(countsDF)){
- 
-   countsDF[,i]<-as.integer(countsDF[,i])
-}
-
-#Must remove all the values for every row that contain a 0 for all columns
-colIntr<-colnames(countsDF)[(2:ncol(countsDF))]
-countsDF<-countsDF[!!rowSums(abs(countsDF[-c(1:1)])),]
+  #Must remove all the values for every row that contain a 0 for all columns
+  colIntr<-colnames(countsDF)[(2:ncol(countsDF))]
+  countsDF<-countsDF[!!rowSums(abs(countsDF[-c(1:1)])),]
 
 
-#not sure of input values used
-datType<-"count"
-isNorm=FALSE
-exTable=countsDF
-filenameRoot="myData"
-sample1Name="n"
-sample2Name="s"
-erccmix="RatioPair"
-erccdilution=1/100
-spikeVol<-1
-totalRNAmass=0.500
-choseFDR<-0.05
+  #not sure of input values used
+  datType<-"count"
+  isNorm=FALSE
+  exTable=countsDF
+  filenameRoot="myData"
+  sample1Name="n"
+  sample2Name="s"
+  erccmix="RatioPair"
+  erccdilution=1/100
+  spikeVol<-1
+  totalRNAmass=0.500
+  choseFDR<-0.05
 
 
-exDat<-initDat(datType="count",
+  exDat<-initDat(datType="count",
   isNorm=FALSE,
   exTable=countsDF,
   filenameRoot="mydata",
@@ -76,15 +65,10 @@ exDat<-initDat(datType="count",
   spikeVol=1,
   totalRNAmass=0.500,
   choseFDR=0.1)
-
-
-exDat <- est_r_m(exDat)
-exDat <- dynRangePlot(exDat)
-exDat <- geneExprTest(exDat)
-exDat <- erccROC(exDat)
-
-
-#multiple plot 1 pdf per page
-
-saveERCCPlots(exDat, plotsPerPg = "single", plotlist = exDat$Figures)
+  exDat <- est_r_m(exDat)
+  exDat <- dynRangePlot(exDat)
+  exDat <- geneExprTest(exDat)
+  exDat <- erccROC(exDat)
+  #multiple plot 1 pdf per page
+  saveERCCPlots(exDat, plotsPerPg = "single", plotlist = exDat$Figures)
 }

@@ -18,7 +18,6 @@
 #' @seealso voom 
 #' 
 #' @export
-#'
 enrichmentAnalysis <- function(kexp, design, 
                                method=c("ggea","gsea"), 
                                species=c("hsa","mmu"),
