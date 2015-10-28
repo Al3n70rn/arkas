@@ -1,5 +1,6 @@
+#' Utility functions for artemis
 #' @describeIn utils
-#
+#'
 #' handy string splitting function that operates on basename(x)
 #' 
 #' @param x   a string
