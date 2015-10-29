@@ -31,23 +31,26 @@ Kallisto source must be built locally, and then quantifying the raw fastq's requ
 
 ```{r}
 library(artemis)      
-library(artemisData)        
+library(artemisData)       
+library(TxDbLite)       
 pathBase<-system.file("extdata",package="artemisData")       
-fastaPath <- paste0(pathBase, "/fasta")                
+FastaPath <- paste0(pathBase, "/fasta")
+setwd(FastaPath)
+OutputPath<-"/home/anthonycolombo/Git_Repos/artemisData/data/output"
 fastqPath <- paste0(pathBase, "/fastq")            
 samples <- c(MrN="MrN", MrT="MrT")              
-fastaFiles <- c( "ERCC.fa.gz", ## spike-in controls             
-                 "Homo_sapiens.RepBase.20_05.humrep.fa.gz", ## repeats         
-                 "Homo_sapiens.RepBase.20_05.humsub.fa.gz")  ## ALUs and such             
-indexName <- indexKallisto(fastaFiles=fastaFiles, fastaPath=fastaPath)$indexName
+FastaFiles <- c( "ERCC.fa", ## spike-in controls             
+                 "Homo_sapiens.RepBase.20_05.humrep.fa", ## repeats         
+                 "Homo_sapiens.RepBase.20_05.humsub.fa")  ## ALUs and such             
+indexName <- indexKallisto(fastaFiles=FastaFiles, fastaPath=FastaPath)$indexName
 library(parallel)
-results <- mclapply(samples, 
+results <- lapply(samples, 
                     runKallisto,
                     indexName=indexName,
                     fastqPath=fastqPath,
-                    fastaPath=fastaPath,
+                    fastaPath=FastaPath,
                     bootstraps=100,
-                    outputPath=".")
+                    outputPath=OutputPath)
 ```
 
 
@@ -55,12 +58,12 @@ results <- mclapply(samples,
 
 This is also fairly simple:
 
-```R
-covs <- DataFrame(sampleDir=c("n1","n2","n4","s1","s2","s4"),
-                  normal=c(1, 1, 1, 0, 0, 0),
-                  subject=as.factor(c(1, 2, 4, 1, 2, 4)))
-rownames(covs) <- covs$sampleDirs
-merged <- mergeKallisto(covariates=covs, outputPath="/data/output")
+```{r}
+merged <- mergeKallisto(samples, outputPath=OutputPath)
+design <- DataFrame(sampleDir=c("MrN","MrT"),
+                  intercept=c(1,1),
+                  normal=c(1, 0))
+rownames(design) <- design$sampleDir
 ```
 
 The resulting object has annotations for distinct coding and non-coding transcripts,
@@ -78,8 +81,8 @@ and group the observed changes by biochemical pathway, gene sets associated with
 experimental outcomes, or perhaps drug metabolism and metabolic targets.  For this,
 we typically collapse all the transcripts in each bundle, and run tests across those:
 
-```R
-gwa <- geneWiseAnalysis(merged)
+```{r}
+#gwa <- geneWiseAnalysis(merged,design=design,how="cpm",species="Homo.sapiens")
 ```
 
 
