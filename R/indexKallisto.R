@@ -29,7 +29,7 @@ indexKallisto <- function(fastaFiles, fastaPath, fastaTxDbLite=TRUE,
   if (!file.exists(indexPath)) {
 
     ## Check the FASTA files for duplicate seqnames:
-    dupes <- findDupes(as.list(fastaFiles))
+    dupes <- findDupes(fastaFiles)
     if (!is.null(dupes)) {
       duplicatedSeqnames <- unique(dupes$seqname)
       message("There are duplicated sequence names in your FASTA files:")
