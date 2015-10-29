@@ -1,7 +1,7 @@
 # Artemis: Reads To Results In Less Time
 author: Timothy J. Triche, Jr, Anthony R. Colombo, Harold Pimentel       
 date:  `r Sys.Date()`                 
-output: html_document:        
+output: html_document           
         
           
 ##Introduction
@@ -14,34 +14,52 @@ RepBase) simultaneously merging annotated samples into one R object: KallistoExp
 
 ###Kallisto Installation
 For linux systems, after installing the dependencies, kallisto is installed via:
-``` mkdir /KallistoSource        
-cd /KallistoSource           
-git clone https://github.com/pachterlab/kallisto.git      
-cd ./kallisto     
-mkdir ./build     
-cd ./build       
-cmake ..              
-make          
-make install ```       
 
+> mkdir /KallistoSource           
+>cd /KallistoSource             
+>git clone https://github.com/pachterlab/kallisto.git         
+>cd ./kallisto       
+>mkdir ./build        
+>cd ./build       
+>cmake ..              
+>make          
+>make install        
 
+##Reference File Preparation
+TxDbLite has an important feature which creates merged annotation databases of repetitive elements creating a SQL-lite database from multiple RepBase files of a specific species.  It is not uncommon for RepBase files with fixed species to have duplicated sequences and duplicated sequence names across fasta files.   The package artemisData stores supplementary data for the package artemis; we've included raw RepBase files with duplicated repeats, and a set of fasta with manually excised duplicated RepBase sequences across fasta files.
 
-###Fastq Quantification
-Kallisto source must be built locally, and then quantifying the raw fastq's requires calling quant option:
+###Identifying Duplicated Sequences in RepBase References
+Kallisto source must be built locally by indexing the reference files.  There can not be duplicated sequences across reference fasta; Artemis will identify where in there reference duplicates occur.
 
-```{r}
-library(artemis)      
-library(artemisData)       
-library(TxDbLite)       
+```{r message=FALSE}
+suppressPackageStartupMessages(library(artemis))      
+suppressPackageStartupMessages(library(artemisData))       
+suppressPackageStartupMessages(library(TxDbLite))      
 pathBase<-system.file("extdata",package="artemisData")       
 FastaPath <- paste0(pathBase, "/fasta")
 setwd(FastaPath)
-OutputPath<-"/home/anthonycolombo/Git_Repos/artemisData/data/output"
-fastqPath <- paste0(pathBase, "/fastq")            
-samples <- c(MrN="MrN", MrT="MrT")              
-FastaFiles <- c( "ERCC.fa", ## spike-in controls             
+fastaFilesDuplicates <- c( "ERCC.fa", ## spike-in controls             
                  "Homo_sapiens.RepBase.20_05.humrep.fa", ## repeats         
                  "Homo_sapiens.RepBase.20_05.humsub.fa")  ## ALUs and such             
+message("TxDbLite will notify the user of duplicated entries, here is an example: ")
+message(indexKallisto(fastaFiles=fastaFilesDuplicates, fastaPath=FastaPath)$indexName)
+```
+
+### Quantifying Transcripts with Unique Reference Transcripts
+```{r}
+pathBase<-system.file("extdata",package="artemisData")
+if(file.exists("/data")==FALSE){
+    system("sudo mkdir /data && sudo mkdir /data/output")
+     system("sudo chmod -R 777 /data")
+ }
+   if(file.exists("/data/output")==FALSE){
+     system("sudo mkdir /data/output && sudo chmod -R 777 /data/output")
+   }
+OutputPath<-"/data/output"
+fastqPath <- paste0(pathBase, "/fastq")
+samples <- c(MrN="MrN", MrT="MrT")
+FastaFiles <- c( "ERCC.fa", ## spike-in controls                    
+                 "Homo_sapiens.RepBase.20_05.merged.fa") #no duplicates
 indexName <- indexKallisto(fastaFiles=FastaFiles, fastaPath=FastaPath)$indexName
 library(parallel)
 results <- lapply(samples, 
@@ -54,72 +72,33 @@ results <- lapply(samples,
 ```
 
 
-## Loading already-processed transcript abundance estimates
+## Merging Kallisto Quantification
 
-This is also fairly simple:
-
+Artemis runs kallisto pseudo-alignment quantification into a KallistoExperiment object, as an S4 object.  The SummarizedExperiment accessors are the same for KallistoExperiment objects because KallistoExperiment containers are a sub-class of SummarizedExperiments
+ We enforce uniformity between kallisto versions because if the kallisto versions are not the same, then there exists data variance between different KallistoExperiments' assay data and indexed references.
 ```{r}
 merged <- mergeKallisto(samples, outputPath=OutputPath)
-design <- DataFrame(sampleDir=c("MrN","MrT"),
-                  intercept=c(1,1),
-                  normal=c(1, 0))
-rownames(design) <- design$sampleDir
+merged    
+assays(merged)
+kallistoVersion(merged)
+message("accessing unannotated GRanges...")
+features(merged)
 ```
 
-The resulting object has annotations for distinct coding and non-coding transcripts,
-along with an indication of the general biological category of each transcript bundle
-(e.g. protein-coding transcript, pseudogene, ribosomal RNA, etc.).  Transcripts for 
-which annotations could not be found are assigned to the chromosome "Unknown" and 
-retained as part of the KallistoExperiment, albeit with less informative annotation.
 
-
-## Gene-wise analysis
-
-One of the most common tasks when analysing the abundance of RNA transcripts is to 
-aggregate estimates by "gene" (i.e., "bundle of transcripts with extensive homology")
-and group the observed changes by biochemical pathway, gene sets associated with 
-experimental outcomes, or perhaps drug metabolism and metabolic targets.  For this,
-we typically collapse all the transcripts in each bundle, and run tests across those:
-
+##Repeat Analysis
+ After creating the repeatome, Artemis can be used to analyze repetitive elements
+ For instance, one can plot repeat element transcripts using (counts/bootstrap MADs) as effect size, or analyze families of Alu, LTR, or Endongenous Retroviruses.  Below we plot a heat map of quantified transcripts from our repeatome for species Homo Sapiens.
 ```{r}
-#gwa <- geneWiseAnalysis(merged,design=design,how="cpm",species="Homo.sapiens")
+
+
+ topKbyMAD <- function(kexp, k=25) {
+  tpm(kexp)[rev(order(rowMeans(counts(kexp) / mad(kexp))))[1:k],]
+}
+
+    heatmap(log1p(topKbyMAD(merged)), scale="none", 
+        col=colorRampPalette(c("white","red","darkred"))(255),
+        main="Repeat transcription, teratoma vs. normal")
+
 ```
 
-
-## Styles
-
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
-
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
-
-## Figures
-
-The figure sizes have been customised so that you can easily put two images side-by-side. 
-
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
-```
-
-You can enable figure captions by `fig_caption: yes` in YAML:
-
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
-
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
-
-## More Examples
-
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
-
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
-```
-
-Also a quote using `>`:
-
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
