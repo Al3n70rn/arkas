@@ -1,8 +1,8 @@
-@inproceedings{li09,
-    author = {Bo,Li},
-    title = {RNA-Seq Gene Expression Estimation with Read Mapping Uncertainty},
-    publisher = {Journals Bioinformatics. Oxford Journal, 9 Dec. 2009. Web. 20 June 2015.},
-    url = {http://bioinformatics.oxfordjournals.org/content/26/4/493.full},
-    year = {2009},
+@ARTICLE {li09,
+    author  = { Li,Bo},
+    title   = {RNA-Seq Gene Expression Estimation with Read Mapping Uncertainty},
+    journal = {Journals Bioinformatics. Oxford Journal},
+    year    = {2009},
+    volume  = {9},
+    month   = {Dec}
 }
- 
