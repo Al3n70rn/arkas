@@ -56,7 +56,9 @@ geneWiseAnalysis <- function(kexp, design=NULL, how=c("cpm","tpm"),
   }
 
   ## only ones supported for now (would be simple to expand, though)
-  species <- match.arg(species) ## NOT to be confused with KEGG species ID
+   species <- match.arg(species, c("Homo.sapiens",
+                                       "Mus.musculus",
+                                       "Rattus.norvegicus")) ## NOT to be confused with KEGG species ID
   commonName <- switch(species, 
                        Mus.musculus="mouse", 
                        Homo.sapiens="human",
