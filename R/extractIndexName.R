@@ -5,7 +5,6 @@
 #' @return the index name
 #'
 #' @export
-#'
 extractIndexName <- function(callinfo) {
   pop <- function(x) x[length(x)] 
   popsplit <- function(x, y=.Platform$file.sep) pop(strsplit(x, y)[[1]])

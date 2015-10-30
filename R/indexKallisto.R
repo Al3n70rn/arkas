@@ -29,7 +29,7 @@ indexKallisto <- function(fastaFiles, fastaPath, fastaTxDbLite=TRUE,
   if (!file.exists(indexPath)) {
 
     ## Check the FASTA files for duplicate seqnames:
-    dupes <- findDupes(fastaFiles)
+    dupes <- findDupes(as.list(fastaFiles))
     if (!is.null(dupes)) {
       duplicatedSeqnames <- unique(dupes$seqname)
       message("There are duplicated sequence names in your FASTA files:")
@@ -92,7 +92,8 @@ indexKallisto <- function(fastaFiles, fastaPath, fastaTxDbLite=TRUE,
 #' @import TxDbLite
 .getIndexName <- function(fastaFiles, collapse="_mergedWith_") {
   cleanNames <- function(x) unique(sort(getFastaStub(x)))
-  return(paste0(paste(cleanNames(fastaFiles), collapse=collapse), ".fa.kidx"))
+  return(paste0(paste(cleanNames(fastaFiles), collapse=collapse), 
+                "kallisto.", getKallistoVersion(), ".fa.kidx"))
 }
 
 .getIndexPath <- function(indexName, fastaPath) {
