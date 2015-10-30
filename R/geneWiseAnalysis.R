@@ -91,24 +91,6 @@ geneWiseAnalysis <- function(kexp, design=NULL, how=c("cpm","tpm"),
     # limma is in terms of ensembl id
     message("Performing clustered enrichment analysis...")
     res$scaledExprs <- t(scale(t(res$voomed$E)))
-    
-    #finding scaled Expression in terms of entrez id
-    scaledConvertedID<-getBM(filters="ensembl_gene_id",
-                           attributes=c("ensembl_gene_id","entrezgene"),
-                           values=rownames(res$scaledExprs),
-                           mart=speciesMart)
-
-    message("clustering scaled expression in terms of entrez id ... ")
-    clust <- cutree(hclust(dist(res$scaledExprs), method="ward"), k=2)
-    genes <- split(names(clust), clust)
-      names(genes) <- c("down","up")
-      
-   res$clusts <- compareCluster(geneCluster=genes, 
-                                fun="enrichPathway", 
-                                 qvalueCutoff=p.cutoff)
-
-    #adding ggplot object for multiplotting
-    res$Figures$clusts <- plot(res$clusts) ## saving into Figures list
 
     # ReactomePA has facilities to do simple GSEA enrichment & plots
     # DSigDb gene sets (http://tanlab.ucdenver.edu/DSigDB/DSigDBv1.0/) may
