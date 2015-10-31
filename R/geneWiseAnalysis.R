@@ -77,18 +77,15 @@ geneWiseAnalysis <- function(kexp, design=NULL, how=c("cpm","tpm"),
 #commonName is important
 res$entrezID<-.convertEntrezID(res,commonName)
 #grab all the entrez IDs that are not NA
-converted<-res$entrezID[which(!is.na(res$entrezID[,2])==TRUE),]
-entrezVector<-as.vector(converted[,2])
+converted<-res$entrezID[which(!is.na(res$entrezID[,which(colnames(res$entrezID)=="entrezgene")])==TRUE),]
+entrezVector<-as.vector(converted[,which(colnames(res$entrezID)=="entrezgene")])
 #grab all the ensembl associated with the non-NA entrez
-ensemblVector<-converted[,1]
-
-
-
-
-
-
-
-  res$features <- features(kexp)
+ensemblVector<-converted[,which(colnames(converted)=="ensembl_gene_id")]
+ 
+res<-.reactomeEnrichmentOverall(res,converted,commonNomen=commonName,species)
+res<-.reactomeEnrichmentCluster(res,converted,species,commonNomen=commonName)
+res<-formatLimmaWithMeta(res,converted)
+ res$features <- features(kexp)
   res$species <- species
   return(res)
 
@@ -96,14 +93,20 @@ ensemblVector<-converted[,1]
 
 }#{{{main
 
-.convertEntrezID(resValues,commonName) { 
+###the help####################
+
+.convertEntrezID<-function(resValues=NULL,commonNomen=NULL) { 
  #import biomaRt
  
  #for ReactomePA it is needed to have entrezGene id,  adding to res list
    #if more species are added then getBM will have to be turned into a funciton
 
- if (commonName=="human") {
-   speciesMart<-.findMart(commonName)
+#resValues must be ensG ids or ensT ids, characters only
+
+  commenNomen<-match.arg(commonNomen,c("human","mouse","rat"))
+
+ if (commonNomen=="human") {
+   speciesMart<-.findMart(commonNomen)
     speciesSymbol<-"hgnc_symbol"  #hugo nomenclature human only 
          message("finding entrez IDs of top ensembl genes...")
          convertedEntrezID<-getBM(filters="ensembl_gene_id",
@@ -113,8 +116,8 @@ ensemblVector<-converted[,1]
 
    }#human
 
-  if(commonName=="mouse"){
-   speciesMart<-.findMart(commonName)
+  if(commonNomen=="mouse"){
+   speciesMart<-.findMart(commonNomen)
    speciesSymbol<-"mgi_symbol"
         message("finding entrez IDs of top ensembl genes...")
         convertedEntrezID<-getBM(filters="ensembl_gene_id",
@@ -122,8 +125,8 @@ ensemblVector<-converted[,1]
                     values=resValues, #fitBundles ensembl Gene Ids
                     mart=speciesMart)
         }#mouse
- if (commonName=="rat"){
-  speciesMart<-.findMart(commonName)
+ if (commonNomen=="rat"){
+  speciesMart<-.findMart(commonNomen)
     speciesSymbol<-"mgi_symbol"  # mgi supports rat and mouse http://www.informatics.jax.org/mgihome/nomen/gene.shtml
        message("finding entrez IDs of top ensembl genes...")
       convertedEntrezID<-getBM(filters="ensembl_gene_id",
@@ -136,11 +139,12 @@ ensemblVector<-converted[,1]
 } #{{{ entrez Convert
 
 
-.reactomeEnrichmentOverall(res,commonName){
-
+.reactomeEnrichmentOverall<-function(res=NULL,commonNomen=NULL){
+commenNomen<-match.arg(commonNomen,c("human","mouse","rat"))
 if(res$entrezID==NULL){
- res$entrezID<-.convertEntrezID(res$topGenes,commonName)
+ res$entrezID<-.convertEntrezID(res$topGenes,commonNomen)
 }
+
 
 converted<-res$entrezID[which(!is.na(res$entrezID[,which(colnames(res$entrezID)=="entrezgene")])==TRUE),]
 entrezVector<-as.vector(converted[,which(colnames(converted)=="entrezgene")])
@@ -149,7 +153,7 @@ ensemblVector<-converted[,which(colnames(converted)=="ensembl_gene_id")]
 
 message("Performing Reactome enrichment analysis...")
   message("Matching species...")
-  library(species, character.only=TRUE) ## can ignore this now 
+  library(species, character.only=TRUE)
   res$enriched <- enrichPathway(gene=converted[,which(colnames(res$entrezID)=="entrezgene")], 
                                 qvalueCutoff=p.cutoff, 
                                 readable=TRUE) 
@@ -159,14 +163,16 @@ message("Performing Reactome enrichment analysis...")
   res$Figures$barplot <- barplot(res$enriched, 
                                  showCategory=10, 
                                  title="Overall Reactome enrichment")
-    
+    return(res)
 }#{{{ reactome main
 
 
-.reactomeEnrichmentCluster(res,commonName){
+.reactomeEnrichmentCluster<-function(res=NULL,commonNomen=NULL){
+
+commenNomen<-match.arg(commonNomen,c("human","mouse","rat"))
 
 if(res$entrezID==NULL) {
-res$entrezID<-.convertEntrezID(res$topGenes,commonName)
+res$entrezID<-.convertEntrezID(res$topGenes,commonNomen)
   }
 converted<-res$entrezID[which(!is.na(res$entrezID[,which(colnames(res$entrezID)=="entrezgene")])==TRUE),]
 entrezVector<-as.vector(converted[,which(colnames(converted)=="entrezgene")])
@@ -175,14 +181,14 @@ ensemblVector<-converted[,which(colnames(converted)=="ensembl_gene_id")]
 message("Performing clustered enrichment analysis...")
 res$scaledExprs <- t(scale(t(res$voomed$E[ ensemblVector, ])))
  #finding scaled Expression in terms of entrez id
-   speciesMart<-.findMart(commonName)
+   speciesMart<-.findMart(commonNomen)
 
-   scaledBiomartID<-.convertEntrezID(rownames(re$scaledExprs),commonName)
+   scaledBiomartID<-.convertEntrezID(rownames(res$scaledExprs),commonNomen)
    stopifnot(nrow(res$scaledExprs)==nrow(scaledBiomartID))
 #map the entrez ID to the matching ensembl score
-indx<-which(rownames(res$scaledExprs)==scaledBiomartID[,1])
+indx<-which(rownames(res$scaledExprs)==scaledBiomartID[,which(colnames(converted)=="ensembl_gene_id")])
 #map limma sclaed expression to ENTREZ
-rownames(res$scaledExprs)<-scaledConvertedID[indx,2]
+rownames(res$scaledExprs)<-scaledBiomartID[indx,which(colnames(converted)=="entrezgene")]
   
   message("clustering scaled expression in terms of entrez id ... ")
   clust <- cutree(hclust(dist(res$scaledExprs), method="ward"), k=2)
@@ -199,16 +205,16 @@ rownames(res$scaledExprs)<-scaledConvertedID[indx,2]
 }#enrichment cluser
 
 
-.formatLimmaWithMeta(....){
+.formatLimmaWithMeta<-function(res,converted){
  
 #create csv of limma counts, gene names, ensembl ID, biotypes and store into res
  index<-vector()
 for(i in 1:nrow(converted)){
-index[i]<-which(rownames(res$top)==G_list[i,1])
+index[i]<-which(rownames(res$top)==converted[i, grep("ensembl_gene_id",colnames(converted))])
 }#indexing converted
 
 limmad<-res$top[index,]
-limmad<-cbind(limmad,G_list[,2],G_list[,3],G_list[,1])
+limmad<-cbind(limmad,converted[,grep("entrezgene",colnames(converted))],converted[,grep("_symbol",colnames(converted))], converted[, grep("ensembl_gene_id",colnames(converted))])
 colnames(limmad)[7]<-"entrez_id"
 colnames(limmad)[8]<-"gene_name"
 colnames(limmad)[9]<-"ensembl_id"
@@ -235,7 +241,7 @@ res$limmaWithMeta<-limmad
 
 
 
-.findMart<-function(commonName){
+.findMart<-function(commonName=NULL){
 
  if (commonName=="human") {
    setType="hsapiens_gene_ensembl"
@@ -256,5 +262,5 @@ res$limmaWithMeta<-limmad
 speciesMart<-useMart("ensembl",dataset=setType)
 return(speciesMart)
 
-}
+} #{{{find mart
 
