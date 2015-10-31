@@ -72,7 +72,6 @@ In order to run gene-wise analysis, Artemis requires that the merged KallistoExp
 ```{r}
 suppressPackageStartupMessages(library(TxDbLite))
 setwd(appSession$fastaPath)
-libraryPath<- system.file("extdata/Libraries", "", package="artemisData")
 erccDb<-erccDbLiteFromFasta(paste0(appSession$fastaPath,"/","ERCC.fa.gz"))
 erccPkg<-makeErccDbLitePkg(erccDb,destDir=appSession$fastaPath)
 #Create a Ensembl Annotation Db with cdna and ncrna
@@ -95,9 +94,9 @@ EnsDbLite(ensDb)
 RepDbLite(repDb)
 ```
 ##Annotating Merged KallistoExperiment Containers
-   Artemis has a function "annotateFeatures.R" which annotates ERCC, Ensembl, and RepBase databases for species Homo-Sapiens, Mus-musculus, and Rattus norvegicus.  The method "annotateFeatures.R" annotates the merged KallistoExperiment against every TxDbLite library simulatenously.
+   Artemis has a function "annotateFeatures.R" which annotates ERCC, Ensembl, and RepBase databases for species Homo-Sapiens, Mus-musculus, and Rattus norvegicus.  The method "annotateFeatures.R" annotates the merged KallistoExperiment against every TxDbLite library simulatenously. These annotation databases are defined as 'lite' because they do not store exonic or intronic coordinates.
 ```{r}
-NS<-annotateFeatures(NS,level="transcript") 
+NS<-suppressWarnings(annotateFeatures(NS,level="transcript"))
 ```
 #Gene Wise Analysis
  Gene wise analysis collapses transcripts into groups related to specific ensembl "gene" Ids.  The package TxDbLite parses the Ensembl, or RepBase transcript fasta files and stores the respective gene id's associate with the given transcript documented in the transcript fasta header.  Artemis' method for gene wise analysis calls "collapseBundles.R" which then calculates the aggregated total counts of transcripts for each unique gene id association.  Thus the "gene" count is defined as the sum of all quantified transcripts associated with a specific gene identifier.  
@@ -113,10 +112,10 @@ GWA<-geneWiseAnalysis(NS,design=design,how="cpm",
 
 
 ##Understanding Gene Wise Analysis Output
+  The output for gene wise analysis contains a comma separated list of the limma calculated expression values, fold change, the entrez ID, gene names, and gene biotype.  
 
-
-#Encrichment Plots
-
+##Encrichment Plots
+  Artemis performs enrichment analysis using the entrez gene names from the limma results and input them into biomaRt enrichPathway.  Gene wise analysis conducts overall enrichment analysis and clustered enrichment analysis on the differentially expressed groups.
 
 
 #Transcript Wise Analysis

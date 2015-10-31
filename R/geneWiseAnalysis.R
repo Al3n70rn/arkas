@@ -82,8 +82,8 @@ entrezVector<-as.vector(converted[,which(colnames(res$entrezID)=="entrezgene")])
 #grab all the ensembl associated with the non-NA entrez
 ensemblVector<-converted[,which(colnames(converted)=="ensembl_gene_id")]
  
-res<-.reactomeEnrichmentOverall(res,converted,commonNomen=commonName,species)
-res<-.reactomeEnrichmentCluster(res,converted,commonNomen=commonName)
+res<-.reactomeEnrichmentOverall(res,converted,commonNomen=commonName,species,p.cutoff)
+res<-.reactomeEnrichmentCluster(res,converted,commonNomen=commonName,p.cutoff)
 res<-.formatLimmaWithMeta(res,converted)
  res$features <- features(kexp)
   res$species <- species
@@ -139,7 +139,7 @@ res<-.formatLimmaWithMeta(res,converted)
 } #{{{ entrez Convert
 
 
-.reactomeEnrichmentOverall<-function(res=NULL,converted,commonNomen=NULL,species){
+.reactomeEnrichmentOverall<-function(res=NULL,converted,commonNomen=NULL,species, p.cutoff){
 message("Performing Reactome enrichment analysis...")
   message("Matching species...")
   library(species, character.only=TRUE)
@@ -156,7 +156,7 @@ message("Performing Reactome enrichment analysis...")
 }#{{{ reactome main
 
 
-.reactomeEnrichmentCluster<-function(res=NULL,converted,commonNomen=NULL){
+.reactomeEnrichmentCluster<-function(res=NULL,converted,commonNomen=NULL,p.cutoff){
 entrezVector<-as.vector(converted[,which(colnames(converted)=="entrezgene")])
 #grab all the ensembl associated with the non-NA entrez
 ensemblVector<-converted[,which(colnames(converted)=="ensembl_gene_id")]
