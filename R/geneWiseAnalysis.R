@@ -152,13 +152,6 @@ message("Performing Reactome enrichment analysis...")
                                  showCategory=10, 
                                  title="Overall Reactome enrichment")
    
-     pdf("overallEnrich.pdf")
-     barplot(res$enriched,
-                    showCategory=10, 
-                    title="Overall Reactome enrichment")
-   dev.off()
-
-
     return(res)
 }#{{{ reactome main
 
