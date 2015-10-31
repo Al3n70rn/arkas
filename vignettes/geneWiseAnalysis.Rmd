@@ -1,0 +1,97 @@
+---
+title: "Artemis: Raw Reads To Pathway Analsyes In Much Less Time"
+author:  "Timothy J. Triche, Jr, Anthony R. Colombo, Harold Pimentel"
+output: 
+    pdf_document:
+      toc: true
+      number_sections: true
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+---
+          
+#Introduction
+Kallisto is software developed by Nicolas Bray, Harold Pimentel, Pall Melsted, and Lior Pachter (UC Berkeley) that analyzes 30 million unaligned paired-end RNA-Seq reads in less than 5 minutes on a standard laptop computer.   Kallisto quantifies transcript abundance from input RNA-Seq reads by using a process, known as pseudoalignment, which identifies the read-transcript compatibility matrix. Artemis is a BioConductor package that extends functions and utilities for RNA-Seq analysis from raw reads to results in minutes.
+
+#Reads to Quantification to Annotation
+Artemis was designed to reduce the programmative steps required to quantify and annotate multitudes of sample directories. Artemis calls Kallisto to perform on- the-fly transcriptome indexing and quantification recursively for numerous sample directories. For RNA- Seq projects with numerous sequenced samples, Artemis encapsulates expensive preparatory routines. Artemis programmatically orders FASTQ files output from DNA sequencers and inputs a list required by
+Kallisto for processing multitudes of demultiplexed reads. The Artemis function 'runKallisto' recursively indexes transcriptomes and quantifies abundances for any number of samples. The function 'mergeKallisto' merges quantified output into an object of ofsubclass a KallistoExperiment-class, SummarizedExperiment-class. Standard mutators and accessor methods from SummarizedExperiment- methods are preserved in KallistoExperiment-methods. Gene annotation is performed from user-selected bundled transcriptomes (ERCC, Ensembl, and/or
+RepBase) simultaneously merging annotated samples into one R object: KallistoExperiment. Artemis annotates genes for Homo-Sapiens GrCh38 and Mouse GrCm38 (NCBI). Routines such as 'annotateBundles' yields annotated genes from transcriptomes such as External RNA Control Consortium (ERCC), Ensembl release 81 of non-coding RNA, coding RNA, and a hg38 repeatome for both species.
+
+##Kallisto Installation
+For linux systems, after installing the dependencies, kallisto is installed via:
+```
+mkdir /KallistoSource           
+cd /KallistoSource             
+git clone https://github.com/pachterlab/kallisto.git         
+cd ./kallisto       
+mkdir ./build        
+cd ./build       
+cmake ..              
+make          
+make install   
+```     
+
+#Gene Wise Analysis
+Artemis supports various levels of analysis, namely transcript-level or gene-level analysis which involves the Limma package for differential expression analysis. First we merge quantified transcripts, and create a design matrix.   
+  Gene Wise analysis bundles and aggregates transcripts associated with a specific Ensembl Gene ID, collapsing transcripts into groups and summing the quantified transcript counts of the group; these transcript aggregated counts are defined as "gene" counts. 
+
+```{r message=FALSE}
+suppressWarnings(suppressPackageStartupMessages(library(artemis)))    
+suppressPackageStartupMessages(library(artemisData))       
+jsonFile <- system.file("extdata", "NS.JSON", package="artemis")
+appSession <- fetchAppSession(jsonFile) ## a
+names(appSession$samples) <- appSession$samples ## so column names get set 
+appSession$outputPath <- system.file("extdata", "", package="artemisData")
+  NS <- mergeKallisto(appSession$samples, 
+                      outputPath=appSession$outputPath)
+```
+
+##Creating The Design Matrix
+In order to analyze bundle-aggregated transcripts defined as "genes", we create a design matrix which controls for individual effects and contrasts treatment effects across individual subjects.  
+
+```{r}
+NS$subject <- factor(substr(colnames(NS), 2, 2))
+NS$treatment <- substr(colnames(NS), 1, 1) == "s"
+NS$ID <- NULL
+
+## exptData(SE) == metaData(RSE), should be transparent?!
+design <- with(as(colData(NS), "data.frame"),
+                  model.matrix( ~ treatment + subject ))
+rownames(design) <- colnames(NS)
+exptData(NS)$design <- design
+design
+```
+
+
+##Calling Gene Wise Analysis on a merged KallistoExperiment
+
+```{r}
+GWA<-geneWiseAnalysis(NS,design=design,how="cpm",
+                       p.cutoff=0.07,
+                       fold.cutoff=1,
+                       read.cutoff=1,
+                       species="Homo.sapiens")
+```
+
+
+##Understanding Output
+
+
+##Encrichment Plots
+
+
+#Annotations
+
+
+#Grouping Transcripts Into Bundles, i.e. "Genes"
+
+#Transcript Wise Analysis
+
+
+
+#Ercc Analysis
+
+
+
+#Importing Data From ICGC , TARGET
+
+
