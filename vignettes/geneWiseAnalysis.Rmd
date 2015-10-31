@@ -32,8 +32,11 @@ make install
 
 #Gene Wise Analysis
 Artemis supports various levels of analysis, namely transcript-level or gene-level analysis which involves the Limma package for differential expression analysis. First we merge quantified transcripts, and create a design matrix.   
-  Gene Wise analysis bundles and aggregates transcripts associated with a specific Ensembl Gene ID, collapsing transcripts into groups and summing the quantified transcript counts of the group; these transcript aggregated counts are defined as "gene" counts. 
+  Gene Wise Analysis is founded on the idea that groups of transcriptsby a fixed Ensembl Gene ID is termed a "gene"; where "gene" counts are defined as the sum of all transcripts identified by the same unique Ensembl Gene Id.  Gene Wise analysis generates bundled and aggregated transcripts associated with a specific Ensembl Gene ID.  Gene level analysis is founded on another Artemis method titled "collapseBundles", which collapses transcripts into groups and summing the quantified transcript counts of the group; these transcript aggregated counts are defined as "gene" counts.  Gene Wise Analysis conducts a gene level analysis by first enacting "collapsedBundles".  
 
+ ##The Measure Depends On The Level
+   Not all transcripts are equal.  It is important to include transcript level analysis to identify biological driver mechanisms.  Many genes can have the same total "gene" level total quantified counts; however the biological mechanisms for the same "gene" can vary greatly by a single transcript.
+ 
 ```{r message=FALSE}
 suppressWarnings(suppressPackageStartupMessages(library(artemis)))    
 suppressPackageStartupMessages(library(artemisData))       
@@ -41,7 +44,10 @@ jsonFile <- system.file("extdata", "NS.JSON", package="artemis")
 appSession <- fetchAppSession(jsonFile) ## a
 names(appSession$samples) <- appSession$samples ## so column names get set 
 appSession$outputPath <- system.file("extdata", "", package="artemisData")
-  NS <- mergeKallisto(appSession$samples, 
+pathBase<-system.file("extdata",package="artemisData")
+fastaPath <- paste0(pathBase, "/fasta")
+appSession$fastaPath<-fastaPath
+NS <- mergeKallisto(appSession$samples, 
                       outputPath=appSession$outputPath)
 ```
 
@@ -52,17 +58,48 @@ In order to analyze bundle-aggregated transcripts defined as "genes", we create 
 NS$subject <- factor(substr(colnames(NS), 2, 2))
 NS$treatment <- substr(colnames(NS), 1, 1) == "s"
 NS$ID <- NULL
-
-## exptData(SE) == metaData(RSE), should be transparent?!
 design <- with(as(colData(NS), "data.frame"),
                   model.matrix( ~ treatment + subject ))
 rownames(design) <- colnames(NS)
-exptData(NS)$design <- design
+(exptData(NS)$design) <- design
 design
 ```
+#Annotate!
+In order to run gene-wise analysis, Artemis requires that the merged KallistoExperiment must be annotated; this is because we must collapse transcripts into groups linked to unique Ensembl Gene Ids.  
 
+```{r}
+library(TxDbLite)
+libraryPath<- system.file("extdata/Libraries", "", package="artemisData")
+erccDb<-erccDbLiteFromFasta(paste0(appSession$fastaPath,"/","ERCC.fa.gz"))
+erccPkg<-makeErccDbLitePkg(erccDb,destDir=libraryPath)
+#Create a Ensembl Annotation Db with cdna and ncrna
+system(paste0("touch ",fastaPath,"/","Homo_sapiens.GRCh38.81.cdna_mergedWith_ncrna.fa")) 
+system(paste0("zcat Homo_sapiens.GRCh38.81.cdna.all.fa.gz Homo_sapiens.GRCh38.81.ncrna.fa.gz >> ",fastaPath,"/","Homo_sapiens.GRCh38.81.cdna_mergedWith_ncrna.fa"))
+findDupes(paste0(fastaPath,"/","Homo_sapiens.GRCh38.81.cdna_mergedWith_ncrna.fa")) #should return null.
+setwd(fastaPath)
+ensDb<-ensDbLiteFromFasta("Homo_sapiens.GRCh38.81.cdna_mergedWith_ncrna.fa")
+ensPkg<-makeEnsDbLitePkg(ensDb,destDir=libraryPath)
+repDb<-repDbLiteFromFasta("Homo_sapiens.RepBase.20_07.merged.fa.gz")
+repPkg<-makeRepDbLitePkg(repDb,destDir=libraryPath)
+```
+##Loading TxDbLite Libraries
+After creating the TxDbLite packages for Ensembl, ERCC, or RepBase references, for this vignette we've already installed the packages.  Now we need to load the libraries and then annotate.
 
-##Calling Gene Wise Analysis on a merged KallistoExperiment
+``{r}
+setwd(libraryPath)
+libraryToBeInstalled<-c(repPkg,erccPkg,ensPkg)
+command<-paste0("sudo R CMD INSTALL ",libraryPath,libraryToBeInstalled,"/")
+lapply(command,function(x) system(x)) #for local end, sudo install required
+library(erccPkg,character.only=TRUE)
+library(ensPkg,character.only=TRUE)
+library(repPkg,character.only=TRUE)
+#display the Annotation data bases
+ErccDbLite(erccDb)
+EnsDbLite(ensDb)
+RepDbLite(repDb)
+
+##First annotated the merged KallistoExperiment before running analysis
+NS<-annotateFeatures(NS,level="transcript") 
 
 ```{r}
 GWA<-geneWiseAnalysis(NS,design=design,how="cpm",
@@ -79,7 +116,7 @@ GWA<-geneWiseAnalysis(NS,design=design,how="cpm",
 ##Encrichment Plots
 
 
-#Annotations
+
 
 
 #Grouping Transcripts Into Bundles, i.e. "Genes"
