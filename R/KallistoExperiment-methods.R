@@ -3,7 +3,6 @@
 #' Retrieve the estimated count matrix from a KallistoExperiment. 
 #'
 #' @export
-#'
 setMethod("counts", "KallistoExperiment",
           function (object) return(assays(object)$est_counts))
 
@@ -17,7 +16,6 @@ setGeneric("covariates<-",
 #' Retrieve the sample covariates from a KallistoExperiment. 
 #'
 #' @export
-#'
 setMethod("covariates", "KallistoExperiment",
           function (object) return(colData(object)))
 
@@ -26,7 +24,6 @@ setMethod("covariates", "KallistoExperiment",
 #' Retrieve the sample covariates from a KallistoExperiment. 
 #'
 #' @export
-#'
 setMethod("pData", "KallistoExperiment",
           function (object) return(colData(object)))
 
@@ -35,7 +32,6 @@ setMethod("pData", "KallistoExperiment",
 #' Assign the sample covariates for a KallistoExperiment. 
 #'
 #' @export
-#'
 setReplaceMethod("covariates", "KallistoExperiment",
                  function (object, value) {
                    object <- BiocGenerics:::replaceSlots(object, colData=value)
@@ -50,7 +46,6 @@ setReplaceMethod("covariates", "KallistoExperiment",
 #' Convenience method for people used to ExpressionSet, to set per-sample data.
 #'
 #' @export
-#'
 setReplaceMethod("pData", c("KallistoExperiment", "DataFrame"),
                  function (object, value) {
                    object <- BiocGenerics:::replaceSlots(object, colData=value)
@@ -68,7 +63,6 @@ setGeneric("features<-", function(object, value) standardGeneric("features<-"))
 #' Retrieve the per-row annotations for a KallistoExperiment. 
 #'
 #' @export
-#'
 setMethod("features", "KallistoExperiment", function (x) rowRanges(x))
 
 #' @describeIn KallistoExperiment 
@@ -76,7 +70,6 @@ setMethod("features", "KallistoExperiment", function (x) rowRanges(x))
 #' Assign per-row annotations to a KallistoExperiment. 
 #'
 #' @export
-#'
 setReplaceMethod("features", c("KallistoExperiment", "ANY"),
                 function(object, value) {
                   object <- BiocGenerics:::replaceSlots(object,
@@ -94,7 +87,6 @@ setGeneric("eff_length", function(object) standardGeneric("eff_length"))
 #' Retrieve the matrix of effective transcript lengths from a KallistoExperiment
 #'
 #' @export
-#'
 setMethod("eff_length", "KallistoExperiment",
           function (object) return(assays(object)$eff_length))
 
@@ -111,7 +103,6 @@ setGeneric("tpm", function(object) standardGeneric("tpm"))
 #' \code{ tpm <- exp(rate - log(sum(exp(rate))) + log(1e6)) } 
 #' 
 #' @export
-#'
 setMethod("tpm", "KallistoExperiment",
           function (object) return(assays(object)$tpm))
 
@@ -124,7 +115,6 @@ setGeneric("kallistoVersion",
 #' Retrieve the version of Kallisto used for alignment from a KallistoExperiment
 #'
 #' @export
-#'
 setMethod("kallistoVersion", "KallistoExperiment",
           function (object) return(object@kallistoVersion))
 
@@ -137,7 +127,6 @@ setGeneric("transcriptomes",
 #' Retrieve the transcriptomes used for annotation from a KallistoExperiment
 #'
 #' @export
-#'
 setMethod("transcriptomes", "KallistoExperiment",
           function (object) return(object@transcriptomes))
 
@@ -146,7 +135,6 @@ setMethod("transcriptomes", "KallistoExperiment",
 #' Fetch transcripts for a gene, or all transcripts bundled by gene.
 #'
 #' @export
-#'
 setMethod("transcriptsBy", "KallistoExperiment",
           function(x, by="gene", ...) {
             if (by == "gene") { 
@@ -161,8 +149,6 @@ setMethod("transcriptsBy", "KallistoExperiment",
 #' Fetch the matrix of MADs for estimated counts, if bootstraps were run. 
 #' 
 #' @export
-#'
 setMethod("mad", "KallistoExperiment", function(x) assays(x)$est_counts_mad)
 
 # FIXME: add method to retrieve normalization factors if ERCC spike-ins used 
-
