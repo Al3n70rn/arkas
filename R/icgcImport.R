@@ -14,7 +14,6 @@
 #' @seealso CountsAndFeaturesToKallistoExperiment
 #' 
 #' @export
-#'
 icgcImport <- function(counts=NULL, filename=NULL, filepath=".", transcriptome,
                        level=c("gene","transcript"),
                        cols=c("submitted_sample_id","gene_id","raw_read_count"),
