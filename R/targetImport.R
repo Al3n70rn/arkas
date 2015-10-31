@@ -12,7 +12,6 @@
 #' @details             One or the other of counts OR files must be set!
 #' 
 #' @export
-#'
 targetImport <- function(counts=NULL, 
                          files=NULL, 
                          transcriptome="EnsDb.Hsapiens.v75", 

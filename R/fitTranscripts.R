@@ -8,8 +8,6 @@
 #' @return        A list with elements (design, voomed, fit)
 #'
 #' @export
-#' 
-#'
 fitTranscripts <- function(kexp, design, read.cutoff=1, ...) { 
 
   res <- list()
