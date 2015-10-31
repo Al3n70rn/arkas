@@ -145,10 +145,20 @@ message("Performing Reactome enrichment analysis...")
                                 readable=TRUE) 
 
   #adding res$Figures list object for multiplotting  
-  res$Figures <- list()
+ 
+ 
+ res$Figures <- list()
   res$Figures$barplot <- barplot(res$enriched,
                                  showCategory=10, 
                                  title="Overall Reactome enrichment")
+   
+     pdf("overallEnrich.pdf")
+     barplot(res$enriched,
+                    showCategory=10, 
+                    title="Overall Reactome enrichment")
+   dev.off()
+
+
     return(res)
 }#{{{ reactome main
 
@@ -177,6 +187,9 @@ rownames(res$scaledExprs)<-scaledBiomartID[indx,which(colnames(converted)=="entr
 
   #adding ggplot object for multiplotting
   res$Figures$clusts <- plot(res$clusts) ## saving into Figures list
+  pdf("cluster.pdf")
+  plot(res$clusts)
+  dev.off()
   return(res)
 }#enrichment cluser
 
