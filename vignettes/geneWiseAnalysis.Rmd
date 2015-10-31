@@ -103,9 +103,10 @@ NS<-suppressWarnings(annotateFeatures(NS,level="transcript"))
 
 ```{r}
 #returns a KallistoExperiment at the gene level
-GWA<-geneWiseAnalysis(NS,design=design,how="cpm",
-                       p.cutoff=0.07,
-                       fold.cutoff=1,
+GWA<-geneWiseAnalysis(NS,design=design,
+                       how="cpm",
+                       p.cutoff=0.05,
+                       fold.cutoff=1, 
                        read.cutoff=1,
                        species="Homo.sapiens")
 ```
@@ -116,16 +117,3 @@ GWA<-geneWiseAnalysis(NS,design=design,how="cpm",
 
 ##Encrichment Plots
   Artemis performs enrichment analysis using the entrez gene names from the limma results and input them into biomaRt enrichPathway.  Gene wise analysis conducts overall enrichment analysis and clustered enrichment analysis on the differentially expressed groups.
-
-
-#Transcript Wise Analysis
-
-
-
-#Ercc Analysis
-
-
-
-#Importing Data From ICGC , TARGET
-
-
