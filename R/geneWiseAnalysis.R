@@ -35,7 +35,6 @@
 #'                                   features, ... (perhaps) 
 #'
 #' @export
-#' 
 geneWiseAnalysis <- function(kexp, design=NULL, how=c("cpm","tpm"), 
                              p.cutoff=0.05, fold.cutoff=1, read.cutoff=1, 
                              species=c("Homo.sapiens",
