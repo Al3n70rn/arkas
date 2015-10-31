@@ -1,5 +1,5 @@
 ---
-title: "Artemis: Reads To Results In Much Less Time"
+title: "Artemis: Repetitive Elements Quantification In Much Less Time"
 author:  "Timothy J. Triche, Jr, Anthony R. Colombo, Harold Pimentel"
 output: 
     pdf_document:
