@@ -61,33 +61,34 @@ NS$ID <- NULL
 design <- with(as(colData(NS), "data.frame"),
                   model.matrix( ~ treatment + subject ))
 rownames(design) <- colnames(NS)
-(exptData(NS)$design) <- design
+metadata(NS)$design <- design
 design
 ```
 #Annotate!
 In order to run gene-wise analysis, Artemis requires that the merged KallistoExperiment must be annotated; this is because we must collapse transcripts into groups linked to unique Ensembl Gene Ids.  
 ##Buiding Annotation libraries
-  Library Annotations are built using TxDbLite; these annotation databases allow for lite annotations parsing gene names, bio-types and family type from reference fastas from ERCC, Ensembl, or RepBase.  Currently exonic, intronic, or other coordinate dependent information is not included in TxDbLite.   The supplemental package artemisData stores the ready-to-load annotation libraries under /extdata/Libraries directory.  For demonstration, we build the libraries under the artemisData/extdata/fasta directory
+  Library Annotations are built using TxDbLite; these annotation databases allow for lite annotations parsing gene names, bio-types and family type from reference fastas from ERCC, Ensembl, or RepBase.  Currently exonic, intronic, or other coordinate dependent information is not included in TxDbLite.   The supplemental package artemisData stores the ready-to-load annotation libraries under /extdata/Libraries directory.  For demonstration, we build the libraries under the artemisData/extdata/fasta/tmp directory.
 
 ```{r}
 suppressPackageStartupMessages(library(TxDbLite))
 setwd(appSession$fastaPath)
 erccDb<-erccDbLiteFromFasta(paste0(appSession$fastaPath,"/","ERCC.fa.gz"))
-erccPkg<-makeErccDbLitePkg(erccDb,destDir=appSession$fastaPath)
+erccPkg<-makeErccDbLitePkg(erccDb,destDir=paste0(appSession$fastaPath,"/tmp"))
 #Create a Ensembl Annotation Db with cdna and ncrna
 findDupes(paste0(fastaPath,"/","Homo_sapiens.GRCh38.81.cdna_mergedWith_ncrna.fa")) #should return null.
 ensDb<-ensDbLiteFromFasta("Homo_sapiens.GRCh38.81.cdna_mergedWith_ncrna.fa")
-ensPkg<-makeEnsDbLitePkg(ensDb,destDir=appSession$fastaPath)
+ensPkg<-makeEnsDbLitePkg(ensDb,destDir=paste0(appSession$fastaPath,"/tmp"))
 repDb<-repDbLiteFromFasta("Homo_sapiens.RepBase.20_07.merged.fa.gz")
-repPkg<-makeRepDbLitePkg(repDb,destDir=appSession$fastaPath)
+repPkg<-makeRepDbLitePkg(repDb,destDir=paste0(appSession$fastaPath,"/tmp"))
+system(paste0("rm -r ",appSession$fastaPath,"/tmp/*"))
 ```
 ##Loading TxDbLite Libraries
 After creating the TxDbLite packages for Ensembl, ERCC, or RepBase references, for this vignette we've already installed the packages.  Now we need to load the libraries and then annotate.
 
 ``{r}
-library(erccPkg,character.only=TRUE)
-library(ensPkg,character.only=TRUE)
-library(repPkg,character.only=TRUE)
+library("EnsDbLite.Hsapiens.81",character.only=TRUE)
+library("ErccDbLite.ERCC.97",character.only=TRUE)
+library("RepDbLite.Hsapiens.2007",character.only=TRUE)
 #display the Annotation data bases
 ErccDbLite(erccDb)
 EnsDbLite(ensDb)
