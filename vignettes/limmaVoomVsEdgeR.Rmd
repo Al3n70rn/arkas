@@ -1,6 +1,6 @@
-f--
-title: "Artemis: reads to results in a lot less time"
-author: "Timothy J. Triche, Jr."
+---
+title: "limma/voom versus edgeR"
+author: "Tim J. Triche, Jr."
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -9,78 +9,60 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
+## limma/voom versus edgeR estimates of differential expression
 
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
+This topic has been beaten to death elsewhere (e.g. http://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-14-91) but when did that ever stop anyone from talking about something? Besides, it's always best to plot the data.
 
-## Loading already-processed transcript abundance estimates
-
-This is also fairly simple:
+Here, we seek to determine what characterizes the different results from edgeR and limma/voom on the normal vs. senescent HSPC samples from three subjects. 
+First we need to read in the results from quantifying each of the matched pairs.
 
 ```R
-covs <- DataFrame(sampleDir=c("n1","n2","n4","s1","s2","s4"),
-                  normal=c(1, 1, 1, 0, 0, 0),
-                  subject=as.factor(c(1, 2, 4, 1, 2, 4)))
-rownames(covs) <- covs$sampleDirs
-merged <- mergeKallisto(covariates=covs, outputPath="/data/output")
+suppressPackageStartupMessages(library(artemisData))
+outputPath <- system.file("extdata", "", package="artemisData")
+samples <- list.files(outputPath, pattern="^[ns][124]$")
+covs <- data.frame(outputDir=samples, 
+                   row.names=samples)
+NS <- mergeKallisto(covariates=covs, 
+                    outputPath=outputPath) 
+show(NS)                   
 ```
 
-The resulting object has annotations for distinct coding and non-coding transcripts,
-along with an indication of the general biological category of each transcript bundle
-(e.g. protein-coding transcript, pseudogene, ribosomal RNA, etc.).  Transcripts for 
-which annotations could not be found are assigned to the chromosome "Unknown" and 
-retained as part of the KallistoExperiment, albeit with less informative annotation.
+Next we need to indicate which sample is from which subject, and which fraction.
+We also need to annotate the transcripts against their ENSEMBL gene IDs, because
+we will sum the abundances of the transcripts to get the abundance of each gene.
+We'll ignore the subject for each result, and simply state that the groups are
+frequency matched on various characteristics...
 
+```
+NS <- annotateFeatures(NS) # loads TxDbLite libs
+NS$senescent <- as.numeric(grepl("^s", colnames(NS)))
+NS_design <- with(as(colData(NS), "data.frame"),
+                  model.matrix(~ senescent))
 
-## Gene-wise analysis
+## limma/voom
 
-One of the most common tasks when analysing the abundance of RNA transcripts is to 
-aggregate estimates by "gene" (i.e., "bundle of transcripts with extensive homology")
-and group the observed changes by biochemical pathway, gene sets associated with 
-experimental outcomes, or perhaps drug metabolism and metabolic targets.  For this,
-we typically collapse all the transcripts in each bundle, and run tests across those:
+limma/voom analysis (Law et al. 2014) is built into artemis as its own function.
 
 ```R
-gwa <- geneWiseAnalysis(merged)
+voomResults <- fitBundles(NS, design=NS_design)$fit
 ```
 
+## edgeR
 
-## Styles
+edgeR analysis (with defaults and TMM normalization) is also relatively simple.
+(The same normalization factors are calculated inside of fitBundles() above.)
+The authors of edgeR recommend filtering out genes with very low counts, and 
+collapseBundles() enforces it by default (minimum 1 read in at least 1 sample).
+```R
 
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
-
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
-
-## Figures
-
-The figure sizes have been customised so that you can easily put two images side-by-side. 
-
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
+geneCounts <- collapseBundles(NS, bundleID="gene_id")
+d <- DGEList(counts=geneCounts, group=ifelse(NS$senescent,"senescent","normal"))
+d <- calcNormFactors(d)
+d <- estimateGLMTrendedDisp(d, NS_design)
+d <- estimateGLMTagwiseDisp(d, NS_design)
+plotBCV(d)
+fit <- glmFit(d, NS_design)
+edgeResults <- glmLRT(fit)
 ```
 
-You can enable figure captions by `fig_caption: yes` in YAML:
-
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
-
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
-
-## More Examples
-
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
-
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
-```
-
-Also a quote using `>`:
-
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
+Now we can compare the two directly and use beeswarm plots where they disagree.

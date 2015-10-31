@@ -1,7 +1,7 @@
 Package: artemis
 Type: Package
 Title: A package that complements Kallisto for quick, informative *seq analysis
-Version: 0.9.30
+Version: 0.9.31
 Date: 2015-10-30
 Author: Tim Triche, Jr., Anthony Colombo, Harold Pimentel
 Depends:
