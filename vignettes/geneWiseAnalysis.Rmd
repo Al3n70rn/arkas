@@ -66,30 +66,26 @@ design
 ```
 #Annotate!
 In order to run gene-wise analysis, Artemis requires that the merged KallistoExperiment must be annotated; this is because we must collapse transcripts into groups linked to unique Ensembl Gene Ids.  
+##Buiding Annotation libraries
+  Library Annotations are built using TxDbLite; these annotation databases allow for lite annotations parsing gene names, bio-types and family type from reference fastas from ERCC, Ensembl, or RepBase.  Currently exonic, intronic, or other coordinate dependent information is not included in TxDbLite.   The supplemental package artemisData stores the ready-to-load annotation libraries under /extdata/Libraries directory.  For demonstration, we build the libraries under the artemisData/extdata/fasta directory
 
 ```{r}
-library(TxDbLite)
+suppressPackageStartupMessages(library(TxDbLite))
+setwd(appSession$fastaPath)
 libraryPath<- system.file("extdata/Libraries", "", package="artemisData")
 erccDb<-erccDbLiteFromFasta(paste0(appSession$fastaPath,"/","ERCC.fa.gz"))
-erccPkg<-makeErccDbLitePkg(erccDb,destDir=libraryPath)
+erccPkg<-makeErccDbLitePkg(erccDb,destDir=appSession$fastaPath)
 #Create a Ensembl Annotation Db with cdna and ncrna
-system(paste0("touch ",fastaPath,"/","Homo_sapiens.GRCh38.81.cdna_mergedWith_ncrna.fa")) 
-system(paste0("zcat Homo_sapiens.GRCh38.81.cdna.all.fa.gz Homo_sapiens.GRCh38.81.ncrna.fa.gz >> ",fastaPath,"/","Homo_sapiens.GRCh38.81.cdna_mergedWith_ncrna.fa"))
 findDupes(paste0(fastaPath,"/","Homo_sapiens.GRCh38.81.cdna_mergedWith_ncrna.fa")) #should return null.
-setwd(fastaPath)
 ensDb<-ensDbLiteFromFasta("Homo_sapiens.GRCh38.81.cdna_mergedWith_ncrna.fa")
-ensPkg<-makeEnsDbLitePkg(ensDb,destDir=libraryPath)
+ensPkg<-makeEnsDbLitePkg(ensDb,destDir=appSession$fastaPath)
 repDb<-repDbLiteFromFasta("Homo_sapiens.RepBase.20_07.merged.fa.gz")
-repPkg<-makeRepDbLitePkg(repDb,destDir=libraryPath)
+repPkg<-makeRepDbLitePkg(repDb,destDir=appSession$fastaPath)
 ```
 ##Loading TxDbLite Libraries
 After creating the TxDbLite packages for Ensembl, ERCC, or RepBase references, for this vignette we've already installed the packages.  Now we need to load the libraries and then annotate.
 
 ``{r}
-setwd(libraryPath)
-libraryToBeInstalled<-c(repPkg,erccPkg,ensPkg)
-command<-paste0("sudo R CMD INSTALL ",libraryPath,libraryToBeInstalled,"/")
-lapply(command,function(x) system(x)) #for local end, sudo install required
 library(erccPkg,character.only=TRUE)
 library(ensPkg,character.only=TRUE)
 library(repPkg,character.only=TRUE)
@@ -97,11 +93,17 @@ library(repPkg,character.only=TRUE)
 ErccDbLite(erccDb)
 EnsDbLite(ensDb)
 RepDbLite(repDb)
-
-##First annotated the merged KallistoExperiment before running analysis
+```
+##Annotating Merged KallistoExperiment Containers
+   Artemis has a function "annotateFeatures.R" which annotates ERCC, Ensembl, and RepBase databases for species Homo-Sapiens, Mus-musculus, and Rattus norvegicus.  The method "annotateFeatures.R" annotates the merged KallistoExperiment against every TxDbLite library simulatenously.
+```{r}
 NS<-annotateFeatures(NS,level="transcript") 
+```
+#Gene Wise Analysis
+ Gene wise analysis collapses transcripts into groups related to specific ensembl "gene" Ids.  The package TxDbLite parses the Ensembl, or RepBase transcript fasta files and stores the respective gene id's associate with the given transcript documented in the transcript fasta header.  Artemis' method for gene wise analysis calls "collapseBundles.R" which then calculates the aggregated total counts of transcripts for each unique gene id association.  Thus the "gene" count is defined as the sum of all quantified transcripts associated with a specific gene identifier.  
 
 ```{r}
+#returns a KallistoExperiment at the gene level
 GWA<-geneWiseAnalysis(NS,design=design,how="cpm",
                        p.cutoff=0.07,
                        fold.cutoff=1,
@@ -110,16 +112,12 @@ GWA<-geneWiseAnalysis(NS,design=design,how="cpm",
 ```
 
 
-##Understanding Output
+##Understanding Gene Wise Analysis Output
 
 
-##Encrichment Plots
+#Encrichment Plots
 
 
-
-
-
-#Grouping Transcripts Into Bundles, i.e. "Genes"
 
 #Transcript Wise Analysis
 
