@@ -84,13 +84,10 @@ ensemblVector<-converted[,which(colnames(converted)=="ensembl_gene_id")]
  
 res<-.reactomeEnrichmentOverall(res,converted,commonNomen=commonName,species,p.cutoff)
 res<-.reactomeEnrichmentCluster(res,converted,commonNomen=commonName,p.cutoff)
-res<-.formatLimmaWithMeta(res,converted)
+res<-.formatLimmaWithMeta(res,converted,kexp)
  res$features <- features(kexp)
   res$species <- species
   return(res)
-
-
-
 }#{{{main
 
 ###the help####################
@@ -184,7 +181,7 @@ rownames(res$scaledExprs)<-scaledBiomartID[indx,which(colnames(converted)=="entr
 }#enrichment cluser
 
 
-.formatLimmaWithMeta<-function(res,converted){
+.formatLimmaWithMeta<-function(res,converted,kexp){
  
 #create csv of limma counts, gene names, ensembl ID, biotypes and store into res
  index<-vector()
