@@ -84,7 +84,7 @@ ensemblVector<-converted[,which(colnames(converted)=="ensembl_gene_id")]
  
 res<-.reactomeEnrichmentOverall(res,converted,commonNomen=commonName,species)
 res<-.reactomeEnrichmentCluster(res,converted,commonNomen=commonName)
-res<-formatLimmaWithMeta(res,converted)
+res<-.formatLimmaWithMeta(res,converted)
  res$features <- features(kexp)
   res$species <- species
   return(res)
@@ -157,29 +157,23 @@ message("Performing Reactome enrichment analysis...")
 
 
 .reactomeEnrichmentCluster<-function(res=NULL,converted,commonNomen=NULL){
-
-
-
 entrezVector<-as.vector(converted[,which(colnames(converted)=="entrezgene")])
 #grab all the ensembl associated with the non-NA entrez
 ensemblVector<-converted[,which(colnames(converted)=="ensembl_gene_id")]
 message("Performing clustered enrichment analysis...")
 res$scaledExprs <- t(scale(t(res$voomed$E[ ensemblVector, ])))
  #finding scaled Expression in terms of entrez id
-   speciesMart<-.findMart(commonNomen)
-
-   scaledBiomartID<-.convertEntrezID(rownames(res$scaledExprs),commonNomen)
+ speciesMart<-.findMart(commonNomen)
+ scaledBiomartID<-.convertEntrezID(rownames(res$scaledExprs),commonNomen)
    stopifnot(nrow(res$scaledExprs)==nrow(scaledBiomartID))
 #map the entrez ID to the matching ensembl score
 indx<-which(rownames(res$scaledExprs)==scaledBiomartID[,which(colnames(converted)=="ensembl_gene_id")])
 #map limma sclaed expression to ENTREZ
 rownames(res$scaledExprs)<-scaledBiomartID[indx,which(colnames(converted)=="entrezgene")]
-  
   message("clustering scaled expression in terms of entrez id ... ")
   clust <- cutree(hclust(dist(res$scaledExprs), method="ward"), k=2)
   genes <- split(names(clust), clust)
   names(genes) <- c("up in Control", "down in Control")
-
   res$clusts <- compareCluster(geneCluster=genes, 
                               fun="enrichPathway", 
                                qvalueCutoff=p.cutoff)
@@ -219,31 +213,23 @@ limmad[indx,c(10:11)]<-cbind(uniqueFeatures$gene_biotype[i],uniqueFeatures$bioty
 }# cbind biotype class to limma results
 
 res$limmaWithMeta<-limmad
-
-
-
+ return(res)
 } #format limma results
 
 
 
 .findMart<-function(commonName=NULL){
-
  if (commonName=="human") {
    setType="hsapiens_gene_ensembl"
    }#human
-
-
  if(commonName=="mouse"){
    setType="mmusculus_gene_ensembl"
    
       }#mouse
-
-
  if (commonName=="rat"){
   setType="rnorvegicus_gene_ensembl"
                  
       }#rat
-
 speciesMart<-useMart("ensembl",dataset=setType)
 return(speciesMart)
 
