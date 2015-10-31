@@ -75,7 +75,7 @@ geneWiseAnalysis <- function(kexp, design=NULL, how=c("cpm","tpm"),
   res$topGenes<-topGenes
 
 #commonName is important
-res$entrezID<-.convertEntrezID(res,commonName)
+res$entrezID<-.convertEntrezID(res$topGenes,commonName)
 #grab all the entrez IDs that are not NA
 converted<-res$entrezID[which(!is.na(res$entrezID[,which(colnames(res$entrezID)=="entrezgene")])==TRUE),]
 entrezVector<-as.vector(converted[,which(colnames(res$entrezID)=="entrezgene")])
@@ -83,7 +83,7 @@ entrezVector<-as.vector(converted[,which(colnames(res$entrezID)=="entrezgene")])
 ensemblVector<-converted[,which(colnames(converted)=="ensembl_gene_id")]
  
 res<-.reactomeEnrichmentOverall(res,converted,commonNomen=commonName,species)
-res<-.reactomeEnrichmentCluster(res,converted,species,commonNomen=commonName)
+res<-.reactomeEnrichmentCluster(res,converted,commonNomen=commonName)
 res<-formatLimmaWithMeta(res,converted)
  res$features <- features(kexp)
   res$species <- species
@@ -139,18 +139,7 @@ res<-formatLimmaWithMeta(res,converted)
 } #{{{ entrez Convert
 
 
-.reactomeEnrichmentOverall<-function(res=NULL,commonNomen=NULL){
-commenNomen<-match.arg(commonNomen,c("human","mouse","rat"))
-if(res$entrezID==NULL){
- res$entrezID<-.convertEntrezID(res$topGenes,commonNomen)
-}
-
-
-converted<-res$entrezID[which(!is.na(res$entrezID[,which(colnames(res$entrezID)=="entrezgene")])==TRUE),]
-entrezVector<-as.vector(converted[,which(colnames(converted)=="entrezgene")])
-#grab all the ensembl associated with the non-NA entrez
-ensemblVector<-converted[,which(colnames(converted)=="ensembl_gene_id")]
-
+.reactomeEnrichmentOverall<-function(res=NULL,converted,commonNomen=NULL,species){
 message("Performing Reactome enrichment analysis...")
   message("Matching species...")
   library(species, character.only=TRUE)
@@ -160,21 +149,17 @@ message("Performing Reactome enrichment analysis...")
 
   #adding res$Figures list object for multiplotting  
   res$Figures <- list()
-  res$Figures$barplot <- barplot(res$enriched, 
+  res$Figures$barplot <- barplot(res$enriched,
                                  showCategory=10, 
                                  title="Overall Reactome enrichment")
     return(res)
 }#{{{ reactome main
 
 
-.reactomeEnrichmentCluster<-function(res=NULL,commonNomen=NULL){
+.reactomeEnrichmentCluster<-function(res=NULL,converted,commonNomen=NULL){
 
-commenNomen<-match.arg(commonNomen,c("human","mouse","rat"))
 
-if(res$entrezID==NULL) {
-res$entrezID<-.convertEntrezID(res$topGenes,commonNomen)
-  }
-converted<-res$entrezID[which(!is.na(res$entrezID[,which(colnames(res$entrezID)=="entrezgene")])==TRUE),]
+
 entrezVector<-as.vector(converted[,which(colnames(converted)=="entrezgene")])
 #grab all the ensembl associated with the non-NA entrez
 ensemblVector<-converted[,which(colnames(converted)=="ensembl_gene_id")]
