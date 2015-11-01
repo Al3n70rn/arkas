@@ -85,7 +85,7 @@ system(paste0("rm -r ",appSession$fastaPath,"/tmp/*"))
 ##Loading TxDbLite Libraries
 After creating the TxDbLite packages for Ensembl, ERCC, or RepBase references, for this vignette we've already installed the packages.  Now we need to load the libraries and then annotate.
 
-``{r}
+```{r}
 library("EnsDbLite.Hsapiens.81",character.only=TRUE)
 library("ErccDbLite.ERCC.97",character.only=TRUE)
 library("RepDbLite.Hsapiens.2007",character.only=TRUE)
