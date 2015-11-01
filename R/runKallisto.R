@@ -53,8 +53,10 @@ runKallisto <- function(sampleDir,
   outputDir <- paste0(outputPath, "/", sampleDir)
   if (!dir.exists(outputPath)) dir.create(outputPath)
 
-  ## run kallisto quant
-  command <- paste("kallisto quant", 
+  ## run kallisto quant without pseudoBAM output
+ 
+if (is.null(pseudoBAM)) {
+ command <- paste("kallisto quant", 
                    "-i", indexFile, 
                    "-o", outputDir, 
                    "-b", bootstraps, 
@@ -69,4 +71,26 @@ runKallisto <- function(sampleDir,
   } else { 
     stop(paste("Quantification failed; command",command,"did not produce hdf5"))
   }
+} #if no pseudoBAM 
+
+#else { 
+ # command <- paste("kallisto quant",
+  #                 "-i", indexFile,
+   #                "-o", outputDir,
+    #               "-b", bootstraps,
+     #              "--pseudobam",
+      #             sampleFiles,
+       #             "| samtools view -Sb - >",
+        #             lapply(sampleDir,function(x) paste(x,".pbam",sep="")))
+ # retval <- system(command)
+ # res <- list(command=command, outputPath=outputPath, bootstraps=bootstraps)
+ # if (retval == 0 && file.exists(paste0(outputDir, "/abundance.h5"))) {
+  #  return(res)
+ # } else {
+  #  stop(paste("Quantification failed; command",command,"did not produce hdf5"))
+ # }
+
+
+
+#}#else pseudoBAM desired
 }

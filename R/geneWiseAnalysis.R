@@ -140,13 +140,9 @@ message("Performing Reactome enrichment analysis...")
   message("Matching species...")
   library(species, character.only=TRUE)
   res$enriched <- enrichPathway(gene=converted[,which(colnames(res$entrezID)=="entrezgene")], 
-                                qvalueCutoff=p.cutoff, 
-                                readable=TRUE) 
-
-  #adding res$Figures list object for multiplotting  
- 
- 
- res$Figures <- list()
+              qvalueCutoff=p.cutoff, 
+              readable=TRUE) 
+  res$Figures <- list()
   res$Figures$barplot <- barplot(res$enriched,
                                  showCategory=10, 
                                  title="Overall Reactome enrichment")
@@ -172,16 +168,13 @@ rownames(res$scaledExprs)<-scaledBiomartID[indx,which(colnames(converted)=="entr
   message("clustering scaled expression in terms of entrez id ... ")
   clust <- cutree(hclust(dist(res$scaledExprs), method="ward"), k=2)
   genes <- split(names(clust), clust)
-  names(genes) <- c("up in Control", "down in Control")
+  names(genes) <- c("up in Cntrl", "down in Cntrl")
   res$clusts <- compareCluster(geneCluster=genes, 
                               fun="enrichPathway", 
                                qvalueCutoff=p.cutoff)
 
   #adding ggplot object for multiplotting
   res$Figures$clusts <- plot(res$clusts) ## saving into Figures list
-  pdf("cluster.pdf")
-  plot(res$clusts)
-  dev.off()
   return(res)
 }#enrichment cluser
 

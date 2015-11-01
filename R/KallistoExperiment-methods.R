@@ -104,8 +104,18 @@ setGeneric("tpm", function(object) standardGeneric("tpm"))
 #' 
 #' @export
 setMethod("tpm", "KallistoExperiment",
-          function (object) return(assays(object)$tpm))
+          function (object) {
 
+          if(length(assays(object)$tpm)==0) {
+            rate <- log(counts(object)) - log(eff_length(object))
+            exp(rate - log(sum(exp(rate))) + log(1e6))
+            }#if
+        else{
+        return(assays(object)$tpm)
+        } #else
+
+               })   
+       
 # kallistoVersion generic 
 setGeneric("kallistoVersion", 
            function(object) standardGeneric("kallistoVersion"))
