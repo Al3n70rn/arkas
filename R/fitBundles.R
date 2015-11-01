@@ -8,7 +8,6 @@
 #' @return            A list with elements (design, voomed, fit)
 #'
 #' @export
-#' 
 fitBundles <- function(kexp, design, bundleID="gene_id", read.cutoff=1, ...) { 
 
   res <- list()

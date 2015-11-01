@@ -31,11 +31,11 @@ make install
 ```     
 
 #Gene Wise Analysis
-Artemis supports various levels of analysis, namely transcript-level or gene-level analysis which involves the Limma package for differential expression analysis. First we merge quantified transcripts, and create a design matrix.   
-  Gene Wise Analysis is founded on the idea that groups of transcriptsby a fixed Ensembl Gene ID is termed a "gene"; where "gene" counts are defined as the sum of all transcripts identified by the same unique Ensembl Gene Id.  Gene Wise analysis generates bundled and aggregated transcripts associated with a specific Ensembl Gene ID.  Gene level analysis is founded on another Artemis method titled "collapseBundles", which collapses transcripts into groups and summing the quantified transcript counts of the group; these transcript aggregated counts are defined as "gene" counts.  Gene Wise Analysis conducts a gene level analysis by first enacting "collapsedBundles".  
+Artemis supports various levels of analysis, namely transcript-level or gene-level analysis which involves the Limma package for differential expression analysis.   
+  Gene Wise Analysis is founded on the idea that groups of transcripts by a fixed Ensembl Gene ID is termed a "gene"; where "gene" counts are defined as the sum of all transcripts identified by the same unique Ensembl Gene Id.  Gene Wise analysis generates bundled and aggregated transcripts associated with a specific Ensembl Gene ID.  Artemis wraps limma around another method titled "collapseBundles", which collapses transcripts into appropriate groups and sums the quantified transcript counts of the group; these transcript aggregated counts are defined as "gene" counts.  
 
- ##The Measure Depends On The Level
-   Not all transcripts are equal.  It is important to include transcript level analysis to identify biological driver mechanisms.  Many genes can have the same total "gene" level total quantified counts; however the biological mechanisms for the same "gene" can vary greatly by a single transcript.
+## The Measure Depends On The Level
+   Not all transcripts have the same function homology.  Most folks agree that genes are made up by transcripts defined by the transcripts' coordinate location on the genome.  However there are transcipt isoforms in DNMT3A and WT1 that have radically different biological function depending on the transcript isoform that is present.  The problem with conducting *only* a gene level analysis is that many genes can have the same total gene level total quantified counts; however the biological mechanisms for the same "gene" can vary greatly by a single transcript isoform.
  
 ```{r message=FALSE}
 suppressWarnings(suppressPackageStartupMessages(library(artemis)))    
@@ -65,8 +65,10 @@ metadata(NS)$design <- design
 design
 ```
 #Annotate!
-In order to run gene-wise analysis, Artemis requires that the merged KallistoExperiment must be annotated; this is because we must collapse transcripts into groups linked to unique Ensembl Gene Ids.  
-##Buiding Annotation libraries
+In order to run gene-wise analysis, Artemis requires that the merged KallistoExperiment must be annotated; this is because we must collapse transcripts into groups linked to unique Ensembl Gene Ids.    
+
+
+## Buiding Annotation libraries
   Library Annotations are built using TxDbLite; these annotation databases allow for lite annotations parsing gene names, bio-types and family type from reference fastas from ERCC, Ensembl, or RepBase.  Currently exonic, intronic, or other coordinate dependent information is not included in TxDbLite.   The supplemental package artemisData stores the ready-to-load annotation libraries under /extdata/Libraries directory.  For demonstration, we build the libraries under the artemisData/extdata/fasta/tmp directory.
 
 ```{r}
@@ -81,11 +83,6 @@ ensPkg<-makeEnsDbLitePkg(ensDb,destDir=paste0(appSession$fastaPath,"/tmp"))
 repDb<-repDbLiteFromFasta("Homo_sapiens.RepBase.20_07.merged.fa.gz")
 repPkg<-makeRepDbLitePkg(repDb,destDir=paste0(appSession$fastaPath,"/tmp"))
 system(paste0("rm -r ",appSession$fastaPath,"/tmp/*"))
-```
-##Loading TxDbLite Libraries
-After creating the TxDbLite packages for Ensembl, ERCC, or RepBase references, for this vignette we've already installed the packages.  Now we need to load the libraries and then annotate.
-
-```{r}
 library("EnsDbLite.Hsapiens.81",character.only=TRUE)
 library("ErccDbLite.ERCC.97",character.only=TRUE)
 library("RepDbLite.Hsapiens.2007",character.only=TRUE)
@@ -94,13 +91,14 @@ ErccDbLite(erccDb)
 EnsDbLite(ensDb)
 RepDbLite(repDb)
 ```
-##Annotating Merged KallistoExperiment Containers
+
+# Annotating Merged KallistoExperiment Containers
    Artemis has a function "annotateFeatures.R" which annotates ERCC, Ensembl, and RepBase databases for species Homo-Sapiens, Mus-musculus, and Rattus norvegicus.  The method "annotateFeatures.R" annotates the merged KallistoExperiment against every TxDbLite library simulatenously. These annotation databases are defined as 'lite' because they do not store exonic or intronic coordinates.
 ```{r}
 NS<-suppressWarnings(annotateFeatures(NS,level="transcript"))
 ```
 #Gene Wise Analysis
- Gene wise analysis collapses transcripts into groups related to specific ensembl "gene" Ids.  The package TxDbLite parses the Ensembl, or RepBase transcript fasta files and stores the respective gene id's associate with the given transcript documented in the transcript fasta header.  Artemis' method for gene wise analysis calls "collapseBundles.R" which then calculates the aggregated total counts of transcripts for each unique gene id association.  Thus the "gene" count is defined as the sum of all quantified transcripts associated with a specific gene identifier.  
+ Gene wise analysis collapses transcripts into groups related to specific ensembl "gene" Ids.  The package TxDbLite parses the Ensembl, or RepBase transcript fasta files and stores the respective gene id's associated with the given transcript documented in the transcript fasta header.  Artemis' method for gene wise analysis calls "collapseBundles.R" which then calculates the aggregated total counts of transcripts for each unique gene id association.  Thus the "gene" count is defined as the sum of all quantified transcripts associated with a specific gene identifier.  
 
 ```{r}
 #returns a KallistoExperiment at the gene level
@@ -114,7 +112,7 @@ GWA<-geneWiseAnalysis(NS,design=design,
 
 
 ##Understanding Gene Wise Analysis Output
-  The output for gene wise analysis contains a comma separated list of the limma calculated expression values, fold change, the entrez ID, gene names, and gene biotype.  
+  The output contains a list of limma derived expression values, and enrichment data derived by ReactomePA.  
 
 ##Encrichment Plots
   Artemis performs enrichment analysis using the entrez gene names from the limma results and input them into biomaRt enrichPathway.  Gene wise analysis conducts overall enrichment analysis and clustered enrichment analysis on the differentially expressed groups.
@@ -129,7 +127,11 @@ GWA<-geneWiseAnalysis(NS,design=design,
       plot(GWA$clusts)
  
 ```
-##Expression Results 
+
+
+
+#Expression Results    
+
   The expression results were generated by limma/voom and have the meta biotype, gene name, etc information included in the gene wise analysis results.
 
 ```{r}

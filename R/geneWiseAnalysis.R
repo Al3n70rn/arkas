@@ -1,15 +1,16 @@
 #' Downstream analysis of bundle-aggregated transcript abundance estimates.
 #'
-#' @param kexp        a KallistoExperiment or SummarizedExperiment-like object 
+#' @param kexp        a KallistoExperiment or SummarizedExperiment-like object
 #' @param design      a design matrix with 2nd coefficient as one to test
 #' @param p.cutoff    where to set the p-value cutoff for plots, etc. (0.05)
 #' @param fold.cutoff where to set the log2-FC cutoff for plots, etc. (1==2x)
 #' @param read.cutoff minimum read coverage (estimated) for a gene bundle 
-#' @param topheat     how many bundles to include in the cluster heatmaps? (100)
-#' @param species     which species? (Homo.sapiens; FIX: get from transcriptome)
+#' @param topheat     how many bundles to include in cluster heatmaps? (100)
+#' @param species     which species? (Homo.sapiens; FIX: get from TxDbLite)
 #' 
 #' @import edgeR 
 #' @import limma
+#' @import biomaRt
 #' @import ReactomePA 
 #' @import clusterProfiler
 #' @import Homo.sapiens
@@ -18,9 +19,8 @@
 #'
 #' @importFrom matrixStats rowSds 
 #' 
-#' 
 #' @details           If no design matrix is found, the function will look in 
-#'                    exptData(kexp)$design. If that too is empty it will fail.
+#'                    exptData(kexp)$design. If that too is empty it fails.
 #'                    There seems to be a bug in rendering Reactome plots, so 
 #'                    it may be necessary to do so manually:  
 #' \code{res <- geneWiseAnalysis(kexp, design, ...)} 
@@ -28,13 +28,14 @@
 #' \code{barplot(res$enriched, showCategory=10)}
 #'                    and 
 #' \code{plot(res$clusts)}
+#'           
+#'                    What really needs to happen is to break those out.
 #'
 #' @return            a list w/items design, voomed, fit, top, enriched,
 #'                                   Figures, scaledExprs, clusts, species,
 #'                                   features, ... (perhaps) 
 #'
 #' @export
-#' 
 geneWiseAnalysis <- function(kexp, design=NULL, how=c("cpm","tpm"), 
                              p.cutoff=0.05, fold.cutoff=1, read.cutoff=1, 
                              species=c("Homo.sapiens",
@@ -56,7 +57,6 @@ geneWiseAnalysis <- function(kexp, design=NULL, how=c("cpm","tpm"),
     }
   }
 
-  ## only ones supported for now (would be simple to expand, though)
    ## only ones supported for now (would be simple to expand, though)
   species <- match.arg(species, c("Homo.sapiens",
                                        "Mus.musculus",
@@ -65,8 +65,7 @@ geneWiseAnalysis <- function(kexp, design=NULL, how=c("cpm","tpm"),
                        Mus.musculus="mouse", 
                        Homo.sapiens="human",
                       Rattus.norvegicus="rat") 
-   message("Fitting bundles...")
-
+  message("Fitting bundles...")
   ## default to ensembl gene id (not entrez)
   res <- fitBundles(kexp, design, read.cutoff=read.cutoff)
   res$top <- with(res, topTable(fit, coef=2, p=p.cutoff, n=nrow(kexp)))
@@ -74,18 +73,18 @@ geneWiseAnalysis <- function(kexp, design=NULL, how=c("cpm","tpm"),
   topGenes <- rownames(res$top)
   res$topGenes<-topGenes
 
-#commonName is important
-res$entrezID<-.convertEntrezID(res$topGenes,commonName)
-#grab all the entrez IDs that are not NA
-converted<-res$entrezID[which(!is.na(res$entrezID[,which(colnames(res$entrezID)=="entrezgene")])==TRUE),]
-entrezVector<-as.vector(converted[,which(colnames(res$entrezID)=="entrezgene")])
-#grab all the ensembl associated with the non-NA entrez
-ensemblVector<-converted[,which(colnames(converted)=="ensembl_gene_id")]
+  #commonName is important
+  res$entrezID<-.convertEntrezID(res$topGenes,commonName)
+  #grab all the entrez IDs that are not NA
+  converted<-res$entrezID[which(!is.na(res$entrezID[,which(colnames(res$entrezID)=="entrezgene")])==TRUE),]
+  entrezVector<-as.vector(converted[,which(colnames(res$entrezID)=="entrezgene")])
+  #grab all the ensembl associated with the non-NA entrez
+  ensemblVector<-converted[,which(colnames(converted)=="ensembl_gene_id")]
  
-res<-.reactomeEnrichmentOverall(res,converted,commonNomen=commonName,species,p.cutoff)
-res<-.reactomeEnrichmentCluster(res,converted,commonNomen=commonName,p.cutoff)
-res<-.formatLimmaWithMeta(res,converted,kexp)
- res$features <- features(kexp)
+  res<-.reactomeEnrichmentOverall(res,converted,commonNomen=commonName,species,p.cutoff)
+  res<-.reactomeEnrichmentCluster(res,converted,commonNomen=commonName,p.cutoff)
+  res<-.formatLimmaWithMeta(res,converted,kexp)
+  res$features <- features(kexp)
   res$species <- species
   return(res)
 }#{{{main
@@ -237,4 +236,3 @@ speciesMart<-useMart("ensembl",dataset=setType)
 return(speciesMart)
 
 } #{{{find mart
-

@@ -18,7 +18,6 @@
 #' @importFrom matrixStats rowSds 
 #' 
 #' @export
-#' 
 transcriptWiseAnalysis <- function(kexp, design, p.cutoff=0.05, fold.cutoff=1, 
                                      annotation=NULL,coef=2, ...){ 
 

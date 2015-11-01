@@ -1,0 +1,68 @@
+---
+title: "limma/voom versus edgeR"
+author: "Tim J. Triche, Jr."
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## limma/voom versus edgeR estimates of differential expression
+
+This topic has been beaten to death elsewhere (e.g. http://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-14-91) but when did that ever stop anyone from talking about something? Besides, it's always best to plot the data.
+
+Here, we seek to determine what characterizes the different results from edgeR and limma/voom on the normal vs. senescent HSPC samples from three subjects. 
+First we need to read in the results from quantifying each of the matched pairs.
+
+```R
+suppressPackageStartupMessages(library(artemisData))
+outputPath <- system.file("extdata", "", package="artemisData")
+samples <- list.files(outputPath, pattern="^[ns][124]$")
+covs <- data.frame(outputDir=samples, 
+                   row.names=samples)
+NS <- mergeKallisto(covariates=covs, 
+                    outputPath=outputPath) 
+show(NS)                   
+```
+
+Next we need to indicate which sample is from which subject, and which fraction.
+We also need to annotate the transcripts against their ENSEMBL gene IDs, because
+we will sum the abundances of the transcripts to get the abundance of each gene.
+We'll ignore the subject for each result, and simply state that the groups are
+frequency matched on various characteristics...
+
+```
+NS <- annotateFeatures(NS) # loads TxDbLite libs
+NS$senescent <- as.numeric(grepl("^s", colnames(NS)))
+NS_design <- with(as(colData(NS), "data.frame"),
+                  model.matrix(~ senescent))
+
+## limma/voom
+
+limma/voom analysis (Law et al. 2014) is built into artemis as its own function.
+
+```R
+voomResults <- fitBundles(NS, design=NS_design)$fit
+```
+
+## edgeR
+
+edgeR analysis (with defaults and TMM normalization) is also relatively simple.
+(The same normalization factors are calculated inside of fitBundles() above.)
+The authors of edgeR recommend filtering out genes with very low counts, and 
+collapseBundles() enforces it by default (minimum 1 read in at least 1 sample).
+```R
+
+geneCounts <- collapseBundles(NS, bundleID="gene_id")
+d <- DGEList(counts=geneCounts, group=ifelse(NS$senescent,"senescent","normal"))
+d <- calcNormFactors(d)
+d <- estimateGLMTrendedDisp(d, NS_design)
+d <- estimateGLMTagwiseDisp(d, NS_design)
+plotBCV(d)
+fit <- glmFit(d, NS_design)
+edgeResults <- glmLRT(fit)
+```
+
+Now we can compare the two directly and use beeswarm plots where they disagree.

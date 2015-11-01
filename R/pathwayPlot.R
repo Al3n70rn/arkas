@@ -23,7 +23,6 @@
 #' @import pathview 
 #'
 #' @export
-#'
 pathwayPlot <- function(pathway, kexp=NULL, results=NULL, design=NULL, coef=2, 
                         IDtype="ENSEMBL", path=".", addData=NULL, how="signed",
                         species=c("Homo sapiens", "Mus musculus"), ...) {
