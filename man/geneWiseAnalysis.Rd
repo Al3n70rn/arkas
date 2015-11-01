@@ -32,25 +32,16 @@ a list w/items design, voomed, fit, top, enriched,
 Downstream analysis of bundle-aggregated transcript abundance estimates.
 }
 \details{
-<<<<<<< HEAD
 If no design matrix is found, the function will look in
-                   exptData(kexp)$design. If that too is empty it will fail.
+                   exptData(kexp)$design. If that too is empty it fails.
                    There seems to be a bug in rendering Reactome plots, so
                    it may be necessary to do so manually:
 \code{res <- geneWiseAnalysis(kexp, design, ...)}
                    followed by
-=======
-If no design matrix is found, the function will look in 
-                   exptData(kexp)$design. If that too is empty it fails.
-                   There seems to be a bug in rendering Reactome plots, so 
-                   it may be necessary to do so manually:  
-\code{res <- geneWiseAnalysis(kexp, design, ...)} 
-                   followed by 
->>>>>>> cf83d2165d2d9d6275da48a493cd6898912ec0e8
 \code{barplot(res$enriched, showCategory=10)}
                    and
 \code{plot(res$clusts)}
-          
+
                    What really needs to happen is to break those out.
 }
 
