@@ -13,7 +13,6 @@
 #'          values for differential expression
 #' 
 #' @export  
-#'
 formatResults <- function(res) {
 
   ## map symbols for top hits 

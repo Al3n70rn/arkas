@@ -3,7 +3,6 @@
 #' @param object: something from which to retrieve covariates
 #'
 #' @export
-#'
 setMethod("covariates", "ANY",
           function (object) return(colData(object)))
 
@@ -15,7 +14,6 @@ setMethod("covariates", "ANY",
 #' @return the object, perhaps with updated covariates
 #'
 #' @export
-#'
 setReplaceMethod("covariates", c("ANY", "ANY"), 
                  function(object, value) {
                    colData(object) <- DataFrame(value)
@@ -29,7 +27,6 @@ setReplaceMethod("covariates", c("ANY", "ANY"),
 #' @return  a GRanges or GRangesList of feature annotations
 #'
 #' @export
-#'
 setMethod("features", "SummarizedExperiment0", 
           function (x) rowRanges(x))
 
@@ -43,7 +40,6 @@ setMethod("features", "SummarizedExperiment0",
 #' @importFrom GenomicRanges rowRanges
 #'
 #' @export
-#'
 setReplaceMethod("features", c("RangedSummarizedExperiment", "ANY"), 
                  function(object, value) {
                    rowRanges(object) <- value
@@ -53,7 +49,6 @@ setReplaceMethod("features", c("RangedSummarizedExperiment", "ANY"),
 #' @describeIn KallistoExperiment 
 #'
 #' @export
-#'
 setReplaceMethod("features", c("SummarizedExperiment0", "ANY"), 
                  function(object, value) {
                    stop("SummarizedExperiment0 objects have no row annotations")

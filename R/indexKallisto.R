@@ -10,7 +10,6 @@
 #' @import Rsamtools
 #' 
 #' @export
-#'
 indexKallisto <- function(fastaFiles, fastaPath, fastaTxDbLite=TRUE, 
                           collapse="_mergedWith_", ...) { 
 
