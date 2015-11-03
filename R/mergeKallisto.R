@@ -73,7 +73,6 @@ mergeKallisto <- function(outputDirs=NULL,
     message("Setting transcriptome automatically from Kallisto call string.")
     transcriptomes <- attr(res[[1]], "transcriptomes")
   }
-
   data(unannotatedTranscript, package="artemis")
   rowdat <- rep(unannotatedTranscript, nrow(asys$est_counts))
   names(rowdat) <- rownames(asys$est_counts)

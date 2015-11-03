@@ -1,86 +1,131 @@
-f--
-title: "Artemis: reads to results in a lot less time"
-author: "Timothy J. Triche, Jr."
-date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Vignette Title}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
 ---
+title: "Artemis: Repetitive Elements Quantification In Much Less Time"
+author:  "Timothy J. Triche, Jr, Anthony R. Colombo, Harold Pimentel"
+output: 
+    pdf_document:
+      toc: true
+      number_sections: true
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+---
+          
+#Introduction
+Kallisto is software developed by Nicolas Bray, Harold Pimentel, Pall Melsted, and Lior Pachter (UC Berkeley) that analyzes 30 million unaligned paired-end RNA-Seq reads in less than 5 minutes on a standard laptop computer.   Kallisto quantifies transcript abundance from input RNA-Seq reads by using a process, known as pseudoalignment, which identifies the read-transcript compatibility matrix. Artemis is a BioConductor package that extends functions and utilities for RNA-Seq analysis from raw reads to results in minutes.
 
-Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
+#Reads to Quantification to Annotation
+Artemis was designed to reduce the programmative steps required to quantify and annotate multitudes of sample directories. Artemis calls Kallisto to perform on- the-fly transcriptome indexing and quantification recursively for numerous sample directories. For RNA- Seq projects with numerous sequenced samples, Artemis encapsulates expensive preparatory routines. Artemis programmatically orders FASTQ files output from DNA sequencers and inputs a list required by
+Kallisto for processing multitudes of demultiplexed reads. The Artemis function 'runKallisto' recursively indexes transcriptomes and quantifies abundances for any number of samples. The function 'mergeKallisto' merges quantified output into an object of ofsubclass a KallistoExperiment-class, SummarizedExperiment-class. Standard mutators and accessor methods from SummarizedExperiment- methods are preserved in KallistoExperiment-methods. Gene annotation is performed from user-selected bundled transcriptomes (ERCC, Ensembl, and/or
+RepBase) simultaneously merging annotated samples into one R object: KallistoExperiment. Artemis annotates genes for Homo-Sapiens GrCh38 and Mouse GrCm38 (NCBI). Routines such as 'annotateBundles' yields annotated genes from transcriptomes such as External RNA Control Consortium (ERCC), Ensembl release 81 of non-coding RNA, coding RNA, and a hg38 repeatome for both species.
 
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
+##Kallisto Installation
+For linux systems, after installing the dependencies, kallisto is installed via:
+```
+mkdir /KallistoSource           
+cd /KallistoSource             
+git clone https://github.com/pachterlab/kallisto.git         
+cd ./kallisto       
+mkdir ./build        
+cd ./build       
+cmake ..              
+make          
+make install   
+```     
 
-## Loading already-processed transcript abundance estimates
+#Reference File Preparation
+Artemis imports methods for identifying duplicated RepBase sequences, and imports these methods from TxDbLite.   It is not uncommon for RepBase files with fixed species to have duplicated sequences and duplicated sequence names across fasta files.   The package artemisData stores supplementary data for the package artemis; we've included raw RepBase files with duplicated repeats, and a set of fasta with manually excised duplicated RepBase sequences across fasta files.
+    
+##Identifying Duplicated Sequences in RepBase References
+Kallisto source must be built locally by indexing the reference files.  There can not be duplicated sequences across reference fasta; Artemis will identify where in there reference duplicates occur.
 
-This is also fairly simple:
-
-```R
-covs <- DataFrame(sampleDir=c("n1","n2","n4","s1","s2","s4"),
-                  normal=c(1, 1, 1, 0, 0, 0),
-                  subject=as.factor(c(1, 2, 4, 1, 2, 4)))
-rownames(covs) <- covs$sampleDirs
-merged <- mergeKallisto(covariates=covs, outputPath="/data/output")
+```{r message=FALSE}
+suppressWarnings(suppressPackageStartupMessages(library(artemis)))    
+suppressPackageStartupMessages(library(artemisData))       
+suppressPackageStartupMessages(library(TxDbLite))      
+pathBase<-system.file("extdata",package="artemisData")       
+FastaPath <- paste0(pathBase, "/fasta")
+setwd(FastaPath)
+fastaFilesDuplicates <- c( "ERCC.fa", ## spike-in controls             
+                 "Homo_sapiens.RepBase.20_05.humrep.fa", ## repeats         
+                 "Homo_sapiens.RepBase.20_05.humsub.fa")  ## ALUs and such             
 ```
 
-The resulting object has annotations for distinct coding and non-coding transcripts,
-along with an indication of the general biological category of each transcript bundle
-(e.g. protein-coding transcript, pseudogene, ribosomal RNA, etc.).  Transcripts for 
-which annotations could not be found are assigned to the chromosome "Unknown" and 
-retained as part of the KallistoExperiment, albeit with less informative annotation.
+Example of output with duplicated repeat sequences in Repeatome:    
+```  
+The duplicated repeats LTR26B at row number 222 have identical sequences: TRUE     
+The duplicated repeats LTR26B at row number 1166 have identical sequences: TRUE    
+The duplicated repeats SVA_A at row number 671 have identical sequences: TRUE     
+The duplicated repeats SVA_A at row number 1207 have identical sequences: TRUE     
+There are duplicated sequence names in your FASTA files:    
+```
+If duplicate sequences exist in one's repeatome, Artemis identifies the duplicate sequence name, and additionally determines if the sequences are identical.  The user can then manually excise one of the duplicates.
 
-
-## Gene-wise analysis
-
-One of the most common tasks when analysing the abundance of RNA transcripts is to 
-aggregate estimates by "gene" (i.e., "bundle of transcripts with extensive homology")
-and group the observed changes by biochemical pathway, gene sets associated with 
-experimental outcomes, or perhaps drug metabolism and metabolic targets.  For this,
-we typically collapse all the transcripts in each bundle, and run tests across those:
-
-```R
-gwa <- geneWiseAnalysis(merged)
+## Quantifying Transcripts with Unique Reference Transcripts in Repeatome
+   Artemis saves time by generating a reference fasta file only if one does not exist. Note that Artemis enforces the uniformity of references generated by the same version of Kallisto, including the Kallisto version which generates the reference within the name.  The reference name that Artemis generates specifies the Kallisto version, and all of the group transcriptomes.  In this case, we have already generated the reference fasta, and can regenerate the reference by deleting it.
+```{r}
+pathBase<-system.file("extdata",package="artemisData")
+if(file.exists("/data")==FALSE){
+    system("sudo mkdir /data && sudo mkdir /data/output")
+     system("sudo chmod -R 777 /data")
+ }
+   if(file.exists("/data/output")==FALSE){
+     system("sudo mkdir /data/output && sudo chmod -R 777 /data/output")
+   }
+OutputPath<-"/data/output"
+fastqPath <- paste0(pathBase, "/fastq")
+samples <- c(MrN="MrN", MrT="MrT")
+FastaFiles <- c( "ERCC.fa", ## spike-in controls                    
+                 "Homo_sapiens.RepBase.20_05.merged.fa") #no duplicates
+indexName <- indexKallisto(fastaFiles=FastaFiles, fastaPath=FastaPath)$indexName
+indexName  #prints the full index Name
+library(parallel)
+results <- lapply(samples, 
+                    runKallisto,
+                    indexName=indexName,
+                    fastqPath=fastqPath,
+                    fastaPath=FastaPath,
+                    bootstraps=100,
+                    outputPath=OutputPath)
 ```
 
 
-## Styles
+## Merging Kallisto Quantification
 
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
-
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
-
-## Figures
-
-The figure sizes have been customised so that you can easily put two images side-by-side. 
-
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
+Artemis runs kallisto pseudo-alignment quantification into a KallistoExperiment object, as an S4 object.  The SummarizedExperiment accessors are the same for KallistoExperiment objects because KallistoExperiment containers are a sub-class of SummarizedExperiments
+ We enforce uniformity between kallisto versions because if the kallisto versions are not the same, then there exists data variance between different KallistoExperiments' assay data and indexed references.
+```{r}
+merged <- mergeKallisto(samples, outputPath=OutputPath)
+assays(merged)      
+kallistoVersion(merged)     
+head(features(merged)) #non-annotated GRanges features     
 ```
 
-You can enable figure captions by `fig_caption: yes` in YAML:
+#RPKM/FPKM to Transcripts-Per-Million (TPM) 
+Many RNA-Seq experiments derive counts as reads per
+kilobase per million, or fragments per kilobase per million. The quantification from RNA-Seq transcript abundances is dependent on transcript length in proportion to relative abundance. The estimated probability of reads generated by a transcript is given by counting the number of reads that align to transcript divided by total number of mapped reads. Where the definition of transcript-per-million, TPM, is given as mean transcript length in kilobases multiplied by RPKM. The mean for transcript dependent lengths gives weighted measure for expression of the lengths across iso-forms. Artemis handles RPKM to TPM conversion by dividing the selected transcript RPKM score by the sum of all RPKM, and multiplying by 1e6 (Li,2009)
 
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
+```{r}
+tail(tpm(merged))
 
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
-
-## More Examples
-
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
-
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
 ```
 
-Also a quote using `>`:
 
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
+
+#Repeat Analysis
+ After creating the repeatome, Artemis can be used to analyze repetitive elements
+ For instance, one can plot repeat element transcripts using (counts/bootstrap MADs) as effect size, or analyze families of Alu, LTR, or Endongenous Retroviruses.  Below we plot a heat map of quantified transcripts from our repeatome for species Homo Sapiens.
+```{r, fig.width=8,fig.height=6}
+topKbyMAD <- function(kexp, k=25) {
+  tpm(kexp)[rev(order(rowMeans(counts(kexp) / mad(kexp))))[1:k],]
+}
+
+    heatmap(log1p(topKbyMAD(merged)), scale="none", 
+        col=colorRampPalette(c("white","red","darkred"))(255),
+        main="Repeat transcription, teratoma vs. normal")
+
+```
+
+
+#References
+Bo, Li, et. al, "RNA-Seq Gene Expression Estimation with Read Mapping Uncertainty."  
+Oxford Journals Bioinformatics. Oxford Journal, 9 Dec. 2009. Web. 20 June 2015.   
+<http://bioinformatics.oxfordjournals.org/content/26/4/493.full>.
+
