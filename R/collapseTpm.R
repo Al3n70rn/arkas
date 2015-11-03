@@ -27,6 +27,7 @@
 #' @return              a matrix of TPMs by bundle for each sample
 #' 
 #' @export 
+#'
 collapseTpm <- function(kexp, bundleID="gene_id", minTPM=1, 
                         discardjoined=TRUE, 
                         tx_biotype=NULL, 
@@ -55,3 +56,4 @@ collapseTpm <- function(kexp, bundleID="gene_id", minTPM=1,
   else return(bundled)
 
 }
+
