@@ -42,7 +42,7 @@ NS$ID <- NULL
 design <- with(as(colData(NS), "data.frame"),
                   model.matrix( ~ treatment + subject ))
 rownames(design) <- colnames(NS)
-exptData(NS)$design <- design
+metadata(NS)$design <- design
 
 ## save a copy for easy retrieval & easy running of examples
 ## save(NS, file="~/Dropbox/artemisData/data/NS.rda", compress="xz")
