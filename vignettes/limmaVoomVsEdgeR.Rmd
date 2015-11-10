@@ -9,11 +9,17 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-## limma/voom versus edgeR estimates of differential expression
+## Gene-level results (limma/voom and edgeR) with transcript-level uncertainty
 
-This topic has been beaten to death elsewhere (e.g. http://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-14-91) but when did that ever stop anyone from talking about something? Besides, it's always best to plot the data.
+This topic has been beaten to death elsewhere (e.g. http://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-14-91, http://genomebiology.biomedcentral.com/articles/10.1186/gb-2013-14-9-r95, and all of the FDA MAQC/SEQC papers), but when did that ever stop anyone from talking about something? Besides, it's always best to plot the data.  As it happens, thanks to Kallisto and Sleuth, we
+can do this on several levels (from beeswarm plots of combined estimates across
+samples, to Sleuth barplots of transcript-level uncertainty within samples). 
 
-Here, we seek to determine what characterizes the different results from edgeR and limma/voom on the normal vs. senescent HSPC samples from three subjects. 
+## Specific focus: edgeR vs. limma/voom in N/S HSPCs 
+
+Here, we seek to determine what characterizes the different results from edgeR and limma/voom on the normal vs. senescent HSPC samples from three subjects.  
+We have used Kallisto to quantify ERCC spike-in, ENSEMBL coding, ENSEMBL noncoding, and RepBase repetitive element abundances, with 100 bootstraps each (to 
+allow for inspection of uncertainty in estimates at transcript or gene level). 
 First we need to read in the results from quantifying each of the matched pairs.
 
 ```R
@@ -30,21 +36,32 @@ show(NS)
 Next we need to indicate which sample is from which subject, and which fraction.
 We also need to annotate the transcripts against their ENSEMBL gene IDs, because
 we will sum the abundances of the transcripts to get the abundance of each gene.
-We'll ignore the subject for each result, and simply state that the groups are
-frequency matched on various characteristics...
 
 ```
 NS <- annotateFeatures(NS) # loads TxDbLite libs
-NS$senescent <- as.numeric(grepl("^s", colnames(NS)))
-NS_design <- with(as(colData(NS), "data.frame"),
-                  model.matrix(~ senescent))
+
+# Sample names are [condition][subject], e.g. s1 or n4
+NS$senescent <- as.factor(substr(colnames(NS), 1, 1))
+NS$subject <- as.factor(substr(colnames(NS), 2, 2))
+NS_design <- with(as(colData(NS), "data.frame"), 
+                  model.matrix(~ senescent + subject))
 
 ## limma/voom
 
 limma/voom analysis (Law et al. 2014) is built into artemis as its own function.
+It would be nice to use RUVseq for normalization, but at the moment, we don't...
+It would also be nice to use B-values (essentially, odds ratios) for ranking. We
+may make this the default in the future, as it's far more sensible than pvalues.
+In any event, a little convenience function retrieves our hits at each p cutoff.
 
 ```R
 voomResults <- fitBundles(NS, design=NS_design)$fit
+
+getHits <- function(fit, p) rownames(topTable(fit, p=p, coef=2, n=nrow(NS)))
+
+voom_fdr01 <- getHits(voomResults, p=0.1)
+voom_fdr005 <- getHits(voomResults, p=0.05)
+voom_fdr001 <- getHits(voomResults, p=0.01)
 ```
 
 ## edgeR
@@ -53,16 +70,109 @@ edgeR analysis (with defaults and TMM normalization) is also relatively simple.
 (The same normalization factors are calculated inside of fitBundles() above.)
 The authors of edgeR recommend filtering out genes with very low counts, and 
 collapseBundles() enforces it by default (minimum 1 read in at least 1 sample).
-```R
+The authors also recommend computing and plotting their dispersion estimates. 
 
+```R
+library(edgeR)
 geneCounts <- collapseBundles(NS, bundleID="gene_id")
-d <- DGEList(counts=geneCounts, group=ifelse(NS$senescent,"senescent","normal"))
+d <- DGEList(counts=geneCounts, group=NS$senescent)
 d <- calcNormFactors(d)
 d <- estimateGLMTrendedDisp(d, NS_design)
 d <- estimateGLMTagwiseDisp(d, NS_design)
+d <- estimateGLMRobustDisp(d, NS_design) # superb, but slow!
 plotBCV(d)
-fit <- glmFit(d, NS_design)
-edgeResults <- glmLRT(fit)
 ```
 
-Now we can compare the two directly and use beeswarm plots where they disagree.
+The robust dispersion estimate seems to help a great deal (although it's slow).
+We will use the same approach and cutoffs to get edgeR hits as for limma/voom.
+
+```R
+fit <- glmFit(d, NS_design)
+edgeResults <- glmLRT(fit, coef=2)
+
+getEdgeR <- function(fit, p) rownames(topTags(fit, p=p, n=nrow(NS)))
+
+edgeR_fdr01 <- getEdgeR(edgeResults, p=0.1)
+edgeR_fdr005 <- getEdgeR(edgeResults, p=0.05)
+edgeR_fdr001 <- getEdgeR(edgeResults, p=0.01)
+```
+
+Now we can compare the two directly and use beeswarm plots where they disagree. 
+We can also fiddle with "significance" cutoffs (since that entire notion is 
+arbitrary and the goal is to identify biologically informative differences) to 
+see whether the underlying differences are of substantial concern to us. Note 
+that it is important for false discovery rate estimates to track actual null 
+results (e.g. if we shuffle the labels, we should get 5% "significant" at 0.05 
+in spite of the fact that there are no longer any believable DE results!). 
+
+## Plots and such
+
+First things first, the canonical Venn diagram. (With acknowledgements to the 
+wonderful VennDiagram package notes at http://rstudio-pubs-static.s3.amazonaws.com/13301_6641d73cfac741a59c0a851feb99e98b.html)  First we shall compare at an 
+adjusted p-value of 0.05, since that is what many people do (in our experience 
+it usually makes sense to find a combination of fold-change and significance 
+that maximizes the subjective believability of each individual result, but of 
+course any attempt to suggest that priors should exist from the corpus of 300+
+years of scientific endeavor tends to face resistance from the hidebound. And 
+there's always the minor issue of the marginalization paradox for Bayesians...)
+
+```R
+library(VennDiagram)
+getVenn <- function(voom, edgeR) {
+  grid.newpage()
+  draw.pairwise.venn(area1=length(voom), area2=length(edgeR), 
+                     cross.area=length(intersect(voom, edgeR)),
+                     category=c("limma/voom", "edgeR"), alpha=rep(0.5, 2), 
+                     fill=c("red", "blue"), lty=rep("blank", 2))
+}
+```
+
+At p <= 0.1, we get:
+
+```R
+getVenn(voom_fdr01, edgeR_fdr01)
+```
+
+At p <= 0.05, we get:
+
+```R
+getVenn(voom_fdr005, edgeR_fdr005)
+```
+
+And at p <= 0.01, we get:
+
+```R
+getVenn(voom_fdr001, edgeR_fdr001)
+```
+
+This is interesting -- the differences persist down to what should be huge 
+effect sizes (for example, at least one of the bundles has a B-value or Bayes
+odds ratio of 22.06, which is enormous).  What is going on here?  Let's see.
+First let us look at some of these huge B-values:
+
+```R 
+topVoom <- topTable(voomResults, n=nrow(NS), coef=2)
+voomOnly_fdr001 <- setdiff(voom_fdr001, edgeR_fdr001)
+topVoom[voomOnly_fdr001, "B"]
+```
+
+At least the first 9 of these should show up via any reasonable method, IFF 
+they make sense.  How many transcripts make up these bundles, anyways?
+
+```R 
+hugeDiffs <- voomOnly_fdr001[1:9]
+feats <- features(NS)[which(mcols(NS)$gene_id %in% hugeDiffs)]
+featsByGene <- split(feats, feats$gene_id)
+sapply(featsByGene, length)
+```
+
+So there's one bundle (a mitochondrial gene) that has one transcript, and the 
+rest have between 5 and 14 transcripts apiece. This is where it helps to pull 
+out Sleuth for inspection of the transcripts involved.
+
+```R
+
+# cf. ?withSleuth
+covs <- as(colData(NS), "data.frame")
+
+```
