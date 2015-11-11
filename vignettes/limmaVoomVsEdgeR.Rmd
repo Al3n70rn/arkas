@@ -55,7 +55,8 @@ may make this the default in the future, as it's far more sensible than pvalues.
 In any event, a little convenience function retrieves our hits at each p cutoff.
 
 ```R
-voomResults <- fitBundles(NS, design=NS_design)$fit
+res <- fitBundles(NS, design=NS_design)
+voomResults <- res$fit
 
 getHits <- function(fit, p) rownames(topTable(fit, p=p, coef=2, n=nrow(NS)))
 
@@ -157,22 +158,97 @@ topVoom[voomOnly_fdr001, "B"]
 ```
 
 At least the first 9 of these should show up via any reasonable method, IFF 
-they make sense.  How many transcripts make up these bundles, anyways?
-
-```R 
-hugeDiffs <- voomOnly_fdr001[1:9]
-feats <- features(NS)[which(mcols(NS)$gene_id %in% hugeDiffs)]
-featsByGene <- split(feats, feats$gene_id)
-sapply(featsByGene, length)
-```
-
-So there's one bundle (a mitochondrial gene) that has one transcript, and the 
-rest have between 5 and 14 transcripts apiece. This is where it helps to pull 
-out Sleuth for inspection of the transcripts involved.
+they make sense.  
 
 ```R
 
-# cf. ?withSleuth
-covs <- as(colData(NS), "data.frame")
+geneTpms <- collapseTpm(NS, bundleID="gene_id")
+# geneCounts is already assembled 
+
+getBeeswarm <- function(ensg, mat, what=c("tpm", "count", "E-value")) { 
+  library(beeswarm)
+  what <- match.arg(what)
+  beeswarm(mat[ensg, ] ~ NS$senescent, col=c("green","red"), 
+           pch=16, xlab="Normal (n) or senescent (s)", 
+           ylab=paste(toupper(what), "for", ensg))
+} 
+
+hugeDiffs <- voomOnly_fdr001[1:9]
+
+# plot 'em: counts
+par(mfrow=c(3,3))
+for (ensg in hugeDiffs) getBeeswarm(ensg, mat=geneCounts, what="count")
+
+# plot 'em: tpm 
+par(mfrow=c(3,3))
+for (ensg in hugeDiffs) getBeeswarm(ensg, mat=geneTpms)
 
 ```
+
+Conversely, what does edgeR favor?
+
+```R
+topEdgeR <- topTags(edgeResults, n=nrow(NS))
+edgeOnly_fdr001 <- setdiff(edgeR_fdr001, voom_fdr001)
+topEdgeR[edgeOnly_fdr001, "LR"]
+```
+
+Well, those are some big likelihood ratios.  Let's plot them.
+
+```R
+moreHugeDiffs <- edgeOnly_fdr001[1:9]
+
+# plot 'em: counts
+par(mfrow=c(3,3))
+for (ensg in moreHugeDiffs) getBeeswarm(ensg, mat=geneCounts, what="count")
+
+# plot 'em: tpm 
+par(mfrow=c(3,3))
+for (ensg in moreHugeDiffs) getBeeswarm(ensg, mat=geneTpms)
+
+```
+
+At this point it is up to the user or analyst to determine what they're 
+looking for.  I will revisit this topic and look at how these differences 
+influence the interpretation of the results downstream, e.g. for pathway 
+analysis.  But it seems pretty clear that each has strengths and weaknesses.
+
+We might want to look at a few of these in Sleuth.  Let's do that:
+
+```R 
+
+# see ?withSleuth
+library(sleuth)
+
+base_dir <- outputPath # from earlier
+sample_id <- samples
+kal_dirs <- paste(base_dir, sample_id, sep=.Platform$file.sep)
+covs <- data.frame(sample=sample_id,
+                   condition=NS$senescent,
+                   subject=NS$subject)
+
+t2g <- mcols(NS)[, c("tx_id","gene_id","tx_biotype","gene_biotype","gene_name")]
+names(t2g) <- c("target_id", "ens_gene", "transcript_biotype", 
+                "gene_biotype", "ext_gene")
+t2g <- as(t2g, "data.frame")
+so <- sleuth_prep(kal_dirs, covs, ~ condition + subject, target_mapping = t2g)
+so <- sleuth_fit(so)
+so <- sleuth_test(so, which_beta = 'conditions')
+
+# not run:
+# sleuth_live(so)
+```
+
+Sleuth Live will only run in a browser, so you'll have to try it locally.
+
+```
+genesToPeruse <- cbind(voomOnly=hugeDiffs, edgeROnly=moreHugeDiffs)
+kable(genesToPeruse)
+```
+
+A table of (all) results follows.
+
+```
+kable(sleuth_results(so, 'conditions'))
+```
+
