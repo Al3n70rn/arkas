@@ -225,7 +225,7 @@ res$limmaWithMeta<-limmad
   setType="rnorvegicus_gene_ensembl"
                  
       }#rat
-speciesMart<-useMart("ensembl",dataset=setType)
-return(speciesMart)
 
+speciesMart<-useMart("ENSEMBL_MART_ENSEMBL",dataset=setType,host="jul2015.archive.ensembl.org")
+return(speciesMart)
 } #{{{find mart
