@@ -1,8 +1,8 @@
 Package: artemis
 Type: Package
 Title: A package that complements Kallisto for quick, informative *seq analysis
-Version: 0.9.41
-Date: 2015-11-10
+Version: 0.9.43
+Date: 2015-11-19
 Author: Tim Triche, Jr., Anthony Colombo, Harold Pimentel
 Depends:
     parallel,
@@ -59,4 +59,4 @@ Description: Artemis was the hunting companion of Kallisto.  This package wraps
     Sample size estimates and pathway analyses are similarly decoupled
     from the underlying source of transcript abundance estimates.
 License: GPL (>= 2)
-RoxygenNote: 5.0.0
+RoxygenNote: 5.0.1
