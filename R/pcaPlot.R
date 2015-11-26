@@ -1,7 +1,7 @@
 #'  plots pca of each kexp assay
 #' @param   kexp, kallisto experiment object
 #' @param   assayInterested, one assay of the kexp cpm,m.a.d, etc
-#' @import stats, rgl
+#' @import ggplot2
 #' @return
 #' @export
 pcaPlot<-function(kexp,assayInterested=c("cpm","tpm","length","mad")){
