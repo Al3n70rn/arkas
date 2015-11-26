@@ -6,7 +6,8 @@
 \usage{
 pcaGGFrame(kexpAssays, firstComponent = c("first", "second", "third",
   "fourth", "fifth", "sixth"), secondComponent = c("first", "second", "third",
-  "fourth", "fifth", "sixth"))
+  "fourth", "fifth", "sixth"), assayInterested = c("cpm", "tpm", "length",
+  "mad"))
 }
 \arguments{
 \item{kexpAssays, }{kallisto experiment assay}
@@ -14,9 +15,11 @@ pcaGGFrame(kexpAssays, firstComponent = c("first", "second", "third",
 \item{firstComponent}{,  the principal component you wish to compare with second}
 
 \item{secondComponent, }{the principal component you wish to compare with first component}
+
+\item{assayInterested, }{the type of assay data, cpm, etc}
 }
 \value{
-a data Frame of the selected principal components used to pass into pcaPlot
+a data Frame of the selected principal components used to pass into pcaPlot, input attributes are under attributes(ggFrame) for each PC
 }
 \description{
 plots pca of each kexp assay
