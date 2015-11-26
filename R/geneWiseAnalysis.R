@@ -73,16 +73,20 @@ geneWiseAnalysis <- function(kexp, design=NULL, how=c("cpm","tpm"),
   topGenes <- rownames(res$top)
   res$topGenes<-topGenes
 
+  
+  #FIX ME- cutting out Reactome support/ biomaRt is unstable
   #commonName is important
-  res$entrezID<-.convertEntrezID(res$topGenes,commonName)
+ # res$entrezID<-.convertEntrezID(res$topGenes,commonName)
   #grab all the entrez IDs that are not NA
-  converted<-res$entrezID[which(!is.na(res$entrezID[,which(colnames(res$entrezID)=="entrezgene")])==TRUE),]
-  entrezVector<-as.vector(converted[,which(colnames(res$entrezID)=="entrezgene")])
+ # converted<-res$entrezID[which(!is.na(res$entrezID[,which(colnames(res$entrezID)=="entrezgene")])==TRUE),]
+ # entrezVector<-as.vector(converted[,which(colnames(res$entrezID)=="entrezgene")])
   #grab all the ensembl associated with the non-NA entrez
-  ensemblVector<-converted[,which(colnames(converted)=="ensembl_gene_id")]
+ # ensemblVector<-converted[,which(colnames(converted)=="ensembl_gene_id")]
  
-  res<-.reactomeEnrichmentOverall(res,converted,commonNomen=commonName,species,p.cutoff)
-  res<-.reactomeEnrichmentCluster(res,converted,commonNomen=commonName,p.cutoff)
+  #res<-.reactomeEnrichmentOverall(res,converted,commonNomen=commonName,species,p.cutoff)
+ # res<-.reactomeEnrichmentCluster(res,converted,commonNomen=commonName,p.cutoff)
+   
+  #FIX ME - need to have iPathway compatibility
   res<-.formatLimmaWithMeta(res,converted,kexp)
   res$features <- features(kexp)
   res$species <- species
