@@ -15,7 +15,8 @@ secondInput<-.principalSelection(secondComponent)
 
     pcaResult<-prcomp(t(kexpAssays))
     ggFrame<-.ggData(pcaResult,firstInput,secondInput)
-
+    attributes(ggFrame)$firstInput<-firstInput
+    attributes(ggFrame)$secondInput<-secondInput
 
 return(ggFrame)
 }
