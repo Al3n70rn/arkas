@@ -12,7 +12,7 @@ message("please supply a kallisto experiment ...")
 groups<-factor(colnames(kexp))
 } 
  if(assayInterested=="cpm"){
-     pcaResult<-prcomp(t(assays(kexp)$est_counts)
+     pcaResult<-prcomp(t(assays(kexp)$est_counts))
      ggFrame<-.ggData(pcaResult)
      cpmPlot<-.plotGG(ggFrame,pcaResult,assayInterested)
      return(cpmPlot)
@@ -35,8 +35,8 @@ groups<-factor(colnames(kexp))
 
    }
     if(assayInterested=="mad"){
-      dat<-assays(kexp)$est_counts_mad
-      pcaResult<-prcomp(t(assay(kexp)$est_counts_mad))
+     
+     pcaResult<-prcomp(t(assay(kexp)$est_counts_mad))
      ggFrame<-.ggData(pcaResult)
      madPlot<-.plotGG(ggFrame,pcaResult,assayInterested)
      return(madPlot)
