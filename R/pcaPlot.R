@@ -43,7 +43,7 @@ groups<-factor(colnames(kexp))
      }
   else {
    message("please supply a correct kallisto experiment, with correct assays, cpm, tpm, m.a.d., etc ...") 
-   return()
+ 
    }
   
 }#{{{main
