@@ -36,7 +36,7 @@ groups<-factor(colnames(kexp))
    }
     if(assayInterested=="mad"){
      
-     pcaResult<-prcomp(t(assay(kexp)$est_counts_mad))
+     pcaResult<-prcomp(t(assays(kexp)$est_counts_mad))
      ggFrame<-.ggData(pcaResult)
      madPlot<-.plotGG(ggFrame,pcaResult,assayInterested)
      return(madPlot)
