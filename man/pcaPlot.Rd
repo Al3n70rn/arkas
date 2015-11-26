@@ -11,6 +11,9 @@ pcaPlot(kexp, assayInterested = c("cpm", "tpm", "length", "mad"))
 
 \item{assayInterested, }{one assay of the kexp cpm,m.a.d, etc}
 }
+\value{
+a pca plot of an cpm, tpm, length, or median abs. deviations
+}
 \description{
 plots pca of each kexp assay
 }
