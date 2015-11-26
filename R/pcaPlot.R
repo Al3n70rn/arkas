@@ -2,7 +2,7 @@
 #' @param   kexp, kallisto experiment object
 #' @param   assayInterested, one assay of the kexp cpm,m.a.d, etc
 #' @import ggplot2
-#' @return
+#' @return a pca plot of an cpm, tpm, length, or median abs. deviations
 #' @export
 pcaPlot<-function(kexp,assayInterested=c("cpm","tpm","length","mad")){
 
