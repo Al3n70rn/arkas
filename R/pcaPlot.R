@@ -3,24 +3,23 @@
 #' @param   assayInterested, one assay of the kexp cpm,m.a.d, etc
 #' @param   firstComponent ,  the principal component you wish to compare with second 
 #' @param   secondComponent,  the principal component you wish to compare with first component 
-#' @param   threeDimensionView ,  view an interactive 3D plot
-#' @import ggplot2, rgl
+#' @import ggplot2
 #' @return a pca plot of an cpm, tpm, length, or median abs. deviations
 #' @export
 pcaPlot<-function(kexpAssays,assayInterested=c("cpm","tpm","length","mad"),firstComponent=c("first","second","third","fourth","fifth","sixth"),secondComponent=c("first","second","third","fourth","fifth","sixth")){
 
-firstComponent<-match.arg(firstComponent,c("first","second","third","fourth","fifth","sixth")
+firstComponent<-match.arg(firstComponent,c("first","second","third","fourth","fifth","sixth"))
 
 firstInput<-.principalSelection(firstComponent)
 
-secondComponent<-match.arg(secondComponent,c("first","second","third","fourth","fifth","sixth")
+secondComponent<-match.arg(secondComponent,c("first","second","third","fourth","fifth","sixth"))
 secondInput<-.principalSelection(secondComponent)
 
 assayInterested<-match.arg(assayInterested, c("cpm","tpm","length","mad"))
     
    
     groups<-factor(colnames(kexpAssays))
-     } 
+      
  if(assayInterested=="cpm"){
      pcaResult<-prcomp(t(kexpAssays))
      ggFrame<-.ggData(pcaResult,firstInput,secondInput)
@@ -53,18 +52,15 @@ assayInterested<-match.arg(assayInterested, c("cpm","tpm","length","mad"))
      }
   else {
    message("please supply a correct kallisto experiment, with correct assays, cpm, tpm, m.a.d., etc ...") 
- 
-   }
+    }
   
 }#{{{main
 
-.plotGG<-function(inputDataFrame,pcaResult,assayInterested, firstInputComponent=1, secondInputComponent=2){
+.plotGG<-function(ggFrame,pcaResult,assayInterested, firstInputComponent=firstInput, secondInputComponent=secondInput){
 
 plotTitle<-paste0("PC",firstInputComponent,".v.PC",secondInputComponent," ",assayInterested," Plot")
-#FIX ME:  select the pcs from firstinput , secondinput
-
- outputGGPlot<-ggplot(data=inputDataFrame,aes(inputDataFrame[,1],inputDataFrame[,2],colour=lab))+geom_point()+ggtitle(plotTitle) + labs(x=paste0(colnames(inputDataFrame)[1],sprintf(' (sd: %s%%)', round(100 * (pcaResult$sdev[1] / sum(pcaResult$sdev))))) , y=paste0( colnames(inputDataFrame)[2],sprintf(' (sd: %s%%)', round(100 * (pcaResult$sdev[2] / sum(pcaResult$sdev))))) )
-   outputGGPlot<- outputGGPlot+geom_text(data=inputDataFrame,aes(label=names),hjust=0.7,vjust=1)
+ outputGGPlot<-ggplot(data=ggFrame,aes(ggFrame[,1],ggFrame[,2],colour=lab))+geom_point()+ggtitle(plotTitle) + labs(x=paste0(colnames(ggFrame)[1],sprintf(' (sd: %s%%)', round(100 * (pcaResult$sdev[1] / sum(pcaResult$sdev))))) , y=paste0( colnames(ggFrame)[2],sprintf(' (sd: %s%%)', round(100 * (pcaResult$sdev[2] / sum(pcaResult$sdev))))) )
+   outputGGPlot<- outputGGPlot+geom_text(data=ggFrame,aes(label=names),hjust=0.7,vjust=1)
  
 return(outputGGPlot)
 }
@@ -82,36 +78,36 @@ return(outputGGPlot)
 
 .principalSelection<-function(inputComponent=NULL){
 
-    if(inputComponent=="first"){
+    if(  grepl(inputComponent,"first",ignore.case=TRUE)=="TRUE"){
       componentSelect<-1
      return(componentSelect)
     }
 
-   if(inputComponent=="second"){
+   if( grepl(inputComponent,"second",ignore.case=TRUE)=="TRUE" ){
      componentSelect<-2
      return(componentSelect)
     }
 
-    if(inputComponent=="third"){
+    if( grepl(inputComponent,"third",ignore.case=TRUE)=="TRUE" ){
     componentSelect<-3
     return(componentSelect)
     }
 
-    if(inputComponent=="fourth"){
+    if( grepl(inputComponent,"fourth",ignore.case=TRUE)=="TRUE" ){
     componentSelect<-4
     return(componentSelect)
     }
-    if(inputComponent=="fifth"){
+    if( grepl(inputComponent,"fifth",ignore.case=TRUE)=="TRUE" ){
     componentSelect<-5
     return(componentSelect)
     }
-   if(inputComponent=="sixth"){
+   if( grepl(inputComponent,"sixth",ignore.case=TRUE)=="TRUE"){
      componentSelect<-6
     return(componentSelect)
     }
 
   else {
-     message("can not recognize the selected component ... ")
+     message("please select two components to compare first,second,third,fourth,fifth, or sixth ... ")
     }
 }#{{{component Select
 
