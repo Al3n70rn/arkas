@@ -4,18 +4,10 @@
 \alias{pcaPlot}
 \title{plots pca of each kexp assay}
 \usage{
-pcaPlot(kexpAssays, assayInterested = c("cpm", "tpm", "length", "mad"),
-  firstComponent = c("first", "second", "third", "fourth", "fifth", "sixth"),
-  secondComponent = c("first", "second", "third", "fourth", "fifth", "sixth"))
+pcaPlot(ggFrame)
 }
 \arguments{
-\item{kexpAssays, }{kallisto experiment assay}
-
-\item{assayInterested, }{one assay of the kexp cpm,m.a.d, etc}
-
-\item{firstComponent}{,  the principal component you wish to compare with second}
-
-\item{secondComponent, }{the principal component you wish to compare with first component}
+\item{ggFrame, }{a data frame of desired components to plot}
 }
 \value{
 a pca plot of an cpm, tpm, length, or median abs. deviations
