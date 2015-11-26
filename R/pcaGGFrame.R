@@ -6,7 +6,7 @@
 #' @import ggplot2
 #' @return a data Frame of the selected principal components used to pass into pcaPlot, input attributes are under attributes(ggFrame) for each PC
 #' @export
-pcaGGFrame<-function(kexpAssays,firstComponent=c("first","second","third","fourth","fifth","sixth"),secondComponent=c("first","second","third","fourth","fifth","sixth"), assayInterested=c("cpm","tpm","length","mad")) ){
+pcaGGFrame<-function(kexpAssays,firstComponent=c("first","second","third","fourth","fifth","sixth"),secondComponent=c("first","second","third","fourth","fifth","sixth"), assayInterested=c("cpm","tpm","length","mad")) {
 
     firstComponent<-match.arg(firstComponent,c("first","second","third","fourth","fifth","sixth"))
     firstInput<-.principalSelection(firstComponent)
