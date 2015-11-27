@@ -4,7 +4,7 @@
 \alias{pcaPlot}
 \title{plots pca of each kexp assay}
 \usage{
-pcaPlot(ggFrame)
+pcaPlot(ggFrame = ggInput)
 }
 \arguments{
 \item{ggFrame, }{a data frame of desired components to plot}
