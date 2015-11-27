@@ -1,0 +1,14 @@
+---
+title: "Artemis: Repetitive Elements Quantification In Much Less Time"
+author:  "Timothy J. Triche, Jr, Anthony R. Colombo, Harold Pimentel"
+output:
+    pdf_document:
+      toc: true
+      number_sections: true
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+---
+
+#Introduction
+Principal component analysis are eigenvalues which solves an equation involving expression assay data, an eigenvector of the expression assay associated with an eigenvalue.  The eigenvectors of the assay represent coordinates of a linear transformation of data where the variables are uncorrelated.
+
+
