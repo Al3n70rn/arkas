@@ -27,8 +27,8 @@ plotTitle<-paste0("PC",firstInputComponent,".v.PC",secondInputComponent," ",assa
                environment=environment()) 
  outputGGPlot<- outputGGPlot +geom_point()+ggtitle(plotTitle) 
   outputGGPlot<- outputGGPlot + labs(x=paste0(colnames(ggFrame)[1],
-                sprintf(' (sd: %s%%)', round(100 * (ggFrame$sdev[1] / sum(ggFrame$sdev))))),
-                  y=paste0( colnames(ggFrame)[2],sprintf(' (sd: %s%%)', round(100 * (ggFrame$sdev[2] / sum(ggFrame$sdev))))) )
+                sprintf(' (sd: %s%%)', round(100 * (ggFrame$sdev[firstInputComponent] / sum(ggFrame$sdev))))),
+                  y=paste0( colnames(ggFrame)[2],sprintf(' (sd: %s%%)', round(100 * (ggFrame$sdev[secondInputComponent] / sum(ggFrame$sdev))))) )
    outputGGPlot<- outputGGPlot+geom_text(data=ggFrame,
                   aes(label=names),
                   hjust=0.7,
