@@ -7,6 +7,7 @@
 #' @param read.cutoff minimum read coverage (estimated) for a gene bundle 
 #' @param topheat     how many bundles to include in cluster heatmaps? (100)
 #' @param species     which species? (Homo.sapiens; FIX: get from TxDbLite)
+#' @param fitOnly     exit after fitting the EBayes linear model?  (FALSE)
 #' 
 #' @import edgeR 
 #' @import limma
@@ -41,7 +42,9 @@ geneWiseAnalysis <- function(kexp, design=NULL, how=c("cpm","tpm"),
                              species=c("Homo.sapiens",
                                        "Mus.musculus",
                                        "Rattus.norvegicus"), 
-                             ...) {
+                             fitOnly=FALSE, 
+                             ...) { 
+  # {{{ main function body
 
   ## this is really only meant for a KallistoExperiment
   if (!is(kexp, "KallistoExperiment")) {
@@ -71,23 +74,31 @@ geneWiseAnalysis <- function(kexp, design=NULL, how=c("cpm","tpm"),
   res$top <- with(res, topTable(fit, coef=2, p=p.cutoff, n=nrow(kexp)))
   res$top <- res$top[ abs(res$top$logFC) >= fold.cutoff, ] ## per SEQC
   topGenes <- rownames(res$top)
-  res$topGenes<-topGenes
-
-  #commonName is important
-  res$entrezID<-.convertEntrezID(res$topGenes,commonName)
-  #grab all the entrez IDs that are not NA
-  converted<-res$entrezID[which(!is.na(res$entrezID[,which(colnames(res$entrezID)=="entrezgene")])==TRUE),]
-  entrezVector<-as.vector(converted[,which(colnames(res$entrezID)=="entrezgene")])
-  #grab all the ensembl associated with the non-NA entrez
-  ensemblVector<-converted[,which(colnames(converted)=="ensembl_gene_id")]
- 
-  res<-.reactomeEnrichmentOverall(res,converted,commonNomen=commonName,species,p.cutoff)
-  res<-.reactomeEnrichmentCluster(res,converted,commonNomen=commonName,p.cutoff)
-  res<-.formatLimmaWithMeta(res,converted,kexp)
+  res$topGenes <- topGenes
   res$features <- features(kexp)
   res$species <- species
+  if (fitOnly) return(res) # otherwise keep going
+
+  # commonName is important
+  res$entrezID <- .convertEntrezID(res$topGenes,commonName)
+  # grab all the entrez IDs that are not NA
+  converted <- res$entrezID[which(!is.na(res$entrezID[,which(colnames(res$entrezID) == "entrezgene")]) == TRUE),]
+  entrezVector <- as.vector(converted[,which(colnames(res$entrezID) == "entrezgene")])
+
+  # grab all the ensembl associated with the non-NA entrez
+  ensemblVector <- converted[,which(colnames(converted) == "ensembl_gene_id")]
+
+  # FIXME: switch this part to qusage and keep it optional  
+  res <- .reactomeEnrichmentOverall(res, converted, commonNomen=commonName,
+                                  species, p.cutoff)
+  res <- .reactomeEnrichmentCluster(res, converted, commonNomen=commonName,
+                                  p.cutoff)
+  res <- .formatLimmaWithMeta(res,converted,kexp)
+  res$features <- features(kexp)
   return(res)
-}#{{{main
+
+# }}}main
+}
 
 ###the help####################
 
