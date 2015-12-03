@@ -6,7 +6,8 @@
 \usage{
 geneWiseAnalysis(kexp, design = NULL, how = c("cpm", "tpm"),
   p.cutoff = 0.05, fold.cutoff = 1, read.cutoff = 1,
-  species = c("Homo.sapiens", "Mus.musculus", "Rattus.norvegicus"), ...)
+  species = c("Homo.sapiens", "Mus.musculus", "Rattus.norvegicus"),
+  fitOnly = FALSE, ...)
 }
 \arguments{
 \item{kexp}{a KallistoExperiment or SummarizedExperiment-like object}
@@ -20,6 +21,8 @@ geneWiseAnalysis(kexp, design = NULL, how = c("cpm", "tpm"),
 \item{read.cutoff}{minimum read coverage (estimated) for a gene bundle}
 
 \item{species}{which species? (Homo.sapiens; FIX: get from TxDbLite)}
+
+\item{fitOnly}{exit after fitting the EBayes linear model?  (FALSE)}
 
 \item{topheat}{how many bundles to include in cluster heatmaps? (100)}
 }
