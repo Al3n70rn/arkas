@@ -1,41 +1,50 @@
-#' Downstream analysis of raw transcript abundance estimates.
-#' (This is delegated to the methods from Sleuth; results processed in artemis)
+#' Analysis of raw transcript abundance estimates.
 #' 
-#' FIXME: add bundle-wise annotation for pathway/functional enrichment 
-#' FIXME: add promoter-wise annotation for pathway/functional enrichment 
-#'
 #' @param kexp        a KallistoExperiment or SummarizedExperiment-like object 
 #' @param design      a design matrix w/contrast or coefficient to test in col2
 #' @param p.cutoff    where to set the p-value cutoff for plots, etc. (0.05)
 #' @param fold.cutoff where to set the log2-FC cutoff for plots, etc. (1 == 2x)
-#' @param annotation  functional annotations for individual transcripts (varies)
+#' @param coef        which column of the design matrix to test on (2nd)
+#' @param tx_biotype  optionally restrict to one or more tx_biotype classes 
+#' @param gene_biotype optionally restrict to one or more gene_biotype classes 
+#' @param biotype_class optionally restrict to one or more biotype_class ...es
 #'
 #' @import edgeR 
 #' @import limma
-#' @import Homo.sapiens
-#' @import Mus.musculus
 #'
-#' @importFrom matrixStats rowSds 
-#' 
 #' @export
 transcriptWiseAnalysis <- function(kexp, design, p.cutoff=0.05, fold.cutoff=1, 
-                                     annotation=NULL,coef=2, ...){ 
+                                   coef=2, tx_biotype=NULL, gene_biotype=NULL,
+                                   biotype_class=NULL, ...){ 
 
-
- ## this is really only meant for a KallistoExperiment
+  ## this is really only meant for a KallistoExperiment
   if (!is(kexp, "KallistoExperiment")) {
     message("This function is optimized for KallistoExperiment objects.")
     message("It may work for other classes, but we make no guarantees.")
   }
-
-  ## only two supported for now (would be simple to expand, though)
-  species <- match.arg(species) ## NOT to be confused with KEGG species ID
-  commonName <- switch(species, Mus.musculus="mouse", Homo.sapiens="human")
-
-
-  res <- fitTranscripts(kexp, design, read.cutoff)
-  top <- topTable(fit, coef=coef, p=p.cutoff, n=nrow(assay))
+  
+  if (all(sapply(c(tx_biotype, gene_biotype, biotype_class), is.null))) {
+    res <- fitTranscripts(kexp, design, read.cutoff)
+    top <- topTable(fit, coef=coef, p=p.cutoff, n=nrow(assay))
+  } else {
+    keep <- seq_len(nrow(kexp))
+    if (!is.null(biotype_class)) {
+      keep <- intersect(keep, which(mcols(kexp)$biotype_class == biotype_class))
+    }
+    if (!is.null(gene_biotype)) {
+      keep <- intersect(keep, which(mcols(kexp)$gene_biotype == gene_biotype))
+    }
+    if (!is.null(tx_biotype)) {
+      keep <- intersect(keep, which(mcols(kexp)$tx_biotype == tx_biotype))
+    }
+    res <- fitTranscripts(kexp[keep, ], design, read.cutoff)
+    top <- topTable(fit, coef=coef, p=p.cutoff, n=length(keep))
+  }
+ 
   res$top <- top[ abs(top$logFC) >= fold.cutoff, ] ## per SEQC recommendations
+  res$biotype_class <- biotype_class
+  res$gene_biotype <- gene_biotype
+  res$tx_biotype <- tx_biotype
   return(res)
 
 }

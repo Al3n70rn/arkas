@@ -2,11 +2,11 @@
 % Please edit documentation in R/transcriptWiseAnalysis.R
 \name{transcriptWiseAnalysis}
 \alias{transcriptWiseAnalysis}
-\title{Downstream analysis of raw transcript abundance estimates.
-(This is delegated to the methods from Sleuth; results processed in artemis)}
+\title{Analysis of raw transcript abundance estimates.}
 \usage{
 transcriptWiseAnalysis(kexp, design, p.cutoff = 0.05, fold.cutoff = 1,
-  annotation = NULL, coef = 2, ...)
+  coef = 2, tx_biotype = NULL, gene_biotype = NULL,
+  biotype_class = NULL, ...)
 }
 \arguments{
 \item{kexp}{a KallistoExperiment or SummarizedExperiment-like object}
@@ -17,10 +17,15 @@ transcriptWiseAnalysis(kexp, design, p.cutoff = 0.05, fold.cutoff = 1,
 
 \item{fold.cutoff}{where to set the log2-FC cutoff for plots, etc. (1 == 2x)}
 
-\item{annotation}{functional annotations for individual transcripts (varies)}
+\item{coef}{which column of the design matrix to test on (2nd)}
+
+\item{tx_biotype}{optionally restrict to one or more tx_biotype classes}
+
+\item{gene_biotype}{optionally restrict to one or more gene_biotype classes}
+
+\item{biotype_class}{optionally restrict to one or more biotype_class ...es}
 }
 \description{
-FIXME: add bundle-wise annotation for pathway/functional enrichment 
-FIXME: add promoter-wise annotation for pathway/functional enrichment
+Analysis of raw transcript abundance estimates.
 }
 
