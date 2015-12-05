@@ -1,0 +1,479 @@
+---
+title: "Bulk, Normal, and Senescent Expression Modeling"
+author:  "Anthony R. Colombo, Timothy Triche Jr., Kwasi Connor, Dr. Giridharan Ramsingh"
+output:
+    pdf_document:
+      toc: true
+      number_sections: true
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+---
+
+#Introduction
+The analysis requires two parts, the first is a differential expression analysis that includes prior senescent percentages known from the experimental cell sorting procedures and documented by the lab technitians.  The first expression analysis is done using these prior senescent percentages used in creating the design model; each design model was performed in two-group pairs i.e. Bulk versus Normal, Normal versus Senescent, Senescent verses Bulk.  Previously we identified differnetially expressed genes which significance at p.value 0.05 and will identify senescent specific biomarkers from intersecting the significant genes returned from Senescent versus Bulk and Normal versus Senescent.  Note that the because the prior percentage of senescence in Bulk samples is 0.03%, the normal and Bulk cells are approximately equal.  
+                               
+The second part of the analysis uses statistical learning and does not use any prior experimental modeling percentages.  The statistical learning method identifies the percent of senescence from Bulk data using the Normal and Senescent as training data.  This then achieves further confidence if the intersection of possible biomarkers has a higher enough overlap.
+
+The last part of the analysis cross validates these two analysis with independent EdgeR software.
+
+
+
+#Normal and Bulk Expression Comparisons
+Using prior percentage data, we expect that there should be approximately zero differentially expressed genes between two iso-qualitative data.
+
+Using limma we construct a contrast matrix and plot the topTable using two different design models.
+
+The coefficients of the design model are the parameters estimated resulting in the t statistic which is the group-parameter-means-across-groups divided by the variance-within-groups.  
+
+```{r}
+suppressPackageStartupMessages(library(artemis))
+setwd("/home/anthonycolombo/Documents/CD34_output")
+load("bnSession.RData")
+bnSession$samples  #shows only bulk and normal
+#create a kexp of bulk normal
+bulkN<-mergeKallisto(bnSession$samples,
+                     outputPath=bnSession$outputPath)
+bulkN<-annotateFeatures(bulkN,level="transcript")
+design<-matrix(data=NA,nrow=8,ncol=2)
+rownames(design)<-colnames(bulkN)
+colnames(design)<-c("Bulk","Normal")
+design[,1]<-c(rep(1,5),rep(0,3))
+design[,2]<-c(rep(0,5),rep(1,3))
+design
+gwaBN2<-geneWiseAnalysis(bulkN,design=design,
+                        how="cpm",
+                        p.cutoff=0.04,
+                        species="Homo.sapiens")
+
+#the contrast matix find the differences between the estimated parameters across groups
+cont.matrix<-makeContrasts(Norm.v.Bulk=Normal-Bulk,levels=design)
+fit2<-contrasts.fit(gwaBN2$fit,cont.matrix)
+fit2<-eBayes(fit2)
+
+#note that the default return number is 10.  
+tt<-topTable(fit2,adjust="BH")
+tt
+
+
+
+#now let's explore the contrasts
+design2<-design
+design2[,1]<-rep(1,8)
+design2
+colnames(design2)[2]<-"Normal.v.Bulk"
+gwaBN<-geneWiseAnalysis(bulkN,design=design2,
+                       how="cpm",
+                       species="Homo.sapiens",
+                       p.cutoff=0.04)
+tt2<-topTable(gwaBN$fit,coef="Normal.v.Bulk",adjust="BH")
+tt2
+
+
+#comparing the contrasting parameter estimates.
+#the design2 implicitly defines the differences between parameter estimates by setting the intercept across all groups
+head(gwaBN$fit$coefficients)
+
+#separate groups of design must explicitly define parameter differences thus fit2
+head(gwaBN2$fit$coefficients)
+head(fit2$coefficients) #has matching comparisons
+
+head(gwaBN$fit$t) #with implicit contrasted design model
+head(fit2$t) #with the contrasted model 
+#note that the topTable default output is 10 and controls FDR rate adjusted p.value
+
+```
+
+##Normal and Bulk Comparisons
+We would expect that that the normal and senescent comparisons where the coefficient of interest being Senescent yields genes that have negative t statistic, which means that they are significantly expressed in normal samples; we would expect that there should be a significant overlap of these genes *negatively* expressied with respect to senescent, to be contained in the bulk comparisons.    
+
+We first analyzed the Normal and Senescent samples as a two group comparison with the coefficient of interest being senescent. The purpose here is to recover the normally expressed genes from the Normal.v.Senescent comparison within the Bulk data set; we attempt to design a model which shows few differentially expressed genes between normal and bulk, and high overlap between the Normal gene list returned from N.v.S gene set. 
+
+
+The results should that when comparing the Bulk to Normal, without any conservative filtering, and ignoring the apriori percentages, returned an overlap of 49% which is poor; meaning that the N.v.B covers Normal returned from N.v.S 49%; we expected much higher  70%++ because bulk and normal are similar, although normal was sorted and these normal cells were identified as SA-Beta-GAL-Negative, whereas bulk was not sorted and negative.
+
+```{r} 
+suppressPackageStartupMessages(library(artemis))
+load("/home/anthonycolombo/Documents/CD34_output/nsSession.RData")
+#normal and senescent only
+nsSession$samples
+
+#create KEXP object
+NS<-mergeKallisto(nsSession$samples,
+                 outputPath=nsSession$outputPath)
+NS<-annotateFeatures(NS,level="transcript")
+
+NS$subject <- factor(substr(colnames(NS), 2, 2))
+NS$treatment <- substr(colnames(NS), 1, 1) == "s"
+NS$ID <- NULL
+
+#create a design matrix with respect to Senescence
+design <- with(as(colData(NS), "data.frame"),
+                  model.matrix( ~ treatment + subject ))
+rownames(design) <- colnames(NS)
+metadata(NS)$design <- design
+
+#includes subject effects
+design
+
+gwaNS<-geneWiseAnalysis(NS,design=design,how="cpm",
+                        p.cutoff=0.04,species="Homo.sapiens")
+
+length(gwaNS$topGenes) #returns a list of 1610 D.E.G. no filtering
+
+#create a list of most down expressed genes i.e. NormalList
+NormalList<-gwaNS$limmaWithMeta[which(gwaNS$limmaWithMeta[,3]<0),]
+head(NormalList) #all negatively expressed genes w.r.t Senescnt
+
+#load the gwaBN from previous section, 4878 top DE genes
+load("/home/anthonycolombo/Documents/CD34_output/gwaBN.RData")
+
+#design with respect to Normal differntially expressed from Bulk
+gwaBN$design
+library(VennDiagram)
+
+#set-union between the normal genes in NS, and Normal in bulk
+bn_overlap_N<-calculate.overlap(
+               x=list(
+              "normal"=rownames(NormalList),
+              "Bulk"=gwaBN$topGenes)
+              )
+
+summary(bn_overlap_N)
+#percent overlap
+length(bn_overlap_N$a3)/length(bn_overlap_N$a1) #48%
+
+
+setwd("/home/anthonycolombo/Documents/CD34_output")
+pdf("VennDiagramNormal.pdf")
+draw.pairwise.venn(length(bn_overlap_N$a2),
+                              length(bn_overlap_N$a1),
+                              length(bn_overlap_N$a3),
+                               c("Norm.v.Bulk","Norm"))
+dev.off()
+
+#load the bulk, normal Kexp.
+load("/home/anthonycolombo/Documents/CD34_output/bulkN.RData")
+res<-fitBundles(bulkN,design=gwaBN$design,read.cutoff=1)
+res$top<-with(res,topTable(fit,coef=2,p=0.04,n=nrow(bulkN),adjust="BH"))
+res$top<-res$top[ abs(res$top$logFC) >=1, ]
+res$topGenes<-rownames(res$top)
+length(res$topGenes) #4303
+
+#filter slightly more convervatively yields 4303
+
+conservative_bn_overlap_N<-calculate.overlap(
+               x=list(
+              "normal"=rownames(NormalList),
+              "conserv.Bulk"=res$topGenes)
+              )
+
+summary(conservative_bn_overlap_N)
+length(conservative_bn_overlap_N$a3)/length(conservative_bn_overlap_N$a1)
+
+pdf("/home/anthonycolombo/Documents/CD34_output/Conservative_BulkvNormal_UnionNormal.pdf")
+draw.pairwise.venn(length(conservative_bn_overlap_N$a2),
+                              length(conservative_bn_overlap_N$a1),
+                              length(conservative_bn_overlap_N$a3),
+                               c("Conserv.Norm.v.Bulk","Norm"))
+
+
+dev.off()
+
+
+
+strictRes<-fitBundles(bulkN,design=gwaBN$design,read.cutoff=1)
+strictRes$top<-with(strictRes,topTable(fit,coef=2,p=0.04,n=nrow(bulkN),adjust="BY"))
+strictRes$top<-strictRes$top[ abs(strictRes$top$logFC) >=1, ]
+strictRes$topGenes<-rownames(strictRes$top)
+length(strictRes$topGenes) #831
+
+
+strict_bn_overlap_N<-calculate.overlap(
+               x=list(
+              "normal"=rownames(NormalList),
+              "strict.Bulk"=strictRes$topGenes)
+              )
+
+
+
+summary(strict_bn_overlap_N)
+length(strict_bn_overlap_N$a3)/length(strict_bn_overlap_N$a1)
+ 
+pdf("/home/anthonycolombo/Documents/CD34_output/strictVennDiagram.pdf")
+draw.pairwise.venn(length(strict_bn_overlap_N$a2),
+                              length(strict_bn_overlap_N$a1),
+                              length(strict_bn_overlap_N$a3),
+                               c("Strict","Norm"))
+
+dev.off()
+
+```
+##N.v.B Union N Without Filtering
+![Bulk.v.Normal Union Normal](/home/anthonycolombo/Documents/CD34_output/VennDiagramNormal.pdf)   
+
+
+## Conservative N.v.B Union Normal
+![Conservative Bulk.v.Normal Union Norm](/home/anthonycolombo/Documents/CD34_output/Conservative_BulkvNormal_UnionNormal.pdf)
+
+##More Conservative N.v.B Union Normal
+![Conservative Bulk.v.Normal Union Norm](/home/anthonycolombo/Documents/CD34_output/strictVennDiagram.pdf)
+
+
+
+
+------
+    
+   
+        
+```{r}
+load("/home/anthonycolombo/Documents/CD34_output/strictRes.RData") #adjust BY
+load("/home/anthonycolombo/Documents/CD34_output/NS.RData")
+load("/home/anthonycolombo/Documents/CD34_output/res.RData") #adjust BH
+load("/home/anthonycolombo/Documents/CD34_output/gwaBN.RData")
+load("/home/anthonycolombo/Documents/CD34_output/gwaNS.RData")
+library(VennDiagram)
+#overlap between the both gene sets entirely, neither have filtering
+bn_overlap_NS<-calculate.overlap(
+               x=list(
+               "NS"=gwaNS$topGenes,
+               "BulkNormal"=gwaBN$topGenes))
+
+summary(bn_overlap_NS)
+length(bn_overlap_NS$a3)/length(bn_overlap_NS$a1) #~29
+
+
+                            
+                           
+pdf("/home/anthonycolombo/Documents/CD34_output/VennDiagram_NS.pdf")
+
+draw.pairwise.venn(length(bn_overlap_NS$a2),
+                              length(bn_overlap_NS$a1),
+                              length(bn_overlap_NS$a3),
+                              c("Norm.v.Bulk","Sen.v.Norm"))
+
+dev.off()
+
+#comparing NS with no filter, to strict N.v.B.
+strict_bn_overlap_NS<-calculate.overlap(
+               x=list(
+              "S.v.N"=gwaNS$topGenes,
+              "strict.Bulk"=strictRes$topGenes)
+              )
+
+summary(strict_bn_overlap_NS) #13%
+length(strict_bn_overlap_NS$a3)/length(strict_bn_overlap_NS$a1)
+
+pdf("/home/anthonycolombo/Documents/CD34_output/StrictNB_SN.pdf")
+
+draw.pairwise.venn(length(strict_bn_overlap_NS$a2),
+                              length(strict_bn_overlap_NS$a1),
+                              length(strict_bn_overlap_NS$a3),
+                              c("StrNB","S.v.N"))
+
+
+
+dev.off()
+
+
+#comparing strict N.v.S. to Strict N.v.B
+
+strictNS<-fitBundles(NS,gwaNS$design,read.cutoff=1)
+strictNS$top<-with(strictNS, topTable(fit, coef=2, p=0.04, n=nrow(NS),
+                  adjust="BY"))
+strictNS$top<-strictNS$top[ abs(strictNS$top$logFC) >= 1, ]
+strictNS$topGenes<-rownames(strictNS$top)
+
+length(strictNS$topGenes) #757
+
+
+strict_bn_strict_NS<-calculate.overlap(
+               x=list(
+              "S.v.N"=strictNS$topGenes,
+              "strict.Bulk"=strictRes$topGenes)
+              )
+
+summary(strict_bn_strict_NS)
+length(strict_bn_strict_NS$a3)/length(strict_bn_strict_NS$a1)
+
+pdf("/home/anthonycolombo/Documents/CD34_output/strictNB_strictSN.pdf")
+draw.pairwise.venn(length(strict_bn_strict_NS$a2),
+                              length(strict_bn_strict_NS$a1),
+                              length(strict_bn_strict_NS$a3),
+                              c("N.B","S.N"))
+
+
+
+dev.off()
+
+
+```
+##NB union NS no filters
+![ Bulk.v.Normal union Sen.v.Norm](/home/anthonycolombo/Documents/CD34_output/VennDiagram_NS.pdf)
+
+##filtered NB unfilterNS
+![StrictBN Union S.N](/home/anthonycolombo/Documents/CD34_output/StrictNB_SN.pdf)       
+
+##filterNB filterNS
+![StrictBN_StrictNS](/home/anthonycolombo/Documents/CD34_output/strictNB_strictSN.pdf)     
+
+
+##Residual Plots of the Bulk.v.Normal Design
+The residual plots shows the differences between the observed data, and the estimated parameters fit to the data, thus showing an error parameter corresponding to the differences.  The following plot compares of the voomed data showing the log CPM transformed-RNA-Seq data used in the linear model and the fitted parameters derived from the transformed counts.  
+
+```{r}
+suppressPackageStartupMessages(library(artemis))
+load("/home/anthonycolombo/Documents/CD34_output/gwaBN.RData")
+library(limma)
+#the design
+gwaBN$design
+bulkNormalResiduals<-residuals.MArrayLM(object=gwaBN$fit,gwaBN$voomed$E)
+plot(bulkNormalResiduals[,1],bulkNormalResiduals[,6],xlab="b1",ylab="n1",main="Residuals B1 N1")
+plot(bulkNormalResiduals[,2],bulkNormalResiduals[,7],xlab="b2",ylab="n2",main="Residuals B2 N2")
+plot(bulkNormalResiduals[,3],bulkNormalResiduals[,8],xlab="b3",ylab="n3",main="Residuals B3 N3")
+
+results<-function(residuals){
+message("residual statistics:")
+for(i in 1:ncol(residuals)){
+message(paste0(colnames(residuals)[i]," mean: ",mean(residuals[,i]), " sd: ",sd(residuals[,i]))   )
+   }
+}
+
+results(bulkNormalResiduals)
+
+```
+
+
+
+##Results Comparing Normal versus Bulk Expression to Senescent versus Normal 
+The chosen model for Bulk and Normal yielded a 49% overlap to the normally expressed genes in Senescent versus Normal expression analysis.  When comparing the overlap between the two complete entire data sets, there was a 29% overlap.
+
+
+When analyzing the overlap between the strict reporting of results from the Normal v. Bulk model and *only* the normal expressed genes,i.e. the negatively expressed genes with respect to senescence, there was 28% overlap with a total of 504 normally expressed genes, and 831 reported genes from Normal.v.Bulk with an overlap of 146.
+The conservative reporting found from the normal versus bulk had 28% overlap between Normal returned from Normal v. Senescent.
+
+
+The next results did not select only the Normally expressed genes down regulated in the Normal versus Senescent data set; we consider *all* the differentially expressed genes in Normal .v. Senescent.  consisting of 1610 genes without filtering.  Without filtering the top genes from Normal.v.Bulk there were 4878 differentially expressed genes, 1610 D.E.G. from Normal.v.Senescent with an overlap of 474 genes, thus 29% overlap.  More conservative analysis increasing the FDR threshold resulted in 13% overlap between filtered N.v.B containing 831 genes and unfiltered N.v.S containing 1610 genes with 213 genes, 13% overlap.  Applying maximum filtering resulted in 831 genes in N.v.B. and 757 genes in N.v.S. with 132 genes in their intersection with 17% overlap.
+
+
+The following model, We expected to see a low number of differentially expressed genes, with a higher percentage of overlap.
+```{r}
+setwd("/home/anthonycolombo/Documents/CD34_output") 
+load("gwaBN.RData")
+gwaBN$design
+
+```
+
+The model fixed the percentage that modeled bulk as 100% normal.  For further analysis, we will incorporate the prior percentages of senescent within bulk of 0.03-0.05.  
+  
+The residual plots show that the errors where very low, within +/- 5, and no outliers with data centered 0.
+
+
+#Recovering Normal Gene Sets From Bulk Using Priors
+
+Previously we used a design model that failed our expectation, using the following design:
+```{r} 
+load("/home/anthonycolombo/Documents/CD34_output/gwaBN.RData")
+gwaBN$design
+```
+We now model the experimental priors of percent senescent given
+Normal is now modeled using the prior normal percentages of 95%.
+```{r}
+load("/home/anthonycolombo/Documents/CD34_output/NormalList.RData")
+load("/home/anthonycolombo/Documents/CD34_output/gwaBNPrior.RData")
+gwaBNPrior$design
+```
+We overlap the unfiltered top genes with the normal genes returned from N.v.S.
+
+```{r}
+library(VennDiagram)
+load("/home/anthonycolombo/Documents/CD34_output/NormalList.RData")
+load("/home/anthonycolombo/Documents/CD34_output/gwaBNPrior.RData")
+load("/home/anthonycolombo/Documents/CD34_output/bn_overlap_N.RData")
+load("/home/anthonycolombo/Documents/CD34_output/bn_overlap_NS.RData")
+load("/home/anthonycolombo/Documents/CD34_output/gwaNS.RData")
+
+#using the geneWiseAnalysis from the prior model, the top genes using prior design were unfiltered
+gwaBNPrior$design
+priorbn_overlap_n<-calculate.overlap(
+                   x=list(
+                   "Normal"=rownames(NormalList),
+                   "PriorBN"=gwaBNPrior$topGenes))
+summary(priorbn_overlap_n)
+length(priorbn_overlap_n$a3)/length(priorbn_overlap_n$a1) #48%
+
+#finding the intersection between unfiltered un-prior N.v.B and N
+
+priorbn_intersect_bn_intersect_N<-calculate.overlap(
+                             x=list(
+                            "BN"=bn_overlap_N$a3,
+                           "PriorBN"=priorbn_overlap_n$a3))
+summary(priorbn_intersect_bn_intersect_N)
+length(priorbn_intersect_bn_intersect_N$a3)/length(priorbn_intersect_bn_intersect_N$a1)  #97
+
+
+priorbn_intersect_NS<-calculate.overlap(
+                     x=list(
+                    "NS"= gwaNS$topGenes,
+                    "PriorBN"=gwaBNPrior$topGenes))
+
+
+priorbn_intersect_bn_intersect_NS<-calculate.overlap(
+                             x=list(
+                            "NS"=bn_overlap_NS$a3,
+                           "PriorBN"=priorbn_intersect_NS$a3))
+summary(priorbn_intersect_bn_intersect_NS)
+length(priorbn_intersect_bn_intersect_NS$a3)/length(priorbn_intersect_bn_intersect_NS$a1)  #94
+
+```
+##Results From Adjusting Prior Percent Senescence
+
+We examine the *only* normal expressed genes from N.v.S model (504 genes) and overlapped the N.v.B design (4370 genes) that includes prior percent senescence resulting in an intersection of 244 genes.  We then considered the similarity between the common genes of Normal and non-prior adjusted N.v.B (242 genes), and investigate the commanility between Normal and prior adjusted N.v.B (244 genes).  This triple intersection output 237 common genes with 97% commonality.
+
+We created a design model that includes the percent normal within the bulk population, and looked for similarity of the gene sets within Normal set and the N.v.S gene set.  After conducting a gene wise Analysis with this model on the N.v.B data (4370 top genes), we then intersected the top genes unfiltered with the N.v.S gene set (1610 top genes) and considered the intersection of 457 genes overlapped at 28%.  We examined the similarity between the overlapped genes of the prior design model, and the model that did not include prior percent senescence.  The intersection between N.v.S and the non-prior N.v.B consisted of 474 genes, the intersection using prior model of N.v.B and N.v.S output 457 genes,  the intersection of these two genes sets output 449 common genes with 94% similarity.  Thus the prior modeling does not affect the data significantly.
+
+Because the unfiltered gene sets and their triple intersection are so alike, examining their filtering will result in a very similar gene set performed without using the prior-adjusted percent senescense.  
+
+We conclude that for Normal versus bulk design modeling, adjusting the percent normal does not influence the data.   
+
+# Senescent and Prior Adjusted Bulk Comparisons
+ We turn our attention to modeling the biological data that adjusts for the percent senescence comparing Bulk as 95% normal, and Bulk with 5% Senescence, compared with pure senescent samples.
+  Previously we analyzed Normal and Senescent without the Bulk data included, and derived a gene list using Artemis with roughly 1600 top genes.  We now investigate the two group comparison between Senescent and Bulk using prior percent senescence and examine the overlap between the top D.E.G. found from modeling senescent samples in N.v.S sorted data set.
+
+
+```{r}
+suppressPackageStartupMessages(library(artemis))
+load("/home/anthonycolombo/Documents/CD34_output/bulkS.RData")
+library(VennDiagram)
+#load the bulk and Senescent kexp
+
+#load the geneWiseAnalyis
+load("/home/anthonycolombo/Documents/CD34_output/gwaBSPrior.RData")
+gwaBSPrior$design #prior % senescence
+#load the geneWiseAnalysis from N.v.S
+load("/home/anthonycolombo/Documents/CD34_output/gwaNS.RData")
+
+#unfiltered
+bs_intersect_ns<-calculate.overlap(
+                x=list(
+                "NS"=gwaNS$topGenes,
+                "BS"=gwaBSPrior$topGenes))
+
+summary(bs_intersect_ns)
+length(bs_intersect_ns$a3)/length(bs_intersect_ns$a1) #58% covrge
+
+pdf("/home/anthonycolombo/Documents/CD34_output/PriorBulkSens_NormSen.pdf")
+draw.pairwise.venn(length(bs_intersect_ns$a2),
+                              length(bs_intersect_ns$a1),
+                              length(bs_intersect_ns$a3),
+                              c("SB","SN"))
+dev.off()
+
+
+```
+##Bulk and Senescent Union Normal And Senescent
+
+![ Bulk.v.Sen union Sen.v.Norm](/home/anthonycolombo/Documents/CD34_output/PriorBulkSens_NormSen.pdf)
+
+
+## Residual Analysis from Bulk Senescence with aprior Percent Senescence
+
+
