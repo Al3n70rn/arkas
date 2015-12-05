@@ -1,6 +1,3 @@
-#' Utility functions for artemis
-#' @describeIn utils
-#'
 #' handy string splitting function that operates on basename(x)
 #' 
 #' @param x   a string
@@ -10,7 +7,6 @@
 #' @return    a string, possibly concatenated from multiple elements
 #' 
 #' @export
-#' 
 strpop <- function(x, y=" ", z=NULL) {
   res <- strsplit(basename(x), y)[[1]]
   if (is.null(z)) z <- length(res)
