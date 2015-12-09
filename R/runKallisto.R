@@ -60,13 +60,14 @@ runKallisto <- function(sampleDir,
                    "-b", bootstraps, 
                    "-t", threads, 
                    ifelse(bias, "--bias", ""), 
-                   ifelse(pseudobam, "--pseudobam", ""), 
-                   sampleFiles)
+                   ifelse(pseudobam, paste0("--pseudobam ",sampleFiles," | samtools view -Sb - > ",outputPath,"/",sampleDir,".bam"), sampleFiles) )
   retval <- system(command)
   res <- list(command=command, outputPath=outputPath, bootstraps=bootstraps)
   if (retval == 0 && file.exists(paste0(outputDir, "/abundance.h5"))) {
     return(res)
   } else { 
-    stop(paste("Quantification failed; command",command,"did not produce hdf5"))
+    stop(paste("Quantification failed; command",command,"did not produce bam file"))
   }
-} 
+   
+
+}#{{{ main 
