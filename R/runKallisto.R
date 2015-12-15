@@ -55,7 +55,12 @@ runKallisto <- function(sampleDir,
   
   ## rack up all the paired FASTQ files for a sample 
   samplePath <- paste0(fastqPath, "/", sampleDir)
+  if(singleEnd==FALSE){
   sampleFiles <- paste(pairFastqFiles(samplePath), collapse=" ")
+   }#pair the fastq for paired end only
+  if(singleEnd==TRUE){
+  sampleFiles<-paste0(samplePath,"/",dir(samplePath))
+  }
   outputDir <- paste0(outputPath, "/", sampleDir)
   if (!dir.exists(outputPath)) dir.create(outputPath)
 
@@ -67,7 +72,7 @@ runKallisto <- function(sampleDir,
                    "-t", threads, 
                    ifelse(bias, "--bias", ""), 
                    ifelse(pseudobam, paste0("--pseudobam ",sampleFiles," | samtools view -Sb - > ",outputPath,"/",sampleDir,".bam"), sampleFiles),
-                    ifelse(singleEnd,paste0("--single -l ", lengthMean," -s ", lengthDev," ",sampleFiles), sampleFiles )
+                    ifelse(singleEnd,paste0("--single -l ", lengthMean," -s ", lengthDev," ",sampleFiles), sampleFiles ))
   retval <- system(command)
   res <- list(command=command, outputPath=outputPath, bootstraps=bootstraps)
   if (retval == 0 && file.exists(paste0(outputDir, "/abundance.h5"))) {
