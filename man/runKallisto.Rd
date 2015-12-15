@@ -7,6 +7,7 @@
 runKallisto(sampleDir, indexName = NULL, fastaPath = ".",
   fastaFiles = NULL, fastqPath = ".", outputPath = ".",
   bootstraps = 100, threads = 1, bias = TRUE, pseudobam = FALSE,
+  singleEnd = FALSE, lengthMean = 150, lengthDev = 0.001,
   collapse = "_mergedWith_", ...)
 }
 \arguments{
@@ -29,6 +30,12 @@ runKallisto(sampleDir, indexName = NULL, fastaPath = ".",
 \item{bias}{boolean, perform bias correction? (TRUE)}
 
 \item{pseudobam}{boolean, produce pseudoBAM output? (FALSE)}
+
+\item{singleEnd}{boolean, produce single end quantification, mean and std.dev required}
+
+\item{lengthMean}{integer, length mean used only for single end quantification}
+
+\item{lengthDev}{integer, length std used only for single end quantification}
 
 \item{collapse}{string to name multi-FASTA indices ("_mergedWith_")}
 }
