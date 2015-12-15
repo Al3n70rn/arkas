@@ -10,6 +10,9 @@
 #' @param threads     integer, how many threads to use for bootstraps? (4)
 #' @param bias        boolean, perform bias correction? (TRUE)
 #' @param pseudobam   boolean, produce pseudoBAM output? (FALSE)
+#' @param singleEnd   boolean, produce single end quantification, mean and std.dev required
+#' @param lengthMean  integer, length mean used only for single end quantification
+#' @param lengthDev   integer, length std used only for single end quantification
 #' @param collapse    string to name multi-FASTA indices ("_mergedWith_")
 #'
 #' @export
@@ -23,6 +26,9 @@ runKallisto <- function(sampleDir,
                         threads=1,
                         bias=TRUE,
                         pseudobam=FALSE,
+                        singleEnd=FALSE,
+                        lengthMean=150,
+                        lengthDev=0.001,
                         collapse="_mergedWith_", 
                         ...) {
 
@@ -60,7 +66,8 @@ runKallisto <- function(sampleDir,
                    "-b", bootstraps, 
                    "-t", threads, 
                    ifelse(bias, "--bias", ""), 
-                   ifelse(pseudobam, paste0("--pseudobam ",sampleFiles," | samtools view -Sb - > ",outputPath,"/",sampleDir,".bam"), sampleFiles) )
+                   ifelse(pseudobam, paste0("--pseudobam ",sampleFiles," | samtools view -Sb - > ",outputPath,"/",sampleDir,".bam"), sampleFiles),
+                    ifelse(singleEnd,paste0("--single -l ", lengthMean," -s ", lengthDev," ",sampleFiles), sampleFiles )
   retval <- system(command)
   res <- list(command=command, outputPath=outputPath, bootstraps=bootstraps)
   if (retval == 0 && file.exists(paste0(outputDir, "/abundance.h5"))) {
