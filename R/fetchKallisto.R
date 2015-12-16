@@ -91,7 +91,8 @@ fetchKallisto <- function(sampleDir=".",
     index <- sub(".fa", "", sub(".idx", "", sub(".kidx", "", indexname)))
     runinfo$fastaFiles <- strsplit(index, collapse)[[1]]
   }
-  runinfo$transcriptomes <- unique(sapply(runinfo$fastaFiles, getTxDbLiteName))
+  runinfo$transcriptomes <- 
+    unlist(unique(sapply(runinfo$fastaFiles, getTxDbLiteName)))
   runinfo$biascorrected <- any(grepl("--bias", callinfo))
   return(runinfo)
 
