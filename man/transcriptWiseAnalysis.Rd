@@ -26,6 +26,11 @@ transcriptWiseAnalysis(kexp, design, p.cutoff = 0.05, fold.cutoff = 1,
 \item{biotype_class}{optionally restrict to one or more biotype_class ...es}
 }
 \description{
+<<<<<<< HEAD
 Analysis of raw transcript abundance estimates.
+=======
+FIXME: add bundle-wise annotation for pathway/functional enrichment 
+FIXME: add promoter-wise annotation for pathway/functional enrichment
+>>>>>>> fabb0952a9e187138ec827ef88f8948a31371e2f
 }
 
