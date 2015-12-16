@@ -5,7 +5,7 @@
 \title{index transcriptome/transcriptomes}
 \usage{
 indexKallisto(fastaFiles, fastaPath, fastaTxDbLite = TRUE,
-  collapse = "_mergedWith_", ...)
+  collapse = "_mergedWith_", kmer = 31, ...)
 }
 \arguments{
 \item{fastaFiles}{a character string or vector of FASTA transcriptomes}
@@ -15,6 +15,8 @@ indexKallisto(fastaFiles, fastaPath, fastaTxDbLite = TRUE,
 \item{fastaTxDbLite}{boolean: should we try to annotate new FASTAs? (yes)}
 
 \item{collapse}{string to name multi-FASTA indices ("_mergedWith_")}
+
+\item{kmer}{integer, integer 3-31 of kmer size,default 31}
 }
 \description{
 index transcriptome/transcriptomes
