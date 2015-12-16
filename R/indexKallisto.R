@@ -4,18 +4,18 @@
 #' @param fastaPath       where to find the preceding FASTA files 
 #' @param fastaTxDbLite   boolean: should we try to annotate new FASTAs? (yes)
 #' @param collapse        string to name multi-FASTA indices ("_mergedWith_")
-#'
+#' @param kmer            integer, integer 3-31 of kmer size,default 31 
 #' @import tools
 #' @import TxDbLite
 #' @import Rsamtools
 #' 
 #' @export
 indexKallisto <- function(fastaFiles, fastaPath, fastaTxDbLite=TRUE, 
-                          collapse="_mergedWith_", ...) { 
+                          collapse="_mergedWith_", kmer=31,...) { 
 
   oldwd <- getwd()
   setwd(fastaPath)
-
+  message(paste0("kmer length size: ",kmer))
   indexName <- .getIndexName(fastaFiles, collapse=collapse)
   indexPath <- .getIndexPath(indexName, fastaPath)
 
@@ -48,7 +48,7 @@ indexKallisto <- function(fastaFiles, fastaPath, fastaTxDbLite=TRUE,
     }
 
     ## No dupes, proceed...
-    command <- paste(c("kallisto index -i", indexName, fastaFiles),collapse=" ")
+    command <- paste(c("kallisto index -i", indexName, fastaFiles," -k ",kmer),collapse=" ")
     retval <- system(command=command)
     setwd(oldwd)
     if (retval == 0) {
