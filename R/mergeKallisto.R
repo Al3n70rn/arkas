@@ -72,6 +72,9 @@ mergeKallisto <- function(outputDirs=NULL,
   } else {
     message("Setting transcriptome automatically from Kallisto call string.")
     transcriptomes <- attr(res[[1]], "transcriptomes")
+    if (is.null(transcriptomes)) {
+      transcriptomes <- c(unknown=attr(res[[1]], "fastaFiles"))
+    }
   }
   data(unannotatedTranscript, package="artemis")
   rowdat <- rep(unannotatedTranscript, nrow(asys$est_counts))
