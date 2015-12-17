@@ -71,8 +71,8 @@ runKallisto <- function(sampleDir,
                    "-b", bootstraps, 
                    "-t", threads, 
                    ifelse(bias, "--bias", ""), 
-                   ifelse(pseudobam, paste0("--pseudobam ",sampleFiles," | samtools view -Sb - > ",outputPath,"/",sampleDir,".bam"), sampleFiles),
-                    ifelse(singleEnd,paste0("--single -l ", lengthMean," -s ", lengthDev," ",sampleFiles), sampleFiles ))
+                   ifelse(pseudobam, paste0("--pseudobam ",sampleFiles," | samtools view -Sb - > ",outputPath,"/",sampleDir,".bam"),sampleFiles),
+                    ifelse(singleEnd,paste0("--single -l ", lengthMean," -s ", lengthDev," ",sampleFiles),"" ))
   retval <- system(command)
   res <- list(command=command, outputPath=outputPath, bootstraps=bootstraps)
   if (retval == 0 && file.exists(paste0(outputDir, "/abundance.h5"))) {
