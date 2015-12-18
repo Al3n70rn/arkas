@@ -8,7 +8,7 @@ runKallisto(sampleDir, indexName = NULL, fastaPath = ".",
   fastaFiles = NULL, fastqPath = ".", outputPath = ".",
   bootstraps = 100, threads = 1, bias = TRUE, pseudobam = FALSE,
   singleEnd = FALSE, lengthMean = 150, lengthDev = 0.001,
-  collapse = "_mergedWith_", ...)
+  collapse = "_mergedWith_", extension = ".fastq.gz", ...)
 }
 \arguments{
 \item{sampleDir}{character, subdirectory for sample's FASTQ files}
@@ -38,6 +38,8 @@ runKallisto(sampleDir, indexName = NULL, fastaPath = ".",
 \item{lengthDev}{integer, length std used only for single end quantification}
 
 \item{collapse}{string to name multi-FASTA indices ("_mergedWith_")}
+
+\item{extension}{string,  to pass the extension into pairFastqFiles()}
 }
 \description{
 run kallisto with fastq.gz files on a freshly generated or existing index
