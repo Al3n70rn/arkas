@@ -14,7 +14,7 @@
 #' @param lengthMean  integer, length mean used only for single end quantification
 #' @param lengthDev   integer, length std used only for single end quantification
 #' @param collapse    string to name multi-FASTA indices ("_mergedWith_")
-#'
+#' @param extension   string,  to pass the extension into pairFastqFiles()
 #' @export
 runKallisto <- function(sampleDir, 
                         indexName=NULL, 
@@ -29,7 +29,8 @@ runKallisto <- function(sampleDir,
                         singleEnd=FALSE,
                         lengthMean=150,
                         lengthDev=0.001,
-                        collapse="_mergedWith_", 
+                        collapse="_mergedWith_",
+                        extension=".fastq.gz", 
                         ...) {
 
   if (is.null(indexName) && is.null(fastaFiles)) {
@@ -56,7 +57,7 @@ runKallisto <- function(sampleDir,
   ## rack up all the paired FASTQ files for a sample 
   samplePath <- paste0(fastqPath, "/", sampleDir)
   if(singleEnd==FALSE){
-  sampleFiles <- paste(pairFastqFiles(samplePath), collapse=" ")
+  sampleFiles <- paste(pairFastqFiles(samplePath, extension=extension), collapse=" ")
    }#pair the fastq for paired end only
   if(singleEnd==TRUE){
   sampleFiles<-paste0(samplePath,"/",dir(samplePath))
