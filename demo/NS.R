@@ -17,6 +17,7 @@ if (require(artemisData)) {
   ## may not need to 
   appSession$indexName <- indexKallisto(fastaFiles=appSession$fastaFiles,
                                         fastaPath=appSession$fastaPath)$indexName
+  appSession$extension<-"_*"
   results <- lapply(appSession$samples,
                     runKallisto,
                     indexName=appSession$indexName,
@@ -24,7 +25,8 @@ if (require(artemisData)) {
                     fastaPath=appSession$fastaPath,
                     bootstraps=appSession$bootstraps,
                     threads=appSession$threads,
-                    outputPath=appSession$outputPath)
+                    outputPath=appSession$outputPath,
+                     extension=appSession$extension)
 
   message("AppSession variables:")
   for (i in names(appSession)) message("appSession$", i, " = ", appSession[[i]])
