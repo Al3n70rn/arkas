@@ -12,7 +12,6 @@
 #' @import edgeR 
 #' @import limma
 #' @import biomaRt
-#' @import ReactomePA 
 #' @import clusterProfiler
 #' @import Homo.sapiens
 #' @import Mus.musculus
@@ -90,9 +89,9 @@ geneWiseAnalysis <- function(kexp, design=NULL, how=c("cpm","tpm"),
   ensemblVector <- converted[,which(colnames(converted) == "ensembl_gene_id")]
 
   # FIXME: switch this part to qusage and keep it optional  
-  res <- .reactomeEnrichmentOverall(res, converted, commonNomen=commonName,
+  #res <- .reactomeEnrichmentOverall(res, converted, commonNomen=commonName,
                                   species, p.cutoff)
-  res <- .reactomeEnrichmentCluster(res, converted, commonNomen=commonName,
+  #res <- .reactomeEnrichmentCluster(res, converted, commonNomen=commonName,
                                   p.cutoff)
   res <- .formatLimmaWithMeta(res,converted,kexp)
   res$features <- features(kexp)
