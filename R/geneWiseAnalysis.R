@@ -15,7 +15,7 @@
 #' @import clusterProfiler
 #' @import Homo.sapiens
 #' @import Mus.musculus
-#' @import biomaRt
+#' 
 #'
 #' @importFrom matrixStats rowSds 
 #' 
