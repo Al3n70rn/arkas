@@ -4,7 +4,7 @@
 \alias{pairFastqFiles}
 \title{figure out how a sample's runs can be properly paired (no SE support yet)}
 \usage{
-pairFastqFiles(path = ".", extension = ".fastq.gz", readPrefix = "R")
+pairFastqFiles(path = ".", extension = "_*", readPrefix = "R")
 }
 \arguments{
 \item{path}{a character string specifying where the FASTQ files are}
