@@ -9,6 +9,7 @@ Depends:
     jsonlite,
     GenomeInfoDb,
     ReactomePA,
+    qusage,
     limma,
     Biobase,
     TxDbLite,

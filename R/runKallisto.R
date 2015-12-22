@@ -10,8 +10,11 @@
 #' @param threads     integer, how many threads to use for bootstraps? (4)
 #' @param bias        boolean, perform bias correction? (TRUE)
 #' @param pseudobam   boolean, produce pseudoBAM output? (FALSE)
+#' @param singleEnd   boolean, produce single end quantification, mean and std.dev required
+#' @param lengthMean  integer, length mean used only for single end quantification
+#' @param lengthDev   integer, length std used only for single end quantification
 #' @param collapse    string to name multi-FASTA indices ("_mergedWith_")
-#'
+#' @param extension   string,  to pass the extension into pairFastqFiles()
 #' @export
 runKallisto <- function(sampleDir, 
                         indexName=NULL, 
@@ -23,7 +26,11 @@ runKallisto <- function(sampleDir,
                         threads=1,
                         bias=TRUE,
                         pseudobam=FALSE,
-                        collapse="_mergedWith_", 
+                        singleEnd=FALSE,
+                        lengthMean=150,
+                        lengthDev=0.001,
+                        collapse="_mergedWith_",
+                        extension=".fastq.gz", 
                         ...) {
 
   if (is.null(indexName) && is.null(fastaFiles)) {
@@ -49,48 +56,31 @@ runKallisto <- function(sampleDir,
   
   ## rack up all the paired FASTQ files for a sample 
   samplePath <- paste0(fastqPath, "/", sampleDir)
-  sampleFiles <- paste(pairFastqFiles(samplePath), collapse=" ")
+  if(singleEnd==FALSE){
+  sampleFiles <- paste(pairFastqFiles(samplePath, extension=extension), collapse=" ")
+   }#pair the fastq for paired end only
+  if(singleEnd==TRUE){
+  sampleFiles<-paste0(samplePath,"/",dir(samplePath))
+  }
   outputDir <- paste0(outputPath, "/", sampleDir)
   if (!dir.exists(outputPath)) dir.create(outputPath)
 
   ## run kallisto quant without pseudoBAM output
- 
-if (is.null(pseudoBAM)) {
- command <- paste("kallisto quant", 
+  command <- paste("kallisto quant", 
                    "-i", indexFile, 
                    "-o", outputDir, 
                    "-b", bootstraps, 
                    "-t", threads, 
                    ifelse(bias, "--bias", ""), 
-                   ifelse(pseudobam, "--pseudobam", ""), 
-                   sampleFiles)
+                   ifelse(pseudobam, paste0("--pseudobam ",sampleFiles," | samtools view -Sb - > ",outputPath,"/",sampleDir,".bam"),sampleFiles),
+                    ifelse(singleEnd,paste0("--single -l ", lengthMean," -s ", lengthDev," ",sampleFiles),"" ))
   retval <- system(command)
   res <- list(command=command, outputPath=outputPath, bootstraps=bootstraps)
   if (retval == 0 && file.exists(paste0(outputDir, "/abundance.h5"))) {
     return(res)
   } else { 
-    stop(paste("Quantification failed; command",command,"did not produce hdf5"))
+    stop(paste("Quantification failed; command",command,"did not produce bam file"))
   }
-} #if no pseudoBAM 
+   
 
-#else { 
- # command <- paste("kallisto quant",
-  #                 "-i", indexFile,
-   #                "-o", outputDir,
-    #               "-b", bootstraps,
-     #              "--pseudobam",
-      #             sampleFiles,
-       #             "| samtools view -Sb - >",
-        #             lapply(sampleDir,function(x) paste(x,".pbam",sep="")))
- # retval <- system(command)
- # res <- list(command=command, outputPath=outputPath, bootstraps=bootstraps)
- # if (retval == 0 && file.exists(paste0(outputDir, "/abundance.h5"))) {
-  #  return(res)
- # } else {
-  #  stop(paste("Quantification failed; command",command,"did not produce hdf5"))
- # }
-
-
-
-#}#else pseudoBAM desired
-}
+}#{{{ main 
