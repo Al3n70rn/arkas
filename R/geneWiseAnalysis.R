@@ -12,25 +12,11 @@
 #' @import edgeR 
 #' @import limma
 #' @import biomaRt
-#' @import ReactomePA 
-#' @import clusterProfiler
-#' @import Homo.sapiens
-#' @import Mus.musculus
-#' @import biomaRt
 #'
 #' @importFrom matrixStats rowSds 
 #' 
 #' @details           If no design matrix is found, the function will look in 
 #'                    exptData(kexp)$design. If that too is empty it fails.
-#'                    There seems to be a bug in rendering Reactome plots, so 
-#'                    it may be necessary to do so manually:  
-#' \code{res <- geneWiseAnalysis(kexp, design, ...)} 
-#'                    followed by 
-#' \code{barplot(res$enriched, showCategory=10)}
-#'                    and 
-#' \code{plot(res$clusts)}
-#'           
-#'                    What really needs to happen is to break those out.
 #'
 #' @return            a list w/items design, voomed, fit, top, enriched,
 #'                                   Figures, scaledExprs, clusts, species,
@@ -39,12 +25,8 @@
 #' @export
 geneWiseAnalysis <- function(kexp, design=NULL, how=c("cpm","tpm"), 
                              p.cutoff=0.05, fold.cutoff=1, read.cutoff=1, 
-                             species=c("Homo.sapiens",
-                                       "Mus.musculus",
-                                       "Rattus.norvegicus"), 
-                             fitOnly=FALSE, 
-                             ...) { 
-  # {{{ main function body
+                             species=c("Homo.sapiens", "Mus.musculus"),
+                             fitOnly=FALSE, ...) { 
 
   ## this is really only meant for a KallistoExperiment
   if (!is(kexp, "KallistoExperiment")) {
@@ -61,13 +43,10 @@ geneWiseAnalysis <- function(kexp, design=NULL, how=c("cpm","tpm"),
   }
 
    ## only ones supported for now (would be simple to expand, though)
-  species <- match.arg(species, c("Homo.sapiens",
-                                       "Mus.musculus",
-                                       "Rattus.norvegicus")) ## NOT to be confused with KEGG species ID
+  species <- match.arg(species, c("Homo.sapiens", "Mus.musculus"))
   commonName <- switch(species, 
                        Mus.musculus="mouse", 
-                       Homo.sapiens="human",
-                      Rattus.norvegicus="rat") 
+                       Homo.sapiens="human")
   message("Fitting bundles...")
   ## default to ensembl gene id (not entrez)
   res <- fitBundles(kexp, design, read.cutoff=read.cutoff)
@@ -90,10 +69,6 @@ geneWiseAnalysis <- function(kexp, design=NULL, how=c("cpm","tpm"),
   ensemblVector <- converted[,which(colnames(converted) == "ensembl_gene_id")]
 
   # FIXME: switch this part to qusage and keep it optional  
-  res <- .reactomeEnrichmentOverall(res, converted, commonNomen=commonName,
-                                  species, p.cutoff)
-  res <- .reactomeEnrichmentCluster(res, converted, commonNomen=commonName,
-                                  p.cutoff)
   res <- .formatLimmaWithMeta(res,converted,kexp)
   res$features <- features(kexp)
   return(res)
@@ -103,10 +78,9 @@ geneWiseAnalysis <- function(kexp, design=NULL, how=c("cpm","tpm"),
 
 ###the help####################
 
-.convertEntrezID<-function(resValues=NULL,commonNomen=NULL) { 
+.convertEntrezID<-function(resValues=NULL,commonNomen=NULL) {  # {{{
  #import biomaRt
  
- #for ReactomePA it is needed to have entrezGene id,  adding to res list
    #if more species are added then getBM will have to be turned into a funciton
 
 #resValues must be ensG ids or ensT ids, characters only
@@ -144,100 +118,50 @@ geneWiseAnalysis <- function(kexp, design=NULL, how=c("cpm","tpm"),
       }#rat
 
     return(convertedEntrezID)
-} #{{{ entrez Convert
+} # }}} entrez Convert
 
-
-.reactomeEnrichmentOverall<-function(res=NULL,converted,commonNomen=NULL,species, p.cutoff){
-message("Performing Reactome enrichment analysis...")
-  message("Matching species...")
-  library(species, character.only=TRUE)
-  res$enriched <- enrichPathway(gene=converted[,which(colnames(res$entrezID)=="entrezgene")], 
-              qvalueCutoff=p.cutoff, 
-              readable=TRUE) 
-  res$Figures <- list()
-  res$Figures$barplot <- barplot(res$enriched,
-                                 showCategory=10, 
-                                 title="Overall Reactome enrichment")
-   
-    return(res)
-}#{{{ reactome main
-
-
-.reactomeEnrichmentCluster<-function(res=NULL,converted,commonNomen=NULL,p.cutoff){
-entrezVector<-as.vector(converted[,which(colnames(converted)=="entrezgene")])
-#grab all the ensembl associated with the non-NA entrez
-ensemblVector<-converted[,which(colnames(converted)=="ensembl_gene_id")]
-message("Performing clustered enrichment analysis...")
-res$scaledExprs <- t(scale(t(res$voomed$E[ ensemblVector, ])))
- #finding scaled Expression in terms of entrez id
- speciesMart<-.findMart(commonNomen)
- scaledBiomartID<-.convertEntrezID(rownames(res$scaledExprs),commonNomen)
-   stopifnot(nrow(res$scaledExprs)==nrow(scaledBiomartID))
-#map the entrez ID to the matching ensembl score
-indx<-which(rownames(res$scaledExprs)==scaledBiomartID[,which(colnames(converted)=="ensembl_gene_id")])
-#map limma sclaed expression to ENTREZ
-rownames(res$scaledExprs)<-scaledBiomartID[indx,which(colnames(converted)=="entrezgene")]
-  message("clustering scaled expression in terms of entrez id ... ")
-  clust <- cutree(hclust(dist(res$scaledExprs), method="ward"), k=2)
-  genes <- split(names(clust), clust)
-  names(genes) <- c("up in Cntrl", "down in Cntrl")
-  res$clusts <- compareCluster(geneCluster=genes, 
-                              fun="enrichPathway", 
-                               qvalueCutoff=p.cutoff)
-
-  #adding ggplot object for multiplotting
-  res$Figures$clusts <- plot(res$clusts) ## saving into Figures list
-  return(res)
-}#enrichment cluser
-
-
-.formatLimmaWithMeta<-function(res,converted,kexp){
+.formatLimmaWithMeta<-function(res,converted,kexp){ # {{{ format limma results
  
-#create csv of limma counts, gene names, ensembl ID, biotypes and store into res
- index<-vector()
-for(i in 1:nrow(converted)){
-index[i]<-which(rownames(res$top)==converted[i, grep("ensembl_gene_id",colnames(converted))])
-}#indexing converted
+  # create csv of limma counts, gene names, ensembl ID, biotypes; store into res
+  index<-vector()
+  for(i in 1:nrow(converted)){
+    cols <- grep("ensembl_gene_id", colnames(converted))
+    index[i] <- which(rownames(res$top) == converted[i, cols])
+  } #indexing converted
 
-limmad<-res$top[index,]
-limmad<-cbind(limmad,converted[,grep("entrezgene",colnames(converted))],converted[,grep("_symbol",colnames(converted))], converted[, grep("ensembl_gene_id",colnames(converted))])
-colnames(limmad)[7]<-"entrez_id"
-colnames(limmad)[8]<-"gene_name"
-colnames(limmad)[9]<-"ensembl_id"
+  limmad <- res$top[index,]
+  limmad <- cbind(limmad,
+                  converted[, grep("entrezgene",colnames(converted))],
+                  converted[, grep("_symbol",colnames(converted))], 
+                  converted[, grep("ensembl_gene_id",colnames(converted))])
+  colnames(limmad)[7]<-"entrez_id"
+  colnames(limmad)[8]<-"gene_name"
+  colnames(limmad)[9]<-"ensembl_id"
 
-#grab the meta data matching the ensembl gene ids from limma
-Index<-mcols(features(kexp))$gene_id %in% limmad[,9] 
-newFeatures<-mcols(features(kexp))[Index,]
-Features<-newFeatures[c(4,8:9)]
-uniqueFeatures<-Features[!duplicated(Features$gene_id),]
-limmad[,10]<-NA
-limmad[,11]<-NA
-colnames(limmad)[c(10:11)]<-c("gene_biotype","biotype_class")
+  #grab the meta data matching the ensembl gene ids from limma
+  Index <- mcols(features(kexp))$gene_id %in% limmad[,9] 
+  newFeatures <- mcols(features(kexp))[Index,]
+  Features<-newFeatures[c(4,8:9)]
+  uniqueFeatures<-Features[!duplicated(Features$gene_id),]
+  limmad[,10]<-NA
+  limmad[,11]<-NA
+  colnames(limmad)[c(10:11)]<-c("gene_biotype","biotype_class")
 
-for(i in 1:nrow(limmad)){
-indx<-which(rownames(limmad)==uniqueFeatures$gene_id[i])
-limmad[indx,c(10:11)]<-cbind(uniqueFeatures$gene_biotype[i],uniqueFeatures$biotype_class[i])
-}# cbind biotype class to limma results
+  for(i in 1:nrow(limmad)) { # cbind biotype class to limma results
+    indx <- which(rownames(limmad) == uniqueFeatures$gene_id[i])
+    limmad[indx,c(10:11)] <- cbind(uniqueFeatures$gene_biotype[i],
+                                   uniqueFeatures$biotype_class[i])
+  }
 
-res$limmaWithMeta<-limmad
- return(res)
-} #format limma results
+  res$limmaWithMeta<-limmad
+  return(res)
+} # }}} format limma results
 
+.findMart <- function(commonName=c("human","mouse"),host="www.ensembl.org"){#{{{
 
+  dataset <- switch(match.arg(commonName),
+                    human="hsapiens_gene_ensembl", 
+                    mouse="mmusculus_gene_ensembl")
+  useMart("ENSEMBL_MART_ENSEMBL", dataset=dataset, host=host)
 
-.findMart<-function(commonName=NULL){
- if (commonName=="human") {
-   setType="hsapiens_gene_ensembl"
-   }#human
- if(commonName=="mouse"){
-   setType="mmusculus_gene_ensembl"
-   
-      }#mouse
- if (commonName=="rat"){
-  setType="rnorvegicus_gene_ensembl"
-                 
-      }#rat
-
-speciesMart<-useMart("ENSEMBL_MART_ENSEMBL",dataset=setType,host="jul2015.archive.ensembl.org")
-return(speciesMart)
-} #{{{find mart
+} #}}}
