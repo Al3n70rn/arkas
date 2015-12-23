@@ -4,7 +4,7 @@
 #' @param extension   what is the file extension?  default is ".fastq.gz"
 #' @param readPrefix  usually pairs are _R1_/_R2_, so this defaults to "R"
 #' @export 
-pairFastqFiles <- function(path=".", extension=".fastq.gz", readPrefix="R") {
+pairFastqFiles <- function(path=".", extension="_*", readPrefix="R") {
   allFiles <- list.files(path, pattern=paste0(extension, "$"))
   
   #FIX ME: need to identify the the end string the error here is that if there is as a numeric digit of "1" in the sample name, this will cause it to error and change the sample name sub identifies the first instance of a "1" or "2".
