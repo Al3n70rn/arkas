@@ -8,15 +8,16 @@ packages for e.g. pathway- or network-based enrichment analysis.  Note that
 this function may or may not be optimal for your RNAseq experiment. Please 
 refer to 'Details' for some thought exercises about the nature of 'genes'.}
 \usage{
-collapseTpm(kexp, bundleID = "gene_id", minTPM = 1, discardjoined = TRUE,
-  tx_biotype = NULL, gene_biotype = NULL, biotype_class = NULL, ...)
+collapseTpm(kexp, bundleID = "gene_id", minTPM = 0.01,
+  discardjoined = TRUE, tx_biotype = NULL, gene_biotype = NULL,
+  biotype_class = NULL, ...)
 }
 \arguments{
 \item{kexp}{A KallistoExperiment (or something very much like it)}
 
 \item{bundleID}{The column (in mcols(features(kexp))) of the bundle IDs}
 
-\item{minTPM}{Discard transcripts and bundles with < this many TPMs}
+\item{minTPM}{Discard transcripts/bundles with < this many TPMs (0.01)}
 
 \item{discardjoined}{Discard bundles with IDs "joined" by a ";"? (TRUE)}
 
