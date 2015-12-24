@@ -29,28 +29,26 @@ indexKallisto <- function(fastaFiles, fastaPath, fastaTxDbLite=TRUE,
 
     ## Check the FASTA files for duplicate seqnames:
     dupes <- findDupes(fastaFiles)
-    if (!is.null(dupes)) {
-      duplicatedSeqnames <- unique(dupes$seqname)
-      message("There are duplicated sequence names in your FASTA files:")
-      for (seqname in duplicatedSeqnames) { 
-        dupeFastas <- dupes[dupes$seqname == seqname, "fastaFile"]
-        id <- "" 
-        if (all(dupes[dupes$seqname == seqname, "allIdentical"])) { 
-          id <- " (all of the nucleotide sequences are identical)"
-        }
-        message(seqname, id, ":")
-        for (fasta in dupeFastas) {
-          message("  appears in ", fasta)
-        }
-      }
-      message("You need to fix this, otherwise the output will choke Sleuth.")
-      stop("Please re-run index creation after you have fixed any duplicates.")
-    }
+    lengthDupes<-sapply(dupes,function(x) length(x))
+    if (all(lengthDupes!=0) ) {#dupes exist
+      duplicatedSeqnames <- dupes[which(lengthDupes>0)]
+      message(paste0("There are duplicated sequence names:", duplicatedSeqNames," in your FASTA file",names(duplicatedSeqNames) ) )
+      command <- paste(c("kallisto index -i", indexName, fastaFiles," -k ",kmer," --make-unique"),collapse=" ")
+    retval <- system(command=command)
+   setwd(oldwd)    
 
-    ## No dupes, proceed...
+    } ##run with the --make-unique command 
+   
+   if(all(lengthDupes==0) ) {
+    
+
+      ## No dupes, proceed...
+
     command <- paste(c("kallisto index -i", indexName, fastaFiles," -k ",kmer),collapse=" ")
     retval <- system(command=command)
     setwd(oldwd)
+   } #no dupes 
+
     if (retval == 0) {
       return(res)
     } else { 
