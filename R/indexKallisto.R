@@ -5,14 +5,14 @@
 #' @param fastaTxDbLite   boolean: should we try to annotate new FASTAs? (yes)
 #' @param collapse        string to name multi-FASTA indices ("_mergedWith_")
 #' @param kmer            integer, integer 3-31 of kmer size,default 31 
-#' @param autoCorrectDupes boolean, true will auto-correct existing dupes
+#' @param makeUnique boolean, true will auto-correct existing dupes
 #' @import tools
 #' @import TxDbLite
 #' @import Rsamtools
 #' 
 #' @export
 indexKallisto <- function(fastaFiles, fastaPath, fastaTxDbLite=TRUE, 
-                          collapse="_mergedWith_", kmer=31,autoCorrectDupes=TRUE) { 
+                          collapse="_mergedWith_", kmer=31,makeUnique=TRUE) { 
 
   oldwd <- getwd()
   setwd(fastaPath)
@@ -33,7 +33,7 @@ indexKallisto <- function(fastaFiles, fastaPath, fastaTxDbLite=TRUE,
         if(length(dupes)==1){ #there exist dupes
     lengthDupes<-sapply(dupes,function(x) length(x)) #length of entire list
      
-      if ( autoCorrectDupes==TRUE) {#correct dupes
+      if ( makeUnique==TRUE) {#correct dupes
       message("auto-correcting dupes found...")
       command <- paste(c("kallisto index -i", indexName, fastaFiles," -k ",kmer," --make-unique"),collapse=" ")
     retval <- system(command=command)
@@ -41,7 +41,7 @@ indexKallisto <- function(fastaFiles, fastaPath, fastaTxDbLite=TRUE,
 
     } ##run with the --make-unique command 
 
-   if(autoCorrectDupes==FALSE) {
+   if( makeUnique==FALSE) {
       command <- paste(c("kallisto index -i", indexName, fastaFiles," -k ",kmer),collapse=" ")
     retval <- system(command=command)
     setwd(oldwd)
@@ -51,7 +51,7 @@ indexKallisto <- function(fastaFiles, fastaPath, fastaTxDbLite=TRUE,
 
 
     if(length(dupes)==0){
-        if(autoCorrectDupes==TRUE || autoCorrectDupes==FALSE) { 
+        if(makeUnique==TRUE || makeUnique==FALSE) { 
      lengthDupes<-length(dupes) #empty list length = 0
      command <- paste(c("kallisto index -i", indexName, fastaFiles," -k ",kmer),collapse=" ")
     retval <- system(command=command)
