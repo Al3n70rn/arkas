@@ -5,13 +5,14 @@
 #' @param fastaTxDbLite   boolean: should we try to annotate new FASTAs? (yes)
 #' @param collapse        string to name multi-FASTA indices ("_mergedWith_")
 #' @param kmer            integer, integer 3-31 of kmer size,default 31 
+#' @param autoCorrectDupes boolean, true will auto-correct existing dupes
 #' @import tools
 #' @import TxDbLite
 #' @import Rsamtools
 #' 
 #' @export
 indexKallisto <- function(fastaFiles, fastaPath, fastaTxDbLite=TRUE, 
-                          collapse="_mergedWith_", kmer=31,...) { 
+                          collapse="_mergedWith_", kmer=31,autoCorrectDupes=TRUE) { 
 
   oldwd <- getwd()
   setwd(fastaPath)
@@ -29,25 +30,34 @@ indexKallisto <- function(fastaFiles, fastaPath, fastaTxDbLite=TRUE,
 
     ## Check the FASTA files for duplicate seqnames:
     dupes <- findDupes(fastaFiles)
-    lengthDupes<-sapply(dupes,function(x) length(x))
-    if (all(lengthDupes!=0) ) {#dupes exist
-      duplicatedSeqnames <- dupes[which(lengthDupes>0)]
-      message(paste0("There are duplicated sequence names:", duplicatedSeqNames," in your FASTA file",names(duplicatedSeqNames) ) )
+        if(length(dupes)==1){ #there exist dupes
+    lengthDupes<-sapply(dupes,function(x) length(x)) #length of entire list
+     
+      if ( autoCorrectDupes==TRUE) {#correct dupes
+      message("auto-correcting dupes found...")
       command <- paste(c("kallisto index -i", indexName, fastaFiles," -k ",kmer," --make-unique"),collapse=" ")
     retval <- system(command=command)
-   setwd(oldwd)    
+   setwd(oldwd)
 
     } ##run with the --make-unique command 
-   
-   if(all(lengthDupes==0) ) {
-    
 
-      ## No dupes, proceed...
-
-    command <- paste(c("kallisto index -i", indexName, fastaFiles," -k ",kmer),collapse=" ")
+   if(autoCorrectDupes==FALSE) {
+      command <- paste(c("kallisto index -i", indexName, fastaFiles," -k ",kmer),collapse=" ")
     retval <- system(command=command)
     setwd(oldwd)
-   } #no dupes 
+    }#there exist dupes
+
+}#there exist dupes and autoCorrect True
+
+
+    if(length(dupes)==0){
+        if(autoCorrectDupes==TRUE || autoCorrectDupes==FALSE) { 
+     lengthDupes<-length(dupes) #empty list length = 0
+     command <- paste(c("kallisto index -i", indexName, fastaFiles," -k ",kmer),collapse=" ")
+    retval <- system(command=command)
+    setwd(oldwd)
+      }
+   }#no dupes exist
 
     if (retval == 0) {
       return(res)
