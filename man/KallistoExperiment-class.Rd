@@ -105,8 +105,7 @@ https://haroldpimentel.wordpress.com/2014/05/08/what-the-fpkm-a-review-rna-seq-e
 
 \code{ rate <- log(counts(object)) - log(eff_length(object)); }
 
-\code{ tpm <- exp(rate - log(sum(exp(rate))) + log(1e6)) } 
- @import SummarizedExperiment
+\code{ tpm <- exp(rate - log(sum(exp(rate))) + log(1e6)) }
 
 \item \code{kallistoVersion}: Retrieve the version of Kallisto used for alignment from a KallistoExperiment
 
