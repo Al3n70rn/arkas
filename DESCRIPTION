@@ -4,36 +4,31 @@ Title: A package that complements Kallisto for quick, informative *seq analysis
 Version: 0.9.34
 Date: 2015-12-22
 Author: Tim Triche, Jr., Anthony Colombo, Harold Pimentel
-Imports:
-    biomaRt,
-    edgeR,
-    erccdashboard,
-    pathview,
+Depends:
     parallel,
-    SummarizedExperiment,
-    BiocGenerics,
-    Rsamtools,
-    RUVSeq,
-    TxDbLite,
-    tools,
+    jsonlite,
+    qusage,
     limma,
+    Biobase,
+    TxDbLite,
+    SummarizedExperiment,
+    EnrichmentBrowser,
+    GenomeInfoDb,
+    graphite,
+    beeswarm,
+    tools
+Imports:
     rhdf5,
     matrixStats,
     GenomicRanges,
     GenomicFeatures,
     Matrix,
-    KEGGREST,
-    ggplot2
+    KEGGREST
 Suggests:
     roxygen2,
     knitr,
-    artemisData,
-     jsonlite,
-    qusage,
-    Biobase,
-    GenomeInfoDb,
-    graphite,
-    beeswarm,
+    EnsDbLite.Hsapiens.80,
+    RepDbLite.Hsapiens.2005
 VignetteBuilder: knitr
 Maintainer: Tim Triche, Jr. <tim.triche@gmail.com>
 Description: Artemis was the hunting companion of Kallisto.  This package wraps
