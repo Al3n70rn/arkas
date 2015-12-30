@@ -1,39 +1,16 @@
 Package: artemis
 Type: Package
-Title: A package that complements Kallisto for quick, informative *seq analysis
+Title: A package that complements Kallisto for quick, informative *seq
+        analysis
 Version: 0.9.34
 Date: 2015-12-22
 Author: Tim Triche, Jr., Anthony Colombo, Harold Pimentel
-Imports:
-    biomaRt,
-    edgeR,
-    erccdashboard,
-    pathview,
-    parallel,
-    SummarizedExperiment,
-    BiocGenerics,
-    Rsamtools,
-    RUVSeq,
-    TxDbLite,
-    tools,
-    limma,
-    rhdf5,
-    matrixStats,
-    GenomicRanges,
-    GenomicFeatures,
-    Matrix,
-    KEGGREST,
-    ggplot2
-Suggests:
-    roxygen2,
-    knitr,
-    artemisData,
-     jsonlite,
-    qusage,
-    Biobase,
-    GenomeInfoDb,
-    graphite,
-    beeswarm,
+Imports: biomaRt, edgeR, erccdashboard, pathview, parallel,
+        SummarizedExperiment, BiocGenerics, Rsamtools, RUVSeq,
+        TxDbLite, tools, limma, rhdf5, matrixStats, GenomicRanges,
+        GenomicFeatures, Matrix, KEGGREST, ggplot2
+Suggests: roxygen2, knitr, artemisData, jsonlite, qusage, Biobase,
+        GenomeInfoDb, graphite, beeswarm,
 VignetteBuilder: knitr
 Maintainer: Tim Triche, Jr. <tim.triche@gmail.com>
 Description: Artemis was the hunting companion of Kallisto.  This package wraps
@@ -64,3 +41,4 @@ Description: Artemis was the hunting companion of Kallisto.  This package wraps
     from the underlying source of transcript abundance estimates.
 License: GPL (>= 2)
 RoxygenNote: 5.0.1
+Built: R 3.2.3; ; 2015-12-30 20:14:44 UTC; unix

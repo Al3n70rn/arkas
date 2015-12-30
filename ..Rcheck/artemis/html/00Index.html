@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>R: A package that complements Kallisto for quick, informative *seq
+analysis</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+<h1> A package that complements Kallisto for quick, informative *seq
+analysis
+<img class="toplogo" src="../../../doc/html/logo.jpg" alt="[R logo]" />
+</h1>
+<hr/>
+<div style="text-align: center;">
+<a href="../../../doc/html/packages.html"><img class="arrow" src="../../../doc/html/left.jpg" alt="[Up]" /></a>
+<a href="../../../doc/html/index.html"><img class="arrow" src="../../../doc/html/up.jpg" alt="[Top]" /></a>
+</div><h2>Documentation for package &lsquo;artemis&rsquo; version 0.9.34</h2>
+
+<ul><li><a href="../DESCRIPTION">DESCRIPTION file</a>.</li>
+<li><a href="../doc/index.html">User guides, package vignettes and other documentation.</a></li>
+<li><a href="../demo">Code demos</a>.  Use <a href="../../utils/help/demo">demo()</a> to run them.</li>
+</ul>
+
+<h2>Help Pages</h2>
+
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="artemis-package.html">artemis-package</a></td>
+<td>various utility functions for fast, informative RNAseq analysis</td></tr>
+<tr><td style="width: 25%;"><a href="rpkmToTpm.html">.tpmBySample</a></td>
+<td>Converts RPKM or FPKM estimates to TPM.  Per Colin Dewey,</td></tr>
+<tr><td style="width: 25%;"><a href="annotateFeatures.html">annotateFeatures</a></td>
+<td>annotate features (genes or transcripts) against (say) EnsemblDb this is becoming the default dispatcher for almost all annotation</td></tr>
+<tr><td style="width: 25%;"><a href="artemis-package.html">artemis</a></td>
+<td>various utility functions for fast, informative RNAseq analysis</td></tr>
+<tr><td style="width: 25%;"><a href="collapseBundles.html">collapseBundles</a></td>
+<td>Collapse bundles of transcripts, discard any that represent pointless tests, and optionally prune any whose joined bundle IDs tend to choke downstream packages for e.g. pathway- or network-based enrichment analysis.  Note that this function may or may not be optimal for your RNAseq experiment. Please refer to 'Details' for some thought exercises about the nature of 'genes'.</td></tr>
+<tr><td style="width: 25%;"><a href="collapseTpm.html">collapseTpm</a></td>
+<td>Collapse bundles of transcripts, discard any with (default) &lt; 1TPM/bundle, and optionally prune any whose joined bundle IDs tend to choke downstream packages for e.g. pathway- or network-based enrichment analysis.  Note that this function may or may not be optimal for your RNAseq experiment. Please refer to 'Details' for some thought exercises about the nature of 'genes'.</td></tr>
+<tr><td style="width: 25%;"><a href="collapseTranscripts.html">collapseTranscripts</a></td>
+<td>Collapse transcripts, discarding any with low reads (pointless to test them) Filtering usually increases statistical power for given false-positive rate; see Bourgon et al, 2010, http://www.pnas.org/content/107/21/9546.long.</td></tr>
+<tr><td style="width: 25%;"><a href="KallistoExperiment-class.html">counts-method</a></td>
+<td>A SummarizedExperiment subclass that stores multiple Kallisto runs</td></tr>
+<tr><td style="width: 25%;"><a href="SEtoKE.html">CountsAndFeaturesToKallistoExperiment</a></td>
+<td>Convert a properly annotated SummarizedExperiment with 'counts', OR a matrix of counts and a GRanges of annotations for each count, to a KallistoExperiment (thereby providing tpm estimates on demand).</td></tr>
+<tr><td style="width: 25%;"><a href="KallistoExperiment-class.html">covariates-method</a></td>
+<td>A SummarizedExperiment subclass that stores multiple Kallisto runs</td></tr>
+<tr><td style="width: 25%;"><a href="KallistoExperiment-class.html">covariates&lt;--method</a></td>
+<td>A SummarizedExperiment subclass that stores multiple Kallisto runs</td></tr>
+<tr><td style="width: 25%;"><a href="KallistoExperiment-class.html">eff_length-method</a></td>
+<td>A SummarizedExperiment subclass that stores multiple Kallisto runs</td></tr>
+<tr><td style="width: 25%;"><a href="erccAnalysis.html">erccAnalysis</a></td>
+<td>QC plots of ERCC spike-in controls (FIXME: automate RUVSeq normalization?)</td></tr>
+<tr><td style="width: 25%;"><a href="ERCC_annotated.html">ERCC_annotated</a></td>
+<td>ERCC spike-in control annotations</td></tr>
+<tr><td style="width: 25%;"><a href="extractIndexName.html">extractIndexName</a></td>
+<td>extract the transcriptome index used for a Kallisto hdf5 file</td></tr>
+<tr><td style="width: 25%;"><a href="KallistoExperiment-class.html">features-method</a></td>
+<td>A SummarizedExperiment subclass that stores multiple Kallisto runs</td></tr>
+<tr><td style="width: 25%;"><a href="KallistoExperiment-class.html">features&lt;--method</a></td>
+<td>A SummarizedExperiment subclass that stores multiple Kallisto runs</td></tr>
+<tr><td style="width: 25%;"><a href="fetchAppSession.html">fetchAppSession</a></td>
+<td>fetch app session variables from BaseSpace JSON</td></tr>
+<tr><td style="width: 25%;"><a href="fetchKallisto.html">fetchKallisto</a></td>
+<td>fetch one sample's worth of Kallisto estimates, perhaps with bootstraps</td></tr>
+<tr><td style="width: 25%;"><a href="fitBundles.html">fitBundles</a></td>
+<td>encapsulate limma/voom analysis for consistency with ebrowser()</td></tr>
+<tr><td style="width: 25%;"><a href="fitTranscripts.html">fitTranscripts</a></td>
+<td>encapsulate limma/voom analysis and TMM normalization at transcript level FIXME: just farm it out to sleuth, e.g. as seen in ?artemisData::withSleuth</td></tr>
+<tr><td style="width: 25%;"><a href="formatResults.html">formatResults</a></td>
+<td>downstream results from fitBundles tabulated into a single object showing genes and quantified limma fitted values.</td></tr>
+<tr><td style="width: 25%;"><a href="geneWiseAnalysis.html">geneWiseAnalysis</a></td>
+<td>Downstream analysis of bundle-aggregated transcript abundance estimates.</td></tr>
+<tr><td style="width: 25%;"><a href="getKallistoVersion.html">getKallistoVersion</a></td>
+<td>get the running version of Kallisto in the default path (if there is one)</td></tr>
+<tr><td style="width: 25%;"><a href="icgcImport.html">icgcImport</a></td>
+<td>import RNAseq data from ICGC (at least the way it comes from their DCC) right now, this means only accepting gene-level summaries; may change later.</td></tr>
+<tr><td style="width: 25%;"><a href="indexKallisto.html">indexKallisto</a></td>
+<td>index transcriptome/transcriptomes</td></tr>
+<tr><td style="width: 25%;"><a href="KallistoExperiment.html">KallistoExperiment</a></td>
+<td>Initializes a KallistoExperiment and performs some rudimentary checks. Many of the arguments CAN be NULL; determination of which is required is done at run-time.  A KallistoExperiment must contain at least the est_counts and eff_length assays, because these are required for tpm estimates.  HOWEVER, given raw counts along with informative lengths for each feature (row), we can deduce the effective length of each transcript or bundle from the total normalized count. Function SEtoKE(), which underlies as(SE, "KallistoExperiment"), does exactly that.</td></tr>
+<tr><td style="width: 25%;"><a href="KallistoExperiment-class.html">KallistoExperiment-class</a></td>
+<td>A SummarizedExperiment subclass that stores multiple Kallisto runs</td></tr>
+<tr><td style="width: 25%;"><a href="KallistoExperiment-class.html">kallistoVersion-method</a></td>
+<td>A SummarizedExperiment subclass that stores multiple Kallisto runs</td></tr>
+<tr><td style="width: 25%;"><a href="KallistoExperiment-class.html">mad-method</a></td>
+<td>A SummarizedExperiment subclass that stores multiple Kallisto runs</td></tr>
+<tr><td style="width: 25%;"><a href="mergeKallisto.html">mergeKallisto</a></td>
+<td>Merge multiple Kallisto results, yielding a KallistoExperiment.</td></tr>
+<tr><td style="width: 25%;"><a href="pairFastqFiles.html">pairFastqFiles</a></td>
+<td>figure out how a sample's runs can be properly paired (no SE support yet)</td></tr>
+<tr><td style="width: 25%;"><a href="pathwayPlot.html">pathwayPlot</a></td>
+<td>Use pathview to plot a pathway or pathways colored by gene-wise contrasts. The default is to plot the effect-size-signed, -log10(p.value) for each row.</td></tr>
+<tr><td style="width: 25%;"><a href="pcaGGFrame.html">pcaGGFrame</a></td>
+<td>plots pca of each kexp assay</td></tr>
+<tr><td style="width: 25%;"><a href="pcaPlot.html">pcaPlot</a></td>
+<td>plots pca of each kexp assay</td></tr>
+<tr><td style="width: 25%;"><a href="KallistoExperiment-class.html">pData-method</a></td>
+<td>A SummarizedExperiment subclass that stores multiple Kallisto runs</td></tr>
+<tr><td style="width: 25%;"><a href="KallistoExperiment-class.html">pData&lt;--method</a></td>
+<td>A SummarizedExperiment subclass that stores multiple Kallisto runs</td></tr>
+<tr><td style="width: 25%;"><a href="remapSymbols.html">remapSymbols</a></td>
+<td>update transcript-/gene-level annotations for a KallistoExperiment or matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rpkmToTpm.html">rpkmToTpm</a></td>
+<td>Converts RPKM or FPKM estimates to TPM.  Per Colin Dewey,</td></tr>
+<tr><td style="width: 25%;"><a href="runKallisto.html">runKallisto</a></td>
+<td>run kallisto with fastq.gz files on a freshly generated or existing index</td></tr>
+<tr><td style="width: 25%;"><a href="saveArtemisPlots.html">saveArtemisPlots</a></td>
+<td>Saving plots in PDF format in a single output file</td></tr>
+<tr><td style="width: 25%;"><a href="SEtoKE.html">SEtoKE</a></td>
+<td>Convert a properly annotated SummarizedExperiment with 'counts', OR a matrix of counts and a GRanges of annotations for each count, to a KallistoExperiment (thereby providing tpm estimates on demand).</td></tr>
+<tr><td style="width: 25%;"><a href="strpop.html">strpop</a></td>
+<td>handy string splitting function that operates on basename(x)</td></tr>
+<tr><td style="width: 25%;"><a href="SEtoKE.html">SummarizedExperimentToKallistoExperiment</a></td>
+<td>Convert a properly annotated SummarizedExperiment with 'counts', OR a matrix of counts and a GRanges of annotations for each count, to a KallistoExperiment (thereby providing tpm estimates on demand).</td></tr>
+<tr><td style="width: 25%;"><a href="KallistoExperiment-class.html">tpm-method</a></td>
+<td>A SummarizedExperiment subclass that stores multiple Kallisto runs</td></tr>
+<tr><td style="width: 25%;"><a href="KallistoExperiment-class.html">transcriptomes-method</a></td>
+<td>A SummarizedExperiment subclass that stores multiple Kallisto runs</td></tr>
+<tr><td style="width: 25%;"><a href="KallistoExperiment-class.html">transcriptsBy-method</a></td>
+<td>A SummarizedExperiment subclass that stores multiple Kallisto runs</td></tr>
+<tr><td style="width: 25%;"><a href="transcriptWiseAnalysis.html">transcriptWiseAnalysis</a></td>
+<td>Analysis of raw transcript abundance estimates.</td></tr>
+</table>
+</body></html>

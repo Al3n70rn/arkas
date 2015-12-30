@@ -1,0 +1,145 @@
+
+R version 3.2.3 (2015-12-10) -- "Wooden Christmas-Tree"
+Copyright (C) 2015 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "artemis"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> library('artemis')
+Warning: replacing previous import by ‘Matrix::as.vector’ when loading ‘artemis’
+Warning: replacing previous import by ‘grid::arrow’ when loading ‘erccdashboard’
+Warning: replacing previous import by ‘grid::unit’ when loading ‘erccdashboard’
+Warning: replacing previous import by ‘scales::alpha’ when loading ‘erccdashboard’
+Warning: replacing previous import by ‘grid::arrow’ when loading ‘qvalue’
+Warning: replacing previous import by ‘grid::unit’ when loading ‘qvalue’
+Warning: replacing previous import by ‘ggplot2::Position’ when loading ‘artemis’
+Warning: replacing previous import by ‘limma::plotMA’ when loading ‘artemis’
+Warning: replacing previous import by ‘parallel::clusterExport’ when loading ‘artemis’
+Warning: replacing previous import by ‘parallel::parSapplyLB’ when loading ‘artemis’
+Warning: replacing previous import by ‘parallel::clusterApplyLB’ when loading ‘artemis’
+Warning: replacing previous import by ‘parallel::parSapply’ when loading ‘artemis’
+Warning: replacing previous import by ‘parallel::parApply’ when loading ‘artemis’
+Warning: replacing previous import by ‘parallel::clusterMap’ when loading ‘artemis’
+Warning: replacing previous import by ‘parallel::clusterApply’ when loading ‘artemis’
+Warning: replacing previous import by ‘parallel::clusterEvalQ’ when loading ‘artemis’
+Warning: replacing previous import by ‘parallel::clusterCall’ when loading ‘artemis’
+Warning: replacing previous import by ‘parallel::parCapply’ when loading ‘artemis’
+Warning: replacing previous import by ‘parallel::parRapply’ when loading ‘artemis’
+Warning: replacing previous import by ‘parallel::parLapplyLB’ when loading ‘artemis’
+Warning: replacing previous import by ‘parallel::parLapply’ when loading ‘artemis’
+Warning: replacing previous import by ‘parallel::clusterSplit’ when loading ‘artemis’
+##############################################################################
+Pathview is an open source software package distributed under GNU General
+Public License version 3 (GPLv3). Details of GPLv3 is available at
+http://www.gnu.org/licenses/gpl-3.0.html.
+
+The pathview downloads and uses KEGG data. Academic users may freely use the
+KEGG website at http://www.kegg.jp/ or its mirror site at GenomeNet
+http://www.genome.jp/kegg/. Academic users may also freely link to the KEGG
+website. Non-academic users may use the KEGG website as end users for
+non-commercial purposes, but any other use requires a license agreement
+(details at http://www.kegg.jp/kegg/legal.html).
+##############################################################################
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("ERCC_annotated")
+> ### * ERCC_annotated
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: ERCC_annotated
+> ### Title: ERCC spike-in control annotations
+> ### Aliases: ERCC_annotated ERCC_annotated
+> ### Keywords: datasets
+> 
+> ### ** Examples
+> 
+>   data(ERCC_annotated)
+>   split(rownames(ERCC_annotated), ERCC_annotated$subgroup)
+$A
+ [1] "ERCC-00130" "ERCC-00004" "ERCC-00136" "ERCC-00108" "ERCC-00116"
+ [6] "ERCC-00092" "ERCC-00095" "ERCC-00131" "ERCC-00062" "ERCC-00019"
+[11] "ERCC-00144" "ERCC-00170" "ERCC-00154" "ERCC-00085" "ERCC-00028"
+[16] "ERCC-00033" "ERCC-00134" "ERCC-00147" "ERCC-00097" "ERCC-00156"
+[21] "ERCC-00123" "ERCC-00017" "ERCC-00083"
+
+$B
+ [1] "ERCC-00096" "ERCC-00171" "ERCC-00009" "ERCC-00042" "ERCC-00060"
+ [6] "ERCC-00035" "ERCC-00025" "ERCC-00051" "ERCC-00053" "ERCC-00148"
+[11] "ERCC-00126" "ERCC-00034" "ERCC-00150" "ERCC-00067" "ERCC-00031"
+[16] "ERCC-00109" "ERCC-00073" "ERCC-00158" "ERCC-00104" "ERCC-00142"
+[21] "ERCC-00138" "ERCC-00117" "ERCC-00075"
+
+$C
+ [1] "ERCC-00074" "ERCC-00113" "ERCC-00145" "ERCC-00111" "ERCC-00076"
+ [6] "ERCC-00044" "ERCC-00162" "ERCC-00071" "ERCC-00084" "ERCC-00099"
+[11] "ERCC-00054" "ERCC-00157" "ERCC-00143" "ERCC-00039" "ERCC-00058"
+[16] "ERCC-00120" "ERCC-00040" "ERCC-00164" "ERCC-00024" "ERCC-00016"
+[21] "ERCC-00012" "ERCC-00098" "ERCC-00057"
+
+$D
+ [1] "ERCC-00002" "ERCC-00046" "ERCC-00003" "ERCC-00043" "ERCC-00022"
+ [6] "ERCC-00112" "ERCC-00165" "ERCC-00079" "ERCC-00078" "ERCC-00163"
+[11] "ERCC-00059" "ERCC-00160" "ERCC-00014" "ERCC-00077" "ERCC-00069"
+[16] "ERCC-00137" "ERCC-00013" "ERCC-00168" "ERCC-00041" "ERCC-00081"
+[21] "ERCC-00086" "ERCC-00061" "ERCC-00048"
+
+>   split(ERCC_annotated$concentration.mix1 / ERCC_annotated$concentration.mix2, ERCC_annotated$subgroup)
+$A
+ [1] 4.000000 4.000000 4.000000 4.000000 4.000000 4.000000 4.000000 4.000000
+ [9] 4.000000 4.000000 4.000000 4.000000 4.000000 4.000000 4.000000 4.000000
+[17] 4.000000 4.000000 4.000000 4.000000 4.000000 4.000000 3.999999
+
+$B
+ [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+
+$C
+ [1] 0.6666667 0.6666667 0.6666667 0.6666667 0.6666667 0.6666667 0.6666667
+ [8] 0.6666667 0.6666667 0.6666667 0.6666667 0.6666667 0.6666667 0.6666667
+[15] 0.6666667 0.6666667 0.6666667 0.6666667 0.6666667 0.6666667 0.6666667
+[22] 0.6666667 0.6666670
+
+$D
+ [1] 0.5000000 0.5000000 0.5000000 0.5000000 0.5000000 0.5000000 0.5000000
+ [8] 0.5000000 0.5000000 0.5000000 0.5000000 0.5000000 0.5000000 0.5000000
+[15] 0.5000000 0.5000000 0.5000000 0.5000000 0.5000000 0.5000000 0.5000000
+[22] 0.5000000 0.5000002
+
+> 
+> 
+> 
+> cleanEx()
+> nameEx("artemis-package")
+> ### * artemis-package
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: artemis-package
+> ### Title: various utility functions for fast, informative RNAseq analysis
+> ### Aliases: artemis-package artemis
+> ### Keywords: package
+> 
+> ### ** Examples
+> 
+> 
+>   ## a single Kallisto run with bootstraps 
+>   h5 <- system.file("extdata", "abundance.h5", package="artemis", mustWork=T)
+Error in system.file("extdata", "abundance.h5", package = "artemis", mustWork = T) : 
+  T used instead of TRUE
+Execution halted
