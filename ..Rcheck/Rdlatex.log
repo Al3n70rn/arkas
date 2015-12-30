@@ -1,0 +1,595 @@
+Hmm ... looks like a package
+
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian)
+ restricted \write18 enabled.
+entering extended mode
+LaTeX2e <2011/06/27>
+Babel <3.9h> and hyphenation patterns for 2 languages loaded.
+(./Rd2.tex
+(/usr/share/texlive/texmf-dist/tex/latex/base/book.cls
+Document Class: book 2007/10/19 v1.4h Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/bk10.clo))
+(/usr/share/R/share/texmf/tex/latex/Rd.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/longtable.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/bm.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/alltt.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/verbatim.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/textcomp.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/ts1enc.def))
+(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.def))
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/times.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/inconsolata/zi4.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/color.sty
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/color.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/pdftex-def/pdftex.def
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty)))
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty))
+(/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/auxhook.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/hyperref.cfg))
+
+Package hyperref Message: Driver (autodetected): hpdftex.
+
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hpdftex.def
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty))
+
+Package hyperref Warning: Option `hyperindex' has already been used,
+(hyperref)                setting the option has no effect on input line 366.
+
+
+Package hyperref Warning: Option `pagebackref' has already been used,
+(hyperref)                setting the option has no effect on input line 366.
+
+) (/usr/share/texlive/texmf-dist/tex/latex/base/makeidx.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/usr/share/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/usr/share/texlive/texmf-dist/tex/latex/base/omsenc.dfu)
+(/usr/share/texlive/texmf-dist/tex/latex/base/ts1enc.dfu))
+(/usr/share/texlive/texmf-dist/tex/latex/base/latin1.def))
+Writing index file Rd2.idx
+No file Rd2.aux.
+(/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1ptm.fd)
+(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+) (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/inconsolata/t1zi4.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd) [1{/var/lib/texmf/fo
+nts/map/pdftex/updmap/pdftex.map}]
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1phv.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (5.42938pt too wide) in paragraph at lines 78--82
+[]\T1/ptm/m/n/10 Kallisto: [][]$\T1/zi4/m/n/10 http : / / arxiv . org / abs / 1
+505 . 02710$[][] \T1/ptm/m/n/10 limma/voom: [][]$\T1/zi4/m/n/10 http : / / geno
+mebiology . com / 2014 /
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [2]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [3]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+Underfull \hbox (badness 2617) in paragraph at lines 175--175
+[]\T1/ptm/m/it/10 Collapse bun-dles of tran-scripts, dis-card any with (de-faul
+t) <
+[4] (/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+Underfull \hbox (badness 6110) in paragraph at lines 227--227
+[]\T1/ptm/m/it/10 Collapse tran-scripts, dis-card-ing any with low reads (point
+-
+
+Underfull \hbox (badness 10000) in paragraph at lines 227--227
+\T1/ptm/m/it/10 less to test them) Fil-ter-ing usu-ally in-creases sta-tis-ti-c
+al
+
+Underfull \hbox (badness 1803) in paragraph at lines 227--227
+\T1/ptm/m/it/10 power for given false-positive rate; see Bour-gon et al, 2010,
+
+Overfull \hbox (100.796pt too wide) in paragraph at lines 230--233
+\T1/ptm/m/n/10 creases sta-tis-ti-cal power for given false-positive rate; see 
+Bour-gon et al, 2010, [][]http://www.pnas.org/content/107/21/9546.long[][][]. 
+[5] (/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (223.87807pt too wide) in paragraph at lines 279--287
+[]\T1/ptm/m/n/10 ERCC spike-in data an-no-tated di-rectly from Life Tech:    \T
+1/zi4/m/n/10 URL <- "https://tools.lifetechnologies.com/content/sfs/manuals/cms
+_095046.txt"
+
+Overfull \hbox (287.78088pt too wide) in paragraph at lines 279--287
+\T1/zi4/m/n/10 names(ERCC_raw) <- c("subgroup","concentration.mix1","concentrat
+ion.mix2")   save(ERCC_raw, file="data/ERCC_annotated.rda", compress="xz")
+
+Underfull \hbox (badness 10000) in paragraph at lines 279--287
+
+
+Overfull \hbox (63.78091pt too wide) in paragraph at lines 299--299
+ []  \T1/zi4/m/n/9 split(ERCC_annotated$concentration.mix1 / ERCC_annotated$con
+centration.mix2, ERCC_annotated$subgroup)[] 
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [6]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [7]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [8]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (181.58093pt too wide) in paragraph at lines 444--447
+[] \T1/zi4/m/n/10 library("artemisData")   data("NS", package="artemisData")   
+formatResults(geneWiseAnalysis(NS, exptData(NS)$design)) 
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [9]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [10]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [11]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+Underfull \hbox (badness 1248) in paragraph at lines 585--585
+[]\T1/ptm/m/it/10 Initializes a Kallis-to-Ex-per-i-ment and per-forms some rudi
+-men-tary
+[12] (/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+(/usr/share/texlive/texmf-dist/tex/latex/inconsolata/ts1zi4.fd) [13] [14]
+Overfull \hbox (131.20587pt too wide) in paragraph at lines 754--756
+[]\T1/zi4/m/n/10 tpm\T1/ptm/m/n/10 : Ob-tain tpm from the pre-com-puted ma-trix
+ ( com-puted as shown in https://haroldpimentel.wordpress.com/2014/05/08/what-
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [15]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [16]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [17]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [18]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [19]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [20]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (87.98601pt too wide) in paragraph at lines 1113--1115
+[]\T1/ptm/m/n/10 Note that the code here is based upon Harold Pi-mentel's code,
+ cf. https://haroldpimentel.wordpress.com/2014/05/08/what-
+[21] (/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [22]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+No file Rd2.ind.
+[23] (./Rd2.aux)
+
+Package rerunfilecheck Warning: File `Rd2.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+ )
+(see the transcript file for additional information)pdfTeX warning (dest): name
+{Rfn.http://www.pnas.org/content/107/21/9546.long} has been referenced but does
+ not exist, replaced by a fixed one
+
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}{/usr/sha
+re/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/share/texlive/texmf-dis
+t/fonts/enc/dvips/inconsolata/i4-t1-0.enc}</usr/share/texlive/texmf-dist/fonts/
+type1/public/inconsolata/Inconsolata-zi4r.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/ur
+w/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.
+pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on Rd2.pdf (23 pages, 120321 bytes).
+Transcript written on Rd2.log.
+This is makeindex, version 2.15 [TeX Live 2013] (kpathsea + Thai support).
+Scanning input file Rd2.idx....done (59 entries accepted, 0 rejected).
+Sorting entries....done (392 comparisons).
+Generating output file Rd2.ind....done (124 lines written, 0 warnings).
+Output written in Rd2.ind.
+Transcript written in Rd2.ilg.
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian)
+ restricted \write18 enabled.
+entering extended mode
+LaTeX2e <2011/06/27>
+Babel <3.9h> and hyphenation patterns for 2 languages loaded.
+(./Rd2.tex
+(/usr/share/texlive/texmf-dist/tex/latex/base/book.cls
+Document Class: book 2007/10/19 v1.4h Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/bk10.clo))
+(/usr/share/R/share/texmf/tex/latex/Rd.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/longtable.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/bm.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/alltt.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/verbatim.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/textcomp.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/ts1enc.def))
+(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.def))
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/times.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/inconsolata/zi4.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/color.sty
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/color.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/pdftex-def/pdftex.def
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty)))
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty))
+(/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/auxhook.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/hyperref.cfg))
+
+Package hyperref Message: Driver (autodetected): hpdftex.
+
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hpdftex.def
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty))
+
+Package hyperref Warning: Option `hyperindex' has already been used,
+(hyperref)                setting the option has no effect on input line 366.
+
+
+Package hyperref Warning: Option `pagebackref' has already been used,
+(hyperref)                setting the option has no effect on input line 366.
+
+) (/usr/share/texlive/texmf-dist/tex/latex/base/makeidx.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/usr/share/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/usr/share/texlive/texmf-dist/tex/latex/base/omsenc.dfu)
+(/usr/share/texlive/texmf-dist/tex/latex/base/ts1enc.dfu))
+(/usr/share/texlive/texmf-dist/tex/latex/base/latin1.def))
+Writing index file Rd2.idx
+(./Rd2.aux) (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1ptm.fd)
+(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+) (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty))
+(./Rd2.out) (./Rd2.out)
+(/usr/share/texlive/texmf-dist/tex/latex/inconsolata/t1zi4.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd) [1{/var/lib/texmf/fo
+nts/map/pdftex/updmap/pdftex.map}]
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1phv.fd) (./Rd2.toc)
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [2]
+Overfull \hbox (5.42938pt too wide) in paragraph at lines 78--82
+[]\T1/ptm/m/n/10 Kallisto: [][]$\T1/zi4/m/n/10 http : / / arxiv . org / abs / 1
+505 . 02710$[][] \T1/ptm/m/n/10 limma/voom: [][]$\T1/zi4/m/n/10 http : / / geno
+mebiology . com / 2014 /
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [3]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [4]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+Underfull \hbox (badness 2617) in paragraph at lines 175--175
+[]\T1/ptm/m/it/10 Collapse bun-dles of tran-scripts, dis-card any with (de-faul
+t) <
+[5] (/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+Underfull \hbox (badness 6110) in paragraph at lines 227--227
+[]\T1/ptm/m/it/10 Collapse tran-scripts, dis-card-ing any with low reads (point
+-
+
+Underfull \hbox (badness 10000) in paragraph at lines 227--227
+\T1/ptm/m/it/10 less to test them) Fil-ter-ing usu-ally in-creases sta-tis-ti-c
+al
+
+Underfull \hbox (badness 1803) in paragraph at lines 227--227
+\T1/ptm/m/it/10 power for given false-positive rate; see Bour-gon et al, 2010,
+
+Overfull \hbox (100.796pt too wide) in paragraph at lines 230--233
+\T1/ptm/m/n/10 creases sta-tis-ti-cal power for given false-positive rate; see 
+Bour-gon et al, 2010, [][]http://www.pnas.org/content/107/21/9546.long[][][]. 
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [6]
+Overfull \hbox (223.87807pt too wide) in paragraph at lines 279--287
+[]\T1/ptm/m/n/10 ERCC spike-in data an-no-tated di-rectly from Life Tech:    \T
+1/zi4/m/n/10 URL <- "https://tools.lifetechnologies.com/content/sfs/manuals/cms
+_095046.txt"
+
+Overfull \hbox (287.78088pt too wide) in paragraph at lines 279--287
+\T1/zi4/m/n/10 names(ERCC_raw) <- c("subgroup","concentration.mix1","concentrat
+ion.mix2")   save(ERCC_raw, file="data/ERCC_annotated.rda", compress="xz")
+
+Underfull \hbox (badness 10000) in paragraph at lines 279--287
+
+
+Overfull \hbox (63.78091pt too wide) in paragraph at lines 299--299
+ []  \T1/zi4/m/n/9 split(ERCC_annotated$concentration.mix1 / ERCC_annotated$con
+centration.mix2, ERCC_annotated$subgroup)[] 
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [7]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [8]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [9]
+Overfull \hbox (181.58093pt too wide) in paragraph at lines 444--447
+[] \T1/zi4/m/n/10 library("artemisData")   data("NS", package="artemisData")   
+formatResults(geneWiseAnalysis(NS, exptData(NS)$design)) 
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [10]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [11]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+Underfull \hbox (badness 1248) in paragraph at lines 585--585
+[]\T1/ptm/m/it/10 Initializes a Kallis-to-Ex-per-i-ment and per-forms some rudi
+-men-tary
+[12] (/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [13]
+(/usr/share/texlive/texmf-dist/tex/latex/inconsolata/ts1zi4.fd) [14]
+Overfull \hbox (131.20587pt too wide) in paragraph at lines 754--756
+[]\T1/zi4/m/n/10 tpm\T1/ptm/m/n/10 : Ob-tain tpm from the pre-com-puted ma-trix
+ ( com-puted as shown in https://haroldpimentel.wordpress.com/2014/05/08/what-
+[15] (/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [16]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [17]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [18]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [19]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [20]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [21]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (87.98601pt too wide) in paragraph at lines 1113--1115
+[]\T1/ptm/m/n/10 Note that the code here is based upon Harold Pi-mentel's code,
+ cf. https://haroldpimentel.wordpress.com/2014/05/08/what-
+[22] (/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [23]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) (./Rd2.ind [24]
+
+LaTeX Font Warning: Font shape `T1/zi4/m/it' undefined
+(Font)              using `T1/zi4/m/n' instead on input line 7.
+
+
+Overfull \hbox (0.8567pt too wide) in paragraph at lines 32--34
+[]\T1/zi4/m/it/10 covariates<-,KallistoExperiment-method 
+
+Overfull \hbox (30.8567pt too wide) in paragraph at lines 51--53
+[]\T1/zi4/m/it/10 features<-,RangedSummarizedExperiment-method 
+
+Overfull \hbox (5.8567pt too wide) in paragraph at lines 53--55
+[]\T1/zi4/m/it/10 features<-,SummarizedExperiment0-method 
+
+Overfull \hbox (33.3567pt too wide) in paragraph at lines 68--70
+[]\T1/zi4/m/it/10 http://www.pnas.org/content/107/21/9546.long\T1/ptm/m/n/10 , 
+
+
+Overfull \hbox (15.8567pt too wide) in paragraph at lines 80--82
+[]\T1/zi4/m/it/10 kallistoVersion,KallistoExperiment-method 
+
+Overfull \hbox (25.8567pt too wide) in paragraph at lines 97--99
+[]\T1/zi4/m/it/10 pData<-,KallistoExperiment,DataFrame-method 
+
+Overfull \hbox (10.8567pt too wide) in paragraph at lines 111--113
+[]\T1/zi4/m/it/10 SummarizedExperimentToKallistoExperiment 
+[25]
+Overfull \hbox (10.8567pt too wide) in paragraph at lines 118--120
+[]\T1/zi4/m/it/10 transcriptomes,KallistoExperiment-method 
+
+Overfull \hbox (5.8567pt too wide) in paragraph at lines 120--122
+[]\T1/zi4/m/it/10 transcriptsBy,KallistoExperiment-method 
+[26]) (./Rd2.aux)
+
+Package rerunfilecheck Warning: File `Rd2.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+ )
+(see the transcript file for additional information)pdfTeX warning (dest): name
+{Rfn.http://www.pnas.org/content/107/21/9546.long} has been referenced but does
+ not exist, replaced by a fixed one
+
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}{/usr/sha
+re/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/share/texlive/texmf-dis
+t/fonts/enc/dvips/inconsolata/i4-t1-0.enc}</usr/share/texlive/texmf-dist/fonts/
+type1/public/inconsolata/Inconsolata-zi4r.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/ty
+pe1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/time
+s/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></
+usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on Rd2.pdf (26 pages, 135509 bytes).
+Transcript written on Rd2.log.
+This is makeindex, version 2.15 [TeX Live 2013] (kpathsea + Thai support).
+Scanning input file Rd2.idx....done (59 entries accepted, 0 rejected).
+Sorting entries....done (393 comparisons).
+Generating output file Rd2.ind....done (124 lines written, 0 warnings).
+Output written in Rd2.ind.
+Transcript written in Rd2.ilg.
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian)
+ restricted \write18 enabled.
+entering extended mode
+LaTeX2e <2011/06/27>
+Babel <3.9h> and hyphenation patterns for 2 languages loaded.
+(./Rd2.tex
+(/usr/share/texlive/texmf-dist/tex/latex/base/book.cls
+Document Class: book 2007/10/19 v1.4h Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/bk10.clo))
+(/usr/share/R/share/texmf/tex/latex/Rd.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/longtable.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/bm.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/alltt.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/verbatim.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/textcomp.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/ts1enc.def))
+(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.def))
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/times.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/inconsolata/zi4.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/color.sty
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/color.cfg)
+(/usr/share/texlive/texmf-dist/tex/latex/pdftex-def/pdftex.def
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty)
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty)))
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty))
+(/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/auxhook.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/hyperref.cfg))
+
+Package hyperref Message: Driver (autodetected): hpdftex.
+
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hpdftex.def
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty))
+
+Package hyperref Warning: Option `hyperindex' has already been used,
+(hyperref)                setting the option has no effect on input line 366.
+
+
+Package hyperref Warning: Option `pagebackref' has already been used,
+(hyperref)                setting the option has no effect on input line 366.
+
+) (/usr/share/texlive/texmf-dist/tex/latex/base/makeidx.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.dfu)
+(/usr/share/texlive/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/usr/share/texlive/texmf-dist/tex/latex/base/omsenc.dfu)
+(/usr/share/texlive/texmf-dist/tex/latex/base/ts1enc.dfu))
+(/usr/share/texlive/texmf-dist/tex/latex/base/latin1.def))
+Writing index file Rd2.idx
+(./Rd2.aux) (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1ptm.fd)
+(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+) (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty))
+(./Rd2.out) (./Rd2.out)
+(/usr/share/texlive/texmf-dist/tex/latex/inconsolata/t1zi4.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ptm.fd) [1{/var/lib/texmf/fo
+nts/map/pdftex/updmap/pdftex.map}]
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1phv.fd) (./Rd2.toc)
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [2]
+Overfull \hbox (5.42938pt too wide) in paragraph at lines 78--82
+[]\T1/ptm/m/n/10 Kallisto: [][]$\T1/zi4/m/n/10 http : / / arxiv . org / abs / 1
+505 . 02710$[][] \T1/ptm/m/n/10 limma/voom: [][]$\T1/zi4/m/n/10 http : / / geno
+mebiology . com / 2014 /
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [3]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [4]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+Underfull \hbox (badness 2617) in paragraph at lines 175--175
+[]\T1/ptm/m/it/10 Collapse bun-dles of tran-scripts, dis-card any with (de-faul
+t) <
+[5] (/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+Underfull \hbox (badness 6110) in paragraph at lines 227--227
+[]\T1/ptm/m/it/10 Collapse tran-scripts, dis-card-ing any with low reads (point
+-
+
+Underfull \hbox (badness 10000) in paragraph at lines 227--227
+\T1/ptm/m/it/10 less to test them) Fil-ter-ing usu-ally in-creases sta-tis-ti-c
+al
+
+Underfull \hbox (badness 1803) in paragraph at lines 227--227
+\T1/ptm/m/it/10 power for given false-positive rate; see Bour-gon et al, 2010,
+
+Overfull \hbox (100.796pt too wide) in paragraph at lines 230--233
+\T1/ptm/m/n/10 creases sta-tis-ti-cal power for given false-positive rate; see 
+Bour-gon et al, 2010, [][]http://www.pnas.org/content/107/21/9546.long[][][]. 
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [6]
+Overfull \hbox (223.87807pt too wide) in paragraph at lines 279--287
+[]\T1/ptm/m/n/10 ERCC spike-in data an-no-tated di-rectly from Life Tech:    \T
+1/zi4/m/n/10 URL <- "https://tools.lifetechnologies.com/content/sfs/manuals/cms
+_095046.txt"
+
+Overfull \hbox (287.78088pt too wide) in paragraph at lines 279--287
+\T1/zi4/m/n/10 names(ERCC_raw) <- c("subgroup","concentration.mix1","concentrat
+ion.mix2")   save(ERCC_raw, file="data/ERCC_annotated.rda", compress="xz")
+
+Underfull \hbox (badness 10000) in paragraph at lines 279--287
+
+
+Overfull \hbox (63.78091pt too wide) in paragraph at lines 299--299
+ []  \T1/zi4/m/n/9 split(ERCC_annotated$concentration.mix1 / ERCC_annotated$con
+centration.mix2, ERCC_annotated$subgroup)[] 
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [7]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [8]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [9]
+Overfull \hbox (181.58093pt too wide) in paragraph at lines 444--447
+[] \T1/zi4/m/n/10 library("artemisData")   data("NS", package="artemisData")   
+formatResults(geneWiseAnalysis(NS, exptData(NS)$design)) 
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [10]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [11]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+Underfull \hbox (badness 1248) in paragraph at lines 585--585
+[]\T1/ptm/m/it/10 Initializes a Kallis-to-Ex-per-i-ment and per-forms some rudi
+-men-tary
+[12] (/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [13]
+(/usr/share/texlive/texmf-dist/tex/latex/inconsolata/ts1zi4.fd) [14]
+Overfull \hbox (131.20587pt too wide) in paragraph at lines 754--756
+[]\T1/zi4/m/n/10 tpm\T1/ptm/m/n/10 : Ob-tain tpm from the pre-com-puted ma-trix
+ ( com-puted as shown in https://haroldpimentel.wordpress.com/2014/05/08/what-
+[15] (/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [16]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [17]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [18]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [19]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [20]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [21]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (87.98601pt too wide) in paragraph at lines 1113--1115
+[]\T1/ptm/m/n/10 Note that the code here is based upon Harold Pi-mentel's code,
+ cf. https://haroldpimentel.wordpress.com/2014/05/08/what-
+[22] (/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) [23]
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def) (./Rd2.ind [24]
+
+LaTeX Font Warning: Font shape `T1/zi4/m/it' undefined
+(Font)              using `T1/zi4/m/n' instead on input line 7.
+
+
+Overfull \hbox (0.8567pt too wide) in paragraph at lines 32--34
+[]\T1/zi4/m/it/10 covariates<-,KallistoExperiment-method 
+
+Overfull \hbox (30.8567pt too wide) in paragraph at lines 51--53
+[]\T1/zi4/m/it/10 features<-,RangedSummarizedExperiment-method 
+
+Overfull \hbox (5.8567pt too wide) in paragraph at lines 53--55
+[]\T1/zi4/m/it/10 features<-,SummarizedExperiment0-method 
+
+Overfull \hbox (33.3567pt too wide) in paragraph at lines 68--70
+[]\T1/zi4/m/it/10 http://www.pnas.org/content/107/21/9546.long\T1/ptm/m/n/10 , 
+
+
+Overfull \hbox (15.8567pt too wide) in paragraph at lines 80--82
+[]\T1/zi4/m/it/10 kallistoVersion,KallistoExperiment-method 
+
+Overfull \hbox (25.8567pt too wide) in paragraph at lines 97--99
+[]\T1/zi4/m/it/10 pData<-,KallistoExperiment,DataFrame-method 
+
+Overfull \hbox (10.8567pt too wide) in paragraph at lines 111--113
+[]\T1/zi4/m/it/10 SummarizedExperimentToKallistoExperiment 
+[25]
+Overfull \hbox (10.8567pt too wide) in paragraph at lines 118--120
+[]\T1/zi4/m/it/10 transcriptomes,KallistoExperiment-method 
+
+Overfull \hbox (5.8567pt too wide) in paragraph at lines 120--122
+[]\T1/zi4/m/it/10 transcriptsBy,KallistoExperiment-method 
+[26]) (./Rd2.aux)
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+ )
+(see the transcript file for additional information)pdfTeX warning (dest): name
+{Rfn.http://www.pnas.org/content/107/21/9546.long} has been referenced but does
+ not exist, replaced by a fixed one
+
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}{/usr/sha
+re/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/share/texlive/texmf-dis
+t/fonts/enc/dvips/inconsolata/i4-t1-0.enc}</usr/share/texlive/texmf-dist/fonts/
+type1/public/inconsolata/Inconsolata-zi4r.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/ty
+pe1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/time
+s/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></
+usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on Rd2.pdf (26 pages, 135924 bytes).
+Transcript written on Rd2.log.
+Saving output to 'artemis-manual.pdf' ...
+Done
+You may want to clean up by 'rm -rf /tmp/RtmpVMRwYw/Rd2pdf197e524f16da'

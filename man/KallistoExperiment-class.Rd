@@ -33,7 +33,7 @@
 
 \S4method{pData}{KallistoExperiment,DataFrame}(object) <- value
 
-\S4method{features}{KallistoExperiment}(x)
+\S4method{features}{KallistoExperiment}(object)
 
 \S4method{features}{KallistoExperiment}(object) <- value
 
@@ -53,7 +53,7 @@
 
 \S4method{covariates}{ANY}(object) <- value
 
-\S4method{features}{SummarizedExperiment0}(x)
+\S4method{features}{SummarizedExperiment0}(object)
 
 \S4method{features}{RangedSummarizedExperiment}(object) <- value
 
@@ -105,7 +105,8 @@ https://haroldpimentel.wordpress.com/2014/05/08/what-the-fpkm-a-review-rna-seq-e
 
 \code{ rate <- log(counts(object)) - log(eff_length(object)); }
 
-\code{ tpm <- exp(rate - log(sum(exp(rate))) + log(1e6)) }
+\code{ tpm <- exp(rate - log(sum(exp(rate))) + log(1e6)) } 
+ @import SummarizedExperiment
 
 \item \code{kallistoVersion}: Retrieve the version of Kallisto used for alignment from a KallistoExperiment
 
