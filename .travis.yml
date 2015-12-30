@@ -3,10 +3,33 @@
 language: r
 #warnings_are_errors: true
 sudo: required
+dist: trusty
+services:
+   - docker
+
+cache:
+    apt: true
+    ccache: true
+    directories: 
+    - $HOME/.ccache
+    - $HOME/.m2
+
+
+language: r
+pandoc: false
+
+os: 
+   - linux
+   - osx
+
 
 env:
  global:
    - CRAN: http://cran.rstudio.com
+
+before_install: ./installDependencies.sh
+
+
 
 notifications:
   email:
