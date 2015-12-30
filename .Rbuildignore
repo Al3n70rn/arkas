@@ -2,3 +2,5 @@
 ^\.Rproj\.user$
 ^.*\.Rproj$
 ^\.travis\.yml$
+^\.travis\.yml$
+^\installDependencies.sh$
