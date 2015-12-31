@@ -46,15 +46,16 @@ setwd(FastaPath)
 fastaFilesDuplicates <- c( "ERCC.fa", ## spike-in controls             
                  "Homo_sapiens.RepBase.20_05.humrep.fa", ## repeats         
                  "Homo_sapiens.RepBase.20_05.humsub.fa")  ## ALUs and such             
+findDupes(fastaFilesDuplicates) #return a df with column of 0 
+
 ```
 
 Example of output with duplicated repeat sequences in Repeatome:    
 ```  
-The duplicated repeats LTR26B at row number 222 have identical sequences: TRUE     
-The duplicated repeats LTR26B at row number 1166 have identical sequences: TRUE    
-The duplicated repeats SVA_A at row number 671 have identical sequences: TRUE     
-The duplicated repeats SVA_A at row number 1207 have identical sequences: TRUE     
-There are duplicated sequence names in your FASTA files:    
+                                      duplicates
+Homo_sapiens.RepBase.20_12.merged.fa1     LTR26B
+Homo_sapiens.RepBase.20_12.merged.fa2      SVA_A
+
 ```
 If duplicate sequences exist in one's repeatome, Artemis identifies the duplicate sequence name, and additionally determines if the sequences are identical.  The user can then manually excise one of the duplicates.
 
@@ -73,29 +74,35 @@ OutputPath<-"/data/output"
 fastqPath <- paste0(pathBase, "/fastq")
 samples <- c(MrN="MrN", MrT="MrT")
 FastaFiles <- c( "ERCC.fa", ## spike-in controls                    
-                 "Homo_sapiens.RepBase.20_05.merged.fa") #no duplicates
+                  "Homo_sapiens.RepBase.20_05.merged.fa") #no duplicates
+
 indexName <- indexKallisto(fastaFiles=FastaFiles, fastaPath=FastaPath)$indexName
 indexName  #prints the full index Name
+Xtension<-"_*"
 library(parallel)
 results <- lapply(samples, 
                     runKallisto,
                     indexName=indexName,
                     fastqPath=fastqPath,
                     fastaPath=FastaPath,
-                    bootstraps=100,
-                    outputPath=OutputPath)
+                    bootstraps=20,
+                    outputPath=OutputPath,
+                    extension=Xtension)
 ```
 
 
 ## Merging Kallisto Quantification
 
 Artemis runs kallisto pseudo-alignment quantification into a KallistoExperiment object, as an S4 object.  The SummarizedExperiment accessors are the same for KallistoExperiment objects because KallistoExperiment containers are a sub-class of SummarizedExperiments
- We enforce uniformity between kallisto versions because if the kallisto versions are not the same, then there exists data variance between different KallistoExperiments' assay data and indexed references.
+ We enforce uniformity between kallisto versions because if the kallisto versions are not the same, then there exists data variance between different KallistoExperiments' assay data and indexed references.  In order to annotate the merged KallistoExperiment, TxDbLite is used to create SQL-lite transcriptome/repeatome databases.  This tutorial already created the transcriptome package which can be accessed using transcriptomes() accessor on the KallistoExperiment object.
+
 ```{r}
 merged <- mergeKallisto(samples, outputPath=OutputPath)
 assays(merged)      
 kallistoVersion(merged)     
-head(features(merged)) #non-annotated GRanges features     
+transcriptomes(merged)
+merged<-annotateFeatures(merged) #annotate features using transcriptomes
+tail(features(merged)) #annotated GRanges features     
 ```
 
 #RPKM/FPKM to Transcripts-Per-Million (TPM) 
