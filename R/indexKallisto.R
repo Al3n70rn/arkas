@@ -29,8 +29,9 @@ indexKallisto <- function(fastaFiles, fastaPath, fastaTxDbLite=TRUE,
   if (!file.exists(indexPath)) {
 
     ## Check the FASTA files for duplicate seqnames:
-    dupes <- findDupes(fastaFiles)
-        if(length(dupes)==1){ #there exist dupes
+    dupes <- findDupes(fastaFiles) #dupes$duplicates contains 0 or name of dupe
+
+        if(all(dupes$duplicates!=0)  ){ #there exist dupes
     lengthDupes<-sapply(dupes,function(x) length(x)) #length of entire list
      
       if ( makeUnique==TRUE) {#correct dupes
@@ -50,7 +51,7 @@ indexKallisto <- function(fastaFiles, fastaPath, fastaTxDbLite=TRUE,
 }#there exist dupes and autoCorrect True
 
 
-    if(length(dupes)==0){
+    if(all(dupes$duplicates)==0){
         if(makeUnique==TRUE || makeUnique==FALSE) { 
      lengthDupes<-length(dupes) #empty list length = 0
      command <- paste(c("kallisto index -i", indexName, fastaFiles," -k ",kmer),collapse=" ")
