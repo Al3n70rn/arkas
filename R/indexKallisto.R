@@ -63,8 +63,10 @@ indexKallisto <- function(fastaFiles, fastaPath, fastaTxDbLite=TRUE,
     if (retval == 0) {
       return(res)
     } else { 
-      stop("Index generation failed.")
-    }
+      message("Index generation failed ... defaulting to --make-unique")
+         command <- paste(c("kallisto index -i", indexName, fastaFiles," -k ",kmer," --make-unique"),collapse=" ")
+    retval <- system(command=command)
+       }
 
     if (fastaTxDbLite) {
       for (fastaFile in fastaFiles) { 
