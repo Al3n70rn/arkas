@@ -22,11 +22,12 @@ before_install:
   - chmod 755 ./travis-tool.sh
   - ./travis-tool.sh bootstrap
   - sudo apt-get update -qq
-  - sudo apt-get upgrade -y
-  - sudo apt-get install -y gcc-4.6-base cpp-4.6 libgomp1 libquadmath0 libc6-dev build-essential zlib1g-dev libc6-dev libcurl4-openssl-dev libxml2-dev curl cmake zlibc zlib1g-dev libhdf5-dev
+  - sudo apt-get upgrade -y -qq
+  - sudo apt-get --yes install gcc-4.6-base cpp-4.6 libgomp1 libquadmath0 libc6-dev build-essential zlib1g-dev libc6-dev libcurl4-openssl-dev libxml2-dev 
+  - sudo apt-get --yes install curl cmake zlibc zlib1g-dev libhdf5-dev
   - sudo apt-get update -qq
   - sudo apt-get install -y git
-  - sudo mkdir /KallistoSource && cd /KallistoSource && git clone https://github.com/pachterlab/kallisto.git && cd ./kallisto && mkdir ./build && cd ./build && cmake .. && make && make install
+ # - sudo mkdir /KallistoSource && cd /KallistoSource && git clone https://github.com/pachterlab/kallisto.git && cd ./kallisto && mkdir ./build && cd ./build && cmake .. && make && make install
    - sudo apt-get update -qq
 install:
     - sudo R -e 'library(devtools);install_github("arcolombo/TxDbLite")'
