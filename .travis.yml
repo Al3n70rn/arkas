@@ -28,7 +28,7 @@ install:
     - sudo R -e 'library(devtools);install_github("arcolombo/TxDbLite")'
     - ./travis-tool.sh install_bioc_deps
     - ./travis-tool.sh install_bioc rhdf5 matrixStats GenomicRanges GenomicFeatures Matrix KEGGREST
-    - ./travis-tool.sh install_bioc rmarkdown roxygen2 knitr
+    - ./travis-tool.sh install_bioc rmarkdown roxygen2 knitr devtools
 script:
     #run the vignette
      - R -e 'library(rmarkdown);render("artemis.Rmd")' 
