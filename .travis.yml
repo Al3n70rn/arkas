@@ -25,10 +25,11 @@ before_install:
   - sudo apt-get install -y git
 
 install:
+    - ./travis-tool.sh install_bioc devtools 
     - sudo R -e 'library(devtools);install_github("arcolombo/TxDbLite")'
     - ./travis-tool.sh install_bioc_deps
     - ./travis-tool.sh install_bioc rhdf5 matrixStats GenomicRanges GenomicFeatures Matrix KEGGREST
-    - ./travis-tool.sh install_bioc rmarkdown roxygen2 knitr devtools
+    - ./travis-tool.sh install_bioc rmarkdown roxygen2 knitr
 script:
     #run the vignette
      - R -e 'library(rmarkdown);render("artemis.Rmd")' 
