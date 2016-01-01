@@ -10,3 +10,5 @@
 vignettes/*.html
 vignettes/*.pdf
 inst/doc
+travis-tool.sh
+installDependencies.sh
