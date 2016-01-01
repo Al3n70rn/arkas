@@ -22,11 +22,7 @@ before_install:
   - ./travis-tool.sh bootstrap
   - sudo apt-get update -qq
   - sudo apt-get upgrade -y -qq
-  - sudo apt-get --yes install gcc-4.6-base cpp-4.6 libgomp1 libquadmath0 libc6-dev build-essential zlib1g-dev libc6-dev libcurl4-openssl-dev libxml2-dev 
-  - sudo apt-get --yes install curl cmake zlibc zlib1g-dev libhdf5-dev
-  - sudo apt-get update -qq
-  - sudo apt-get install -y git
-  - sudo apt-get update -qq
+  
 install:
     - sudo R -e 'library(devtools);install_github("arcolombo/TxDbLite")'
     - ./travis-tool.sh install_bioc_deps
