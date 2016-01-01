@@ -3,4 +3,5 @@
 ^.*\.Rproj$
 ^\.travis\.yml$
 ^\.travis\.yml$
-^\installDependencies\.sh$
+^installDependencies\.sh$
+^travis-tool\.sh$

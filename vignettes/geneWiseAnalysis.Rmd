@@ -114,21 +114,6 @@ GWA<-geneWiseAnalysis(NS,design=design,
 ##Understanding Gene Wise Analysis Output
   The output contains a list of limma derived expression values, and enrichment data derived by ReactomePA.  
 
-##Encrichment Plots
-  Artemis performs enrichment analysis using the entrez gene names from the limma results and input them into biomaRt enrichPathway.  Gene wise analysis conducts overall enrichment analysis and clustered enrichment analysis on the differentially expressed groups.
-
-```{r}
-
- 
-     barplot(GWA$enriched,
-                    showCategory=10,
-                    title="Overall Reactome enrichment")
-  
-      plot(GWA$clusts)
- 
-```
-
-
 
 #Expression Results    
 
