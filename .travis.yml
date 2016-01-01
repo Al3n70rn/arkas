@@ -34,7 +34,7 @@ install:
     - ./travis-tool.sh install_bioc rmarkdown roxygen2 knitr
 script:
     #run the vignette
-     - sudo R -e 'library(rmarkdown);render(system.file("extdata", "artemis.Rmd", package="artemis"))' 
+     - sudo R -e 'library(rmarkdown);render("./vignettes/artemis.Rmd"))' 
     # - R -e 'library(rmarkdown); render("geneWiseAnalysis.Rmd")'
     # - R -e 'library(rmarkdown); render("pcaPlot.Rmd")'
 after_failure:
