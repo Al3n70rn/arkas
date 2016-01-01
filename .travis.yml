@@ -12,7 +12,6 @@ dist: trusty
 
 env:
     matrix:
-    - BIOC_USE_DEVEL="TRUE"
     - BIOC_USE_DEVEL="FALSE"
 
 
