@@ -26,6 +26,7 @@ before_install:
   - sudo apt-get --yes install curl cmake zlibc zlib1g-dev libhdf5-dev
   - sudo apt-get install -y git
   - sudo apt-get install -y pandoc
+  - sudo mkdir /KallistoSource && cd /KallistoSource && sudo git clone https://github.com/pachterlab/kallisto.git && cd ./kallisto && sudo mkdir ./build && cd ./build && sudo cmake .. && sudo make && sudo make install
 install:
     - ./travis-tool.sh install_bioc devtools ensembldb rtracklayer Biobase Biostrings GenomicRanges OrganismDbi Rsamtools 
     - sudo R -e 'library(devtools);install_github("arcolombo/TxDbLite")'
