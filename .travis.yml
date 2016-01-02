@@ -29,12 +29,13 @@ before_install:
 install:
     - ./travis-tool.sh install_bioc devtools ensembldb rtracklayer Biobase Biostrings GenomicRanges OrganismDbi Rsamtools 
     - sudo R -e 'library(devtools);install_github("arcolombo/TxDbLite")'
+    - sudo R -e 'library(devtools);install_github("arcolombo/artemis")'
     - ./travis-tool.sh install_bioc_deps
     - ./travis-tool.sh install_bioc rhdf5 matrixStats GenomicRanges GenomicFeatures Matrix KEGGREST
     - ./travis-tool.sh install_bioc rmarkdown roxygen2 knitr
 script:
     #run the vignette
-     - sudo R -e 'library(rmarkdown);render("./vignettes/artemis.Rmd")' 
+     - sudo R -e 'library(rmarkdown);library(artemis);render("./vignettes/artemis.Rmd")' 
     # - R -e 'library(rmarkdown); render("geneWiseAnalysis.Rmd")'
     # - R -e 'library(rmarkdown); render("pcaPlot.Rmd")'
 after_failure:
