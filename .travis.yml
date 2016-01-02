@@ -32,6 +32,7 @@ install:
     - ./travis-tool.sh install_bioc_deps
     - ./travis-tool.sh install_bioc rhdf5 matrixStats GenomicRanges GenomicFeatures Matrix KEGGREST
     - ./travis-tool.sh install_bioc rmarkdown roxygen2 knitr
+    - ./travis-tool.sh install_bioc RUVSeq
     - sudo R -e 'library(devtools);install_github("arcolombo/artemis")'
 script:
     #run the vignette
