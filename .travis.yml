@@ -45,8 +45,8 @@ install:
 script:
     #run the vignette
      - sudo R -e 'library(rmarkdown);library(artemis);library(artemisData);render("./vignettes/artemis.Rmd")' 
-    # - R -e 'library(rmarkdown); render("geneWiseAnalysis.Rmd")'
-    # - R -e 'library(rmarkdown); render("pcaPlot.Rmd")'
+     - sudo R -e 'library(rmarkdown); render("./vignettes/geneWiseAnalysis.Rmd")'
+     - sudo R -e 'library(rmarkdown); render("./vignettes/pcaPlot.Rmd")'
 after_failure:
   - ./travis-tool.sh dump_logs
 
