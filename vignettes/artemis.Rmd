@@ -100,8 +100,8 @@ Artemis runs kallisto pseudo-alignment quantification into a KallistoExperiment 
  We enforce uniformity between kallisto versions because if the kallisto versions are not the same, then there exists data variance between different KallistoExperiments' assay data and indexed references.  In order to annotate the merged KallistoExperiment, TxDbLite is used to create SQL-lite transcriptome/repeatome databases.  This tutorial already created the transcriptome package which can be accessed using transcriptomes() accessor on the KallistoExperiment object.
 
 ```{r}
-suppressWarnings(suppressPackageStartupMessages(library(artemis)))
-suppressPackageStartupMessages(library(artemisData))
+suppressPackageStartupMessages(library(artemis))
+library(artemisData)
 suppressPackageStartupMessages(library(TxDbLite))
 samples<-c("n1","n2","n4","s1","s2","s4")
 pathBase<-system.file("extdata",package="artemisData")
@@ -109,7 +109,11 @@ merged <- mergeKallisto(samples, outputPath=pathBase)
 assays(merged)      
 kallistoVersion(merged)     
 transcriptomes(merged)
-merged<-annotateFeatures(merged) #annotate features using transcriptomes
+libraryPath<-system.file("extdata","Libraries",package="artemisData")
+command<-paste0("sudo R CMD INSTALL ",libraryPath,"/",dir(libraryPath))
+lapply(command,function(x) system(x))
+
+merged<-annotateFeatures(merged, level="transcript") #annotate features using transcriptomes
 tail(features(merged)) #annotated GRanges features     
 ```
 
