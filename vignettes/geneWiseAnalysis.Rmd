@@ -19,6 +19,7 @@ RepBase) simultaneously merging annotated samples into one R object: KallistoExp
 ##Kallisto Installation
 For linux systems, after installing the dependencies, kallisto is installed via:
 ```
+
 mkdir /KallistoSource           
 cd /KallistoSource             
 git clone https://github.com/pachterlab/kallisto.git         
@@ -28,6 +29,7 @@ cd ./build
 cmake ..              
 make          
 make install   
+
 ```     
 
 #Gene Wise Analysis
@@ -79,7 +81,7 @@ suppressPackageStartupMessages(library(artemisData))
 jsonFile <- system.file("extdata", "NS.JSON", package="artemis")
 appSession <- fetchAppSession(jsonFile)
 names(appSession$samples) <- appSession$samples
-appSession$outputPath <- system.file("extdata", "", package="artemisData")
+appSession$outputPath <- system.file("extdata", package="artemisData")
 fastaPath<-system.file("extdata","fasta",package="artemisData")
 appSession$fastaPath<-fastaPath
 NS <- mergeKallisto(appSession$samples,
@@ -88,9 +90,9 @@ erccDb<-erccDbLiteFromFasta(paste0(appSession$fastaPath,"/","ERCC.fa.gz"))
 erccPkg<-makeErccDbLitePkg(erccDb,destDir=appSession$fastaPath)
 #Create a Ensembl Annotation Db with cdna and ncrna
 findDupes(paste0(fastaPath,"/","Homo_sapiens.GRCh38.81.cdna_mergedWith_ncrna.fa.gz")) #should return null.
-ensDb<-ensDbLiteFromFasta("Homo_sapiens.GRCh38.81.cdna_mergedWith_ncrna.fa.gz")
+ensDb<-ensDbLiteFromFasta(paste0(appSession$fastaPath,"/","Homo_sapiens.GRCh38.81.cdna_mergedWith_ncrna.fa.gz"))
 ensPkg<-makeEnsDbLitePkg(ensDb,destDir=appSession$fastaPath)
-repDb<-repDbLiteFromFasta("Homo_sapiens.RepBase.20_07.merged.fa.gz")
+repDb<-repDbLiteFromFasta(paste0(appSession$fastaPath,"/","Homo_sapiens.RepBase.20_07.merged.fa.gz"))
 repPkg<-makeRepDbLitePkg(repDb,destDir=appSession$fastaPath)
 library("EnsDbLite.Hsapiens.81",character.only=TRUE)
 library("ErccDbLite.ERCC.97",character.only=TRUE)
@@ -131,6 +133,13 @@ command<-paste0("sudo R CMD INSTALL ",libraryPath,"/",dir(libraryPath))
 lapply(command,function(x) system(x))
 NS<-annotateFeatures(merged, level="transcript") #annotate features using transcriptomes
 
+NS$subject <- factor(substr(colnames(NS), 2, 2))
+NS$treatment <- substr(colnames(NS), 1, 1) == "s"
+NS$ID <- NULL
+design <- with(as(colData(NS), "data.frame"),
+                  model.matrix( ~ treatment + subject ))
+rownames(design) <- colnames(NS)
+metadata(NS)$design <- design
 #returns a KallistoExperiment at the gene level
 GWA<-geneWiseAnalysis(NS,design=design,
                        how="cpm",
