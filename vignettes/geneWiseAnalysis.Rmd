@@ -90,9 +90,11 @@ erccDb<-erccDbLiteFromFasta(paste0(appSession$fastaPath,"/","ERCC.fa.gz"))
 erccPkg<-makeErccDbLitePkg(erccDb,destDir=appSession$fastaPath)
 #Create a Ensembl Annotation Db with cdna and ncrna
 findDupes(paste0(fastaPath,"/","Homo_sapiens.GRCh38.81.cdna_mergedWith_ncrna.fa.gz")) #should return null.
-ensDb<-ensDbLiteFromFasta(paste0(appSession$fastaPath,"/","Homo_sapiens.GRCh38.81.cdna_mergedWith_ncrna.fa.gz"))
+cd<-getwd()
+setwd(appSession$fastaPath)
+ensDb<-ensDbLiteFromFasta("Homo_sapiens.GRCh38.81.cdna_mergedWith_ncrna.fa.gz")
 ensPkg<-makeEnsDbLitePkg(ensDb,destDir=appSession$fastaPath)
-repDb<-repDbLiteFromFasta(paste0(appSession$fastaPath,"/","Homo_sapiens.RepBase.20_07.merged.fa.gz"))
+repDb<-repDbLiteFromFasta("Homo_sapiens.RepBase.20_07.merged.fa.gz")
 repPkg<-makeRepDbLitePkg(repDb,destDir=appSession$fastaPath)
 library("EnsDbLite.Hsapiens.81",character.only=TRUE)
 library("ErccDbLite.ERCC.97",character.only=TRUE)
@@ -101,6 +103,7 @@ library("RepDbLite.Hsapiens.2007",character.only=TRUE)
 ErccDbLite(erccDb)
 EnsDbLite(ensDb)
 RepDbLite(repDb)
+setwd(cd)
 ```
 
 # Annotating Merged KallistoExperiment Containers
