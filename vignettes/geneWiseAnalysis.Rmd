@@ -84,18 +84,20 @@ names(appSession$samples) <- appSession$samples
 appSession$outputPath <- system.file("extdata", package="artemisData")
 fastaPath<-system.file("extdata","fasta",package="artemisData")
 appSession$fastaPath<-fastaPath
+system(paste0("sudo mkdir ",appSession$fastaPath,"/","tmp"))
+
 NS <- mergeKallisto(appSession$samples,
                       outputPath=appSession$outputPath)
 erccDb<-erccDbLiteFromFasta(paste0(appSession$fastaPath,"/","ERCC.fa.gz"))
-erccPkg<-makeErccDbLitePkg(erccDb,destDir=appSession$fastaPath)
+erccPkg<-makeErccDbLitePkg(erccDb,destDir=paste0(appSession$fastaPath,"/","tmp"))
 #Create a Ensembl Annotation Db with cdna and ncrna
-findDupes(paste0(fastaPath,"/","Homo_sapiens.GRCh38.81.cdna_mergedWith_ncrna.fa.gz")) #should return null.
+findDupes(paste0(appSession$fastaPath,"/","Homo_sapiens.GRCh38.81.cdna_mergedWith_ncrna.fa.gz")) #should return null.
 cd<-getwd()
 setwd(appSession$fastaPath)
 ensDb<-ensDbLiteFromFasta("Homo_sapiens.GRCh38.81.cdna_mergedWith_ncrna.fa.gz")
-ensPkg<-makeEnsDbLitePkg(ensDb,destDir=appSession$fastaPath)
+ensPkg<-makeEnsDbLitePkg(ensDb,destDir=paste0(appSession$fastaPath,"/","tmp"))
 repDb<-repDbLiteFromFasta("Homo_sapiens.RepBase.20_07.merged.fa.gz")
-repPkg<-makeRepDbLitePkg(repDb,destDir=appSession$fastaPath)
+repPkg<-makeRepDbLitePkg(repDb,destDir=paste0(appSession$fastaPath,"/","tmp"))
 library("EnsDbLite.Hsapiens.81",character.only=TRUE)
 library("ErccDbLite.ERCC.97",character.only=TRUE)
 library("RepDbLite.Hsapiens.2007",character.only=TRUE)
@@ -104,6 +106,7 @@ ErccDbLite(erccDb)
 EnsDbLite(ensDb)
 RepDbLite(repDb)
 setwd(cd)
+system(paste0("sudo rm -r ",appSession$fastaPath,"/tmp"))
 ```
 
 # Annotating Merged KallistoExperiment Containers
