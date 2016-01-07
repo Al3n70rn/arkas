@@ -51,7 +51,7 @@ indexKallisto <- function(fastaFiles, fastaPath, fastaTxDbLite=TRUE,
 }#there exist dupes and autoCorrect True
 
 
-    if(all(dupes$duplicates)==0){
+    if(all(dupes$duplicates==0) ){
         if(makeUnique==TRUE || makeUnique==FALSE) { 
      lengthDupes<-length(dupes) #empty list length = 0
      command <- paste(c("kallisto index -i", indexName, fastaFiles," -k ",kmer),collapse=" ")
