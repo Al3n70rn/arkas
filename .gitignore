@@ -7,9 +7,10 @@
 # RStudio files
 .Rproj.user/
 # produced vignettes
-vignettes/*.html
-vignettes/*.pdf
-inst/doc
+/vignettes/*.html
+/vignettes/*.pdf
+/inst/doc
 travis-tool.sh
 installDependencies.sh
-..Rcheck
+/..Rcheck
+/..bfg-report
