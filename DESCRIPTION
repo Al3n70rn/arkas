@@ -1,23 +1,20 @@
 Package: artemis
 Type: Package
 Title: A package that complements Kallisto for quick, informative *seq analysis
-Version: 0.9.33
-Date: 2015-12-15
+Version: 0.42.4
+Date: 2016-01-11
 Author: Tim Triche, Jr., Anthony Colombo, Harold Pimentel
 Depends:
     parallel,
     jsonlite,
     GenomeInfoDb,
-    ReactomePA,
     qusage,
     limma,
     Biobase,
     TxDbLite,
     SummarizedExperiment,
     EnrichmentBrowser,
-    clusterProfiler,
     beeswarm,
-    SPIA,
     tools
 Imports:
     rhdf5,
@@ -30,7 +27,8 @@ Suggests:
     roxygen2,
     knitr,
     EnsDbLite.Hsapiens.80,
-    RepDbLite.Hsapiens.2005
+    RepDbLite.Hsapiens.2005,
+    simpleSampleSearch 
 VignetteBuilder: knitr
 Maintainer: Tim Triche, Jr. <tim.triche@gmail.com>
 Description: Artemis was the hunting companion of Kallisto.  This package wraps
