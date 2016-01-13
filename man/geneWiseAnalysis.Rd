@@ -6,8 +6,7 @@
 \usage{
 geneWiseAnalysis(kexp, design = NULL, how = c("cpm", "tpm"),
   p.cutoff = 0.05, fold.cutoff = 1, read.cutoff = 1,
-  species = c("Homo.sapiens", "Mus.musculus", "Rattus.norvegicus"),
-  fitOnly = FALSE, ...)
+  species = c("Homo.sapiens", "Mus.musculus"), fitOnly = FALSE, ...)
 }
 \arguments{
 \item{kexp}{a KallistoExperiment or SummarizedExperiment-like object}
@@ -37,14 +36,5 @@ Downstream analysis of bundle-aggregated transcript abundance estimates.
 \details{
 If no design matrix is found, the function will look in 
                    exptData(kexp)$design. If that too is empty it fails.
-                   There seems to be a bug in rendering Reactome plots, so 
-                   it may be necessary to do so manually:  
-\code{res <- geneWiseAnalysis(kexp, design, ...)} 
-                   followed by 
-\code{barplot(res$enriched, showCategory=10)}
-                   and 
-\code{plot(res$clusts)}
-          
-                   What really needs to happen is to break those out.
 }
 

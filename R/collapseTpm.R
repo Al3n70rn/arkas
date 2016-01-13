@@ -6,7 +6,7 @@
 #' 
 #' @param kexp          A KallistoExperiment (or something very much like it)
 #' @param bundleID      The column (in mcols(features(kexp))) of the bundle IDs
-#' @param minTPM        Discard transcripts and bundles with < this many TPMs 
+#' @param minTPM        Discard transcripts/bundles with < this many TPMs (0.01)
 #' @param discardjoined Discard bundles with IDs "joined" by a ";"? (TRUE) 
 #' @param tx_biotype    Restrict to a specific mcols(kexp)$tx_biotype? (NULL)
 #' @param gene_biotype  Restrict to a specific mcols(kexp)$gene_biotype? (NULL)
@@ -27,7 +27,7 @@
 #' @return              a matrix of TPMs by bundle for each sample
 #' 
 #' @export 
-collapseTpm <- function(kexp, bundleID="gene_id", minTPM=1, 
+collapseTpm <- function(kexp, bundleID="gene_id", minTPM=0.01, 
                         discardjoined=TRUE, 
                         tx_biotype=NULL, 
                         gene_biotype=NULL, 

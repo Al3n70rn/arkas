@@ -2,7 +2,7 @@ Package: artemis
 Type: Package
 Title: A package that complements Kallisto for quick, informative *seq analysis
 Version: 0.42.4
-Date: 2016-01-11
+Date: 2016-01-13
 Author: Tim Triche, Jr., Anthony Colombo, Harold Pimentel
 Depends:
     parallel,
@@ -13,7 +13,6 @@ Depends:
     Biobase,
     TxDbLite,
     SummarizedExperiment,
-    EnrichmentBrowser,
     beeswarm,
     tools
 Imports:

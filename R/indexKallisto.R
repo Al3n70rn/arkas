@@ -5,6 +5,7 @@
 #' @param fastaTxDbLite   boolean: should we try to annotate new FASTAs? (yes)
 #' @param collapse        string to name multi-FASTA indices ("_mergedWith_")
 #' @param kmer            integer, integer 3-31 of kmer size,default 31 
+#'
 #' @import tools
 #' @import TxDbLite
 #' @import Rsamtools
@@ -49,7 +50,8 @@ indexKallisto <- function(fastaFiles, fastaPath, fastaTxDbLite=TRUE,
     }
 
     ## No dupes, proceed...
-    command <- paste(c("kallisto index -i", indexName, fastaFiles," -k ",kmer),collapse=" ")
+    command <- paste(c("kallisto index -i", indexName, fastaFiles," -k ",kmer),
+                     collapse=" ")
     retval <- system(command=command)
     setwd(oldwd)
     if (retval == 0) {
