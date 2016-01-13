@@ -13,7 +13,6 @@ pairFastqFiles <- function(path=".", extension="_*", readPrefix="R") {
 #last = .fastq.gz
 # second last = _001
 #third is Read identifer
-  message("remember, the light is an easy burden... not heavy or cumbersome. remain in the light...")
   R1seed<-paste0(readPrefix,"1",extension)
   R2seed<-paste0(readPrefix,"2",extension)
   forwardFiles <- allFiles[grepl(R1seed,allFiles)]
