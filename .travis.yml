@@ -49,7 +49,6 @@ script:
      - sudo R -e 'library(rmarkdown); render("./vignettes/pcaPlot.Rmd")'
 after_failure:
   - ./travis-tool.sh dump_logs
-
 notifications:
   email:
     on_success: change

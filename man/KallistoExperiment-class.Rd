@@ -33,7 +33,7 @@
 
 \S4method{pData}{KallistoExperiment,DataFrame}(object) <- value
 
-\S4method{features}{KallistoExperiment}(object)
+\S4method{features}{KallistoExperiment}(x)
 
 \S4method{features}{KallistoExperiment}(object) <- value
 
@@ -53,7 +53,7 @@
 
 \S4method{covariates}{ANY}(object) <- value
 
-\S4method{features}{SummarizedExperiment0}(object)
+\S4method{features}{SummarizedExperiment0}(x)
 
 \S4method{features}{RangedSummarizedExperiment}(object) <- value
 

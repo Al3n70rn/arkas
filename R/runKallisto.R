@@ -7,7 +7,7 @@
 #' @param fastqPath   character, where sampleDir is located under (".")
 #' @param outputPath  character, output in outputPath/sampleDir (".")
 #' @param bootstraps  integer, how many bootstrap replicates to run? (100)
-#' @param threads     integer, how many threads to use for bootstraps? (4)
+#' @param threads     integer, how many threads to use for boot/quant? (4)
 #' @param bias        boolean, perform bias correction? (TRUE)
 #' @param pseudobam   boolean, produce pseudoBAM output? (FALSE)
 #' @param singleEnd   boolean, produce single end quantification, mean and std.dev required
@@ -23,7 +23,7 @@ runKallisto <- function(sampleDir,
                         fastqPath=".",
                         outputPath=".",
                         bootstraps=100,
-                        threads=1,
+                        threads=4,
                         bias=TRUE,
                         pseudobam=FALSE,
                         singleEnd=FALSE,
@@ -83,4 +83,5 @@ runKallisto <- function(sampleDir,
   }
    
 
-}#{{{ main 
+
+}#}}} main 

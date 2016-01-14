@@ -6,6 +6,7 @@
 #' @param collapse        string to name multi-FASTA indices ("_mergedWith_")
 #' @param kmer            integer, integer 3-31 of kmer size,default 31 
 #' @param makeUnique boolean, true will auto-correct existing dupes
+#'
 #' @import tools
 #' @import TxDbLite
 #' @import Rsamtools
@@ -13,7 +14,6 @@
 #' @export
 indexKallisto <- function(fastaFiles, fastaPath, fastaTxDbLite=TRUE, 
                           collapse="_mergedWith_", kmer=31,makeUnique=TRUE) { 
-
   oldwd <- getwd()
   setwd(fastaPath)
   message(paste0("kmer length size: ",kmer))

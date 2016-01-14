@@ -17,7 +17,6 @@
 #' @param collapse      string: collapsing string for indices ("_mergedWith_")
 #' @param parallel      boolean: try to run the merge in parallel? (TRUE)
 #'
-#' @import parallel
 #' @export
 mergeKallisto <- function(outputDirs=NULL,
                           outputPath=".",
