@@ -28,6 +28,9 @@ before_install:
   - sudo apt-get install -y git
   - sudo apt-get install -y pandoc
   - cwd=$(pwd) && sudo mkdir ./KallistoSource && cd ./KallistoSource && sudo git clone https://github.com/pachterlab/kallisto.git && cd ./kallisto && sudo mkdir ./build && cd ./build && sudo cmake .. && sudo make && sudo make install && cd $cwd
+  - sudo echo "deb http://cran.stat.ucla.edu/bin/linux/ubuntu trusty/" >> /etc/apt/sources.list
+  - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
+  - sudo apt-get update && apt-get install -y r-base && apt-get install -y r-base-dev && apt-get update
   - sudo apt-get install -y texlive-latex-base
   - sudo apt-get install -y texlive-fonts-recommended
   - sudo apt-get install -y texlive-fonts-extra
