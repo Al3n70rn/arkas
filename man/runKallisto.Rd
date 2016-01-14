@@ -6,7 +6,7 @@
 \usage{
 runKallisto(sampleDir, indexName = NULL, fastaPath = ".",
   fastaFiles = NULL, fastqPath = ".", outputPath = ".",
-  bootstraps = 100, threads = 1, bias = TRUE, pseudobam = FALSE,
+  bootstraps = 100, threads = 4, bias = TRUE, pseudobam = FALSE,
   singleEnd = FALSE, lengthMean = 150, lengthDev = 0.001,
   collapse = "_mergedWith_", extension = ".fastq.gz", ...)
 }
@@ -25,7 +25,7 @@ runKallisto(sampleDir, indexName = NULL, fastaPath = ".",
 
 \item{bootstraps}{integer, how many bootstrap replicates to run? (100)}
 
-\item{threads}{integer, how many threads to use for bootstraps? (4)}
+\item{threads}{integer, how many threads to use for boot/quant? (4)}
 
 \item{bias}{boolean, perform bias correction? (TRUE)}
 

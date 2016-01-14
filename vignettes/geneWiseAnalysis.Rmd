@@ -19,7 +19,14 @@ RepBase) simultaneously merging annotated samples into one R object: KallistoExp
 ##Kallisto Installation
 For linux systems, after installing the dependencies, kallisto is installed via:
 ```
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+
+=======
+>>>>>>> 94c0f14f5ea52080585cded760336cb649a44b98
+>>>>>>> travis
 mkdir /KallistoSource           
 cd /KallistoSource             
 git clone https://github.com/pachterlab/kallisto.git         
@@ -29,7 +36,14 @@ cd ./build
 cmake ..              
 make          
 make install   
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+
+=======
+>>>>>>> 94c0f14f5ea52080585cded760336cb649a44b98
+>>>>>>> travis
 ```     
 
 #Gene Wise Analysis
@@ -57,7 +71,14 @@ NS <- mergeKallisto(appSession$samples,
 In order to analyze bundle-aggregated transcripts defined as "genes", we create a design matrix which controls for individual effects and contrasts treatment effects across individual subjects.  
 
 ```{r}
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+
+=======
+>>>>>>> 94c0f14f5ea52080585cded760336cb649a44b98
+>>>>>>> travis
 NS$subject <- factor(substr(colnames(NS), 2, 2))
 NS$treatment <- substr(colnames(NS), 1, 1) == "s"
 NS$ID <- NULL
@@ -76,6 +97,10 @@ In order to run gene-wise analysis, Artemis requires that the merged KallistoExp
 
 ```{r}
 suppressPackageStartupMessages(library(TxDbLite))
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> travis
 suppressWarnings(suppressPackageStartupMessages(library(artemis)))
 suppressPackageStartupMessages(library(artemisData))
 jsonFile <- system.file("extdata", "NS.JSON", package="artemis")
@@ -98,6 +123,21 @@ ensDb<-ensDbLiteFromFasta("Homo_sapiens.GRCh38.81.cdna_mergedWith_ncrna.fa.gz")
 ensPkg<-makeEnsDbLitePkg(ensDb,destDir=paste0(appSession$fastaPath,"/","tmp"))
 repDb<-repDbLiteFromFasta("Homo_sapiens.RepBase.20_07.merged.fa.gz")
 repPkg<-makeRepDbLitePkg(repDb,destDir=paste0(appSession$fastaPath,"/","tmp"))
+<<<<<<< HEAD
+=======
+=======
+setwd(appSession$fastaPath)
+erccDb<-erccDbLiteFromFasta(paste0(appSession$fastaPath,"/","ERCC.fa.gz"))
+erccPkg<-makeErccDbLitePkg(erccDb,destDir=paste0(appSession$fastaPath,"/tmp"))
+#Create a Ensembl Annotation Db with cdna and ncrna
+findDupes(paste0(fastaPath,"/","Homo_sapiens.GRCh38.81.cdna_mergedWith_ncrna.fa.gz")) #should return null.
+ensDb<-ensDbLiteFromFasta("Homo_sapiens.GRCh38.81.cdna_mergedWith_ncrna.fa.gz")
+ensPkg<-makeEnsDbLitePkg(ensDb,destDir=paste0(appSession$fastaPath,"/tmp"))
+repDb<-repDbLiteFromFasta("Homo_sapiens.RepBase.20_07.merged.fa.gz")
+repPkg<-makeRepDbLitePkg(repDb,destDir=paste0(appSession$fastaPath,"/tmp"))
+system(paste0("rm -r ",appSession$fastaPath,"/tmp/*"))
+>>>>>>> 94c0f14f5ea52080585cded760336cb649a44b98
+>>>>>>> travis
 library("EnsDbLite.Hsapiens.81",character.only=TRUE)
 library("ErccDbLite.ERCC.97",character.only=TRUE)
 library("RepDbLite.Hsapiens.2007",character.only=TRUE)
@@ -105,13 +145,25 @@ library("RepDbLite.Hsapiens.2007",character.only=TRUE)
 ErccDbLite(erccDb)
 EnsDbLite(ensDb)
 RepDbLite(repDb)
+<<<<<<< HEAD
 setwd(cd)
 system(paste0("sudo rm -r ",appSession$fastaPath,"/tmp"))
+=======
+<<<<<<< HEAD
+setwd(cd)
+system(paste0("sudo rm -r ",appSession$fastaPath,"/tmp"))
+=======
+>>>>>>> 94c0f14f5ea52080585cded760336cb649a44b98
+>>>>>>> travis
 ```
 
 # Annotating Merged KallistoExperiment Containers
    Artemis has a function "annotateFeatures.R" which annotates ERCC, Ensembl, and RepBase databases for species Homo-Sapiens, Mus-musculus, and Rattus norvegicus.  The method "annotateFeatures.R" annotates the merged KallistoExperiment against every TxDbLite library simulatenously. These annotation databases are defined as 'lite' because they do not store exonic or intronic coordinates.
 ```{r}
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> travis
 suppressPackageStartupMessages(library(artemis))
 library(artemisData)
 suppressPackageStartupMessages(library(TxDbLite))
@@ -122,11 +174,21 @@ libraryPath<-system.file("extdata","Libraries",package="artemisData")
 command<-paste0("sudo R CMD INSTALL ",libraryPath,"/",dir(libraryPath))
 lapply(command,function(x) system(x))
 merged<-annotateFeatures(merged, level="transcript") #annotate features using transcriptomes
+<<<<<<< HEAD
+=======
+=======
+NS<-suppressWarnings(annotateFeatures(NS,level="transcript"))
+>>>>>>> 94c0f14f5ea52080585cded760336cb649a44b98
+>>>>>>> travis
 ```
 #Gene Wise Analysis
  Gene wise analysis collapses transcripts into groups related to specific ensembl "gene" Ids.  The package TxDbLite parses the Ensembl, or RepBase transcript fasta files and stores the respective gene id's associated with the given transcript documented in the transcript fasta header.  Artemis' method for gene wise analysis calls "collapseBundles.R" which then calculates the aggregated total counts of transcripts for each unique gene id association.  Thus the "gene" count is defined as the sum of all quantified transcripts associated with a specific gene identifier.  
 
 ```{r}
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> travis
 
 suppressPackageStartupMessages(library(artemis))
 library(artemisData)
@@ -146,6 +208,11 @@ design <- with(as(colData(NS), "data.frame"),
                   model.matrix( ~ treatment + subject ))
 rownames(design) <- colnames(NS)
 metadata(NS)$design <- design
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 94c0f14f5ea52080585cded760336cb649a44b98
+>>>>>>> travis
 #returns a KallistoExperiment at the gene level
 GWA<-geneWiseAnalysis(NS,design=design,
                        how="cpm",
@@ -153,10 +220,53 @@ GWA<-geneWiseAnalysis(NS,design=design,
                        fold.cutoff=1, 
                        read.cutoff=1,
                        species="Homo.sapiens")
+<<<<<<< HEAD
 
-head(GWA$limmaWithMeta,n=20)
+=======
+<<<<<<< HEAD
+
+=======
 ```
 
 
 ##Understanding Gene Wise Analysis Output
+  The output contains a list of limma derived expression values, and enrichment data derived by ReactomePA.  
+
+##Encrichment Plots
+  Artemis performs enrichment analysis using the entrez gene names from the limma results and input them into biomaRt enrichPathway.  Gene wise analysis conducts overall enrichment analysis and clustered enrichment analysis on the differentially expressed groups.
+
+```{r}
+
+ 
+     barplot(GWA$enriched,
+                    showCategory=10,
+                    title="Overall Reactome enrichment")
+  
+      plot(GWA$clusts)
+ 
+```
+
+
+
+#Expression Results    
+
+  The expression results were generated by limma/voom and have the meta biotype, gene name, etc information included in the gene wise analysis results.
+
+```{r}
+>>>>>>> 94c0f14f5ea52080585cded760336cb649a44b98
+>>>>>>> travis
+head(GWA$limmaWithMeta,n=20)
+```
+
+
+<<<<<<< HEAD
+##Understanding Gene Wise Analysis Output
   The output contains a list of limma derived expression values, and entrezID, gene name, and gene biotypes derived by biomaRt and TxDbLite respectively.  The expression results were generated by limma/voom and have the meta biotype, gene name, etc information included in the gene wise analysis results.
+=======
+<<<<<<< HEAD
+##Understanding Gene Wise Analysis Output
+  The output contains a list of limma derived expression values, and entrezID, gene name, and gene biotypes derived by biomaRt and TxDbLite respectively.  The expression results were generated by limma/voom and have the meta biotype, gene name, etc information included in the gene wise analysis results.
+=======
+
+>>>>>>> 94c0f14f5ea52080585cded760336cb649a44b98
+>>>>>>> travis

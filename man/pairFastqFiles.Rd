@@ -4,14 +4,24 @@
 \alias{pairFastqFiles}
 \title{figure out how a sample's runs can be properly paired (no SE support yet)}
 \usage{
-pairFastqFiles(path = ".", extension = "_*", readPrefix = "R")
+pairFastqFiles(path = ".", extension = "\\\\.fastq\\\\.gz",
+  readPrefix = "R", lanePrefix = "L", splitChar = "_", ...)
 }
 \arguments{
 \item{path}{a character string specifying where the FASTQ files are}
 
 \item{extension}{what is the file extension?  default is ".fastq.gz"}
 
-\item{readPrefix}{usually pairs are _R1_/_R2_, so this defaults to "R"}
+\item{readPrefix}{read prefix, usually a single character, default "R"}
+
+\item{lanePrefix}{lane prefix, usually a single character, default "L"}
+
+\item{splitChar}{split character or string, usually "_" for Illumina}
+
+\item{...}{other arguments, passed on to helper functions}
+}
+\value{
+a vector of paired FASTQ files for runKallisto
 }
 \description{
 figure out how a sample's runs can be properly paired (no SE support yet)

@@ -13,7 +13,6 @@
 #' @export
 indexKallisto <- function(fastaFiles, fastaPath, fastaTxDbLite=TRUE, 
                           collapse="_mergedWith_", kmer=31,makeUnique=TRUE) { 
-
   oldwd <- getwd()
   setwd(fastaPath)
   message(paste0("kmer length size: ",kmer))

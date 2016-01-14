@@ -22,7 +22,15 @@ We have used Kallisto to quantify ERCC spike-in, ENSEMBL coding, ENSEMBL noncodi
 allow for inspection of uncertainty in estimates at transcript or gene level). 
 First we need to read in the results from quantifying each of the matched pairs.
 
+<<<<<<< HEAD
 ```{r}
+=======
+<<<<<<< HEAD
+```{r}
+=======
+```R
+>>>>>>> 94c0f14f5ea52080585cded760336cb649a44b98
+>>>>>>> travis
 suppressPackageStartupMessages(library(artemisData))
 outputPath <- system.file("extdata", "", package="artemisData")
 samples <- list.files(outputPath, pattern="^[ns][124]$")
@@ -30,24 +38,52 @@ covs <- data.frame(outputDir=samples,
                    row.names=samples)
 NS <- mergeKallisto(covariates=covs, 
                     outputPath=outputPath) 
+<<<<<<< HEAD
 show(NS) 
 NS <- annotateFeatures(NS) # loads TxDbLite libs
 
+=======
+<<<<<<< HEAD
+show(NS) 
+NS <- annotateFeatures(NS) # loads TxDbLite libs
+
+=======
+show(NS)                   
+>>>>>>> 94c0f14f5ea52080585cded760336cb649a44b98
+>>>>>>> travis
 ```
 
 Next we need to indicate which sample is from which subject, and which fraction.
 We also need to annotate the transcripts against their ENSEMBL gene IDs, because
 we will sum the abundances of the transcripts to get the abundance of each gene.
 
+<<<<<<< HEAD
 ```{r}
 
+=======
+<<<<<<< HEAD
+```{r}
+
+=======
+```
+NS <- annotateFeatures(NS) # loads TxDbLite libs
+>>>>>>> 94c0f14f5ea52080585cded760336cb649a44b98
+>>>>>>> travis
 
 # Sample names are [condition][subject], e.g. s1 or n4
 NS$senescent <- as.factor(substr(colnames(NS), 1, 1))
 NS$subject <- as.factor(substr(colnames(NS), 2, 2))
 NS_design <- with(as(colData(NS), "data.frame"), 
                   model.matrix(~ senescent + subject))
+<<<<<<< HEAD
 ```
+=======
+<<<<<<< HEAD
+```
+=======
+
+>>>>>>> 94c0f14f5ea52080585cded760336cb649a44b98
+>>>>>>> travis
 ## limma/voom
 
 limma/voom analysis (Law et al. 2014) is built into artemis as its own function.
