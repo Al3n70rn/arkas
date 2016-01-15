@@ -36,8 +36,8 @@ before_install:
     - sudo apt-get install -y texlive-latex-extra
     - sudo apt-get update 
 install:
-    - sudo apt-get update
-    - sudo ./travis-tool.sh install_bioc xml2 rversions devtools ensembldb rtracklayer Biobase Biostrings GenomicRanges OrganismDbi Rsamtools 
+    - sudo apt-get update && sudo apt-get -y upgrade
+    - sudo R -e 'source("https://bioconductor.org/biocLite.R"); biocLite(c("xml2","rversions","devtools","ensembldb","rtracklayer","Biobase","Biostrings","GenomicRanges","OrganismDbi","Rsamtools"),ask=FALSE)'
     - sudo R -e 'library(devtools);install_github("arcolombo/TxDbLite")'
     - sudo ./travis-tool.sh install_bioc_deps
     - sudo ./travis-tool.sh install_bioc rhdf5 matrixStats GenomicRanges GenomicFeatures Matrix KEGGREST
