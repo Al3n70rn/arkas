@@ -37,6 +37,8 @@ before_install:
     - sudo apt-get update 
 install:
     - sudo apt-get update && sudo apt-get -y upgrade
+     - sudo R -e 'install.packages("installr");library(installr);updateR()'
+    - sudo apt-get update
     - sudo R -e 'source("https://bioconductor.org/biocLite.R"); biocLite(c("xml2","rversions","devtools","ensembldb","rtracklayer","Biobase","Biostrings","GenomicRanges","OrganismDbi","Rsamtools"),ask=FALSE)'
     - sudo R -e 'library(devtools);install_github("arcolombo/TxDbLite")'
     - sudo ./travis-tool.sh install_bioc_deps
