@@ -36,7 +36,7 @@ before_install:
   - sudo apt-get install -y texlive-fonts-extra
   - sudo apt-get install -y texlive-latex-extra
 install:
-     - sudo ./travis-tool.sh install_bioc devtools ensembldb rtracklayer Biobase Biostrings GenomicRanges OrganismDbi Rsamtools 
+     - ./travis-tool.sh install_bioc devtools ensembldb rtracklayer Biobase Biostrings GenomicRanges OrganismDbi Rsamtools 
     - sudo R -e 'library(devtools);install_github("arcolombo/TxDbLite")'
     - sudo ./travis-tool.sh install_bioc_deps
     - sudo ./travis-tool.sh install_bioc rhdf5 matrixStats GenomicRanges GenomicFeatures Matrix KEGGREST
@@ -45,9 +45,8 @@ install:
     - sudo R -e 'library(devtools);install_github("arcolombo/artemis")'
     - sudo R -e 'library(devtools);install_github("arcolombo/artemisData")'
 script:
-    #run the vignette
      - sudo R -e 'library(rmarkdown);library(artemis);library(artemisData);render("./vignettes/artemis.Rmd")' 
-     - sudo R -e 'library(rmarkdown); render("./vignettes/geneWiseAnalysis.Rmd")'
+     - sudo R -e 'library(rmarkdown); render("./vignettes/geneWiseAnalysis.Rmd")' 
      - sudo R -e 'library(rmarkdown); render("./vignettes/pcaPlot.Rmd")'
 after_failure:
   - sudo ./travis-tool.sh dump_logs
