@@ -23,7 +23,8 @@ before_install:
     - chmod 755 ./travis-tool.sh
     - sudo apt-get -y update -qq
     - sudo apt-get --yes install gcc-4.6-base cpp-4.6 libgomp1 libquadmath0 libc6-dev build-essential zlib1g-dev libc6-dev libcurl4-openssl-dev libxml2-dev
-    - sudo apt-get --yes install curl cmake zlibc zlib1g-dev libhdf5-dev
+    - sudo apt-update && sudo apt-get --yes install curl cmake zlibc zlib1g-dev
+    - sudo apt-get update && apt-get install -y libhdf5-dev
     - sudo apt-get install -y git
     - sudo apt-get install -y pandoc
     - cwd=$(pwd) && sudo mkdir ./KallistoSource && cd ./KallistoSource && sudo git clone https://github.com/pachterlab/kallisto.git && cd ./kallisto && sudo mkdir ./build && cd ./build && sudo cmake .. && sudo make && sudo make install && cd $cwd
