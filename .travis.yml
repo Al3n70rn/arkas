@@ -35,7 +35,7 @@ before_install:
     - sudo apt-get install -y texlive-fonts-extra
     - sudo apt-get install -y texlive-latex-extra
 install:
-    - ./travis-tool.sh install_bioc devtools ensembldb rtracklayer Biobase Biostrings GenomicRanges OrganismDbi Rsamtools 
+    - sudo ./travis-tool.sh install_bioc devtools ensembldb rtracklayer Biobase Biostrings GenomicRanges OrganismDbi Rsamtools 
     - sudo R -e 'library(devtools);install_github("arcolombo/TxDbLite")'
     - sudo ./travis-tool.sh install_bioc_deps
     - sudo ./travis-tool.sh install_bioc rhdf5 matrixStats GenomicRanges GenomicFeatures Matrix KEGGREST
