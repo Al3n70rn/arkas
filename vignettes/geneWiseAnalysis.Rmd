@@ -87,7 +87,7 @@ NS <- mergeKallisto(appSession$samples,
                       outputPath=appSession$outputPath)
 
 fastaTx<-c("ERCC.fa.gz","Homo_sapiens.GRCh38.81.cdna.all.fa.gz","Homo_sapiens.RepBase.20_05.merged.fa")
-erccDb<-erccDbLiteFromFasta(paste0(appSession$fastaPath,"/tmp","ERCC.fa.gz"))
+erccDb<-erccDbLiteFromFasta(paste0(appSession$fastaPath,"/tmp/","ERCC.fa.gz"))
 erccPkg<-makeErccDbLitePkg(erccDb,destDir=paste0(appSession$fastaPath,"/","tmp"))
 #Create a Ensembl Annotation Db with cdna and ncrna
 lapply(fastaTx,function(x) findDupes(x))
