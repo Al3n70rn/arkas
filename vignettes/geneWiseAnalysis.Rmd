@@ -85,8 +85,9 @@ cd<-appSession$fastaPath
 setwd(paste0(appSession$fastaPath,"/","tmp"))
 NS <- mergeKallisto(appSession$samples,
                       outputPath=appSession$outputPath)
+
 fastaTx<-c("ERCC.fa.gz","Homo_sapiens.GRCh38.81.cdna.all.fa.gz","Homo_sapiens.RepBase.20_05.merged.fa")
-erccDb<-erccDbLiteFromFasta(paste0(appSession$fastaPath,"/","ERCC.fa.gz"))
+erccDb<-erccDbLiteFromFasta(paste0(appSession$fastaPath,"/tmp","ERCC.fa.gz"))
 erccPkg<-makeErccDbLitePkg(erccDb,destDir=paste0(appSession$fastaPath,"/","tmp"))
 #Create a Ensembl Annotation Db with cdna and ncrna
 lapply(fastaTx,function(x) findDupes(x))
@@ -103,7 +104,7 @@ transcripts(RepDbLite(repDb))
 
 files<-dir(paste0(appSession$fastaPath,"/tmp"))[!dir(paste0(appSession$fastaPath,"/tmp")) %in% fastaTx]
 
-lapply(files,function(x) system(paste0("rm -r ",x))
+lapply(files,function(x) system(paste0("rm -r ",x)))
 
 ```
 
