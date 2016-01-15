@@ -18,7 +18,7 @@ indexKallisto(fastaFiles, fastaPath, fastaTxDbLite = TRUE,
 
 \item{kmer}{integer, integer 3-31 of kmer size,default 31}
 
-\item{makeUnique}{boolean, true will auto-correct existing dupes}
+\item{makeUnique}{boolean, true will auto-correct existing dupes flexible}
 }
 \description{
 index transcriptome/transcriptomes
