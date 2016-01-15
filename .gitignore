@@ -1,25 +1,17 @@
 # History files
-.Rhistory
-.Rapp.history
+/.Rhistory
+/.Rapp.history
 
 # Example code in package build process
-*-Ex.R
+/*-Ex.R
 # RStudio files
-.Rproj.user/
+/.Rproj.user/
 # produced vignettes
-<<<<<<< HEAD
 /vignettes/*.html
 /vignettes/*.pdf
 /inst/doc
-travis-tool.sh
-installDependencies.sh
+/travis-tool.sh
+/installDependencies.sh
 /..Rcheck
 /..bfg-report
 /*.bsfs.json
-=======
-vignettes/*.html
-vignettes/*.pdf
-inst/doc
-travis-tool.sh
-installDependencies.sh
->>>>>>> travis
