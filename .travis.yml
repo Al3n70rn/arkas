@@ -1,8 +1,9 @@
-# Sample .travis.yml for R projects.
+# this uses the r-travis native syntax for 1/16/16 travis implementation
 #
 # See README.md for instructions, or for more configuration options,
 # see the wiki:
 #   https://github.com/craigcitro/r-travis/wiki
+# for the moment it is pulling and testing arcolombo ~ master for the tests.  after the checks complete we must change to ramsinghLab ~ master
 
 language: 
     - r
