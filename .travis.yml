@@ -1,12 +1,109 @@
-# Sample .travis.yml for R projects
+# this uses the r-travis native syntax for 1/16/16 travis implementation
+#
+# See README.md for instructions, or for more configuration options,
+# see the wiki:
+#   https://github.com/craigcitro/r-travis/wiki
+# for the moment it is pulling and testing arcolombo ~ master for the tests.  after the checks complete we must change to ramsinghLab ~ master
 
-language: r
-#warnings_are_errors: true
+language: 
+    - r
+    - c
+bioc_required: true
+
+#pandoc: true
+
+
 sudo: required
+dist: trusty
 
 env:
- global:
-   - CRAN: http://cran.rstudio.com
+    matrix:
+    - BIOC_USE_DEVEL="FALSE"
+
+r_github_packages:
+    - hadley/devtools
+
+apt_packages:
+   - gcc-4.6-base
+   - cpp-4.6 
+   - libgomp1
+   - libquadmath0
+   - libc6-dev
+   - build-essential 
+   - zlib1g-dev 
+   - libc6-dev 
+   - libcurl4-openssl-dev 
+   - libxml2-dev
+   - curl 
+   - cmake 
+   - zlibc 
+   - zlib1g-dev
+   - libhdf5-dev
+   - git
+   - pandoc
+   - texlive-latex-base
+   - texlive-fonts-recommended
+   - texlive-fonts-extra
+   - texlive-latex-extra
+   - libcurl4-openssl-dev
+   - libxml2-dev
+
+before_install:
+    - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
+    - chmod 755 ./travis-tool.sh
+    - sudo apt-get --yes install curl cmake zlibc zlib1g-dev
+    - sudo apt-get install -y libhdf5-dev
+    - cwd=$(pwd) && sudo mkdir ./KallistoSource && cd ./KallistoSource && sudo git clone https://github.com/pachterlab/kallisto.git && cd ./kallisto && sudo mkdir ./build && cd ./build && sudo cmake .. && sudo make && sudo make install && cd $cwd
+  
+bioc_packages: 
+    - BiocInstaller
+    - xml2
+    - rversions
+    - ensembldb
+    - rtracklayer
+    - Biobase
+    - Biostrings
+    - GenomicRanges
+    - OrganismDbi
+    - Rsamtools
+    - rhdf5
+    - matrixStats
+    - GenomicFeatures 
+    - Matrix 
+    - KEGGREST
+    - rmarkdown
+    - roxygen2
+    - knitr
+    - RUVSeq
+    - erccdashboard 
+    - pathview
+    - qusage
+    - jsonlite
+    - GenomeInfoDb
+    - limma
+    - parallel
+    - tools
+    - biomaRt
+    - edgeR
+    - ggplot2
+    - DBI
+    - RSQLite
+    - ensembldb
+    - rtracklayer
+    - stringdist
+    - SummarizedExperiment
+    - beeswarm 
+r_github_packages:
+    - arcolombo/TxDbLite
+    - arcolombo/artemis
+    - arcolombo/artemisData
+    
+script:
+    - sudo R -e 'library(rmarkdown);library(artemis);library(artemisData);render("./vignettes/artemis.Rmd")' 
+    - sudo R -e 'library(rmarkdown); render("./vignettes/geneWiseAnalysis.Rmd")'    
+    - sudo R -e 'library(rmarkdown); render("./vignettes/pcaPlot.Rmd")'
+after_failure:
+    - sudo ./travis-tool.sh dump_logs
 
 notifications:
   email:
