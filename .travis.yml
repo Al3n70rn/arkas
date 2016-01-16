@@ -84,7 +84,12 @@ bioc_packages:
     - tools
     - biomaRt
     - edgeR
-    - ggplot2 
+    - ggplot2
+    - DBI
+    - RSQLite
+    - ensembldb
+    - rtracklayer
+    - stringdist 
 r_github_packages:
     - arcolombo/artemis
     - arcolombo/artemisData
