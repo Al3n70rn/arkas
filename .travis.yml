@@ -4,8 +4,8 @@
 # see the wiki:
 #   https://github.com/craigcitro/r-travis/wiki
 
-language: c
-
+language: r
+bioc_required: true
 
 #pandoc: true
 
@@ -16,6 +16,9 @@ dist: trusty
 env:
     matrix:
     - BIOC_USE_DEVEL="FALSE"
+
+r_github_packages:
+    - hadley/devtools
 
 before_install:
     - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
@@ -29,25 +32,44 @@ before_install:
     - cwd=$(pwd) && sudo mkdir ./KallistoSource && cd ./KallistoSource && sudo git clone https://github.com/pachterlab/kallisto.git && cd ./kallisto && sudo mkdir ./build && cd ./build && sudo cmake .. && sudo make && sudo make install && cd $cwd
     - sudo echo "deb http://cran.stat.ucla.edu/bin/linux/ubuntu trusty/" >> sudo /etc/apt/sources.list
     - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
-    - sudo apt-get update && sudo apt-get install -y r-base && sudo apt-get install -y r-base-dev && sudo apt-get update
+    - sudo add-apt-repository ppa:marutter/rdev
+    - sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get install -y r-base && sudo apt-get install -y r-base-dev && sudo apt-get update
     - sudo apt-get install -y texlive-latex-base
     - sudo apt-get install -y texlive-fonts-recommended
     - sudo apt-get install -y texlive-fonts-extra
     - sudo apt-get install -y texlive-latex-extra
     - sudo apt-get update 
-install:
-    - sudo ./travis-tool.sh install_bioc BiocInstaller xml2 rversions devtools
-    - sudo ./travis-tool.sh install_bioc ensembldb rtracklayer Biobase Biostrings GenomicRanges OrganismDbi Rsamtools 
-    - sudo R -e 'library(devtools);install_github("arcolombo/TxDbLite")'
-    - sudo ./travis-tool.sh install_bioc_deps
-    - sudo ./travis-tool.sh install_bioc rhdf5 matrixStats GenomicRanges GenomicFeatures Matrix KEGGREST
-    - sudo ./travis-tool.sh install_bioc rmarkdown roxygen2 knitr
-    - sudo ./travis-tool.sh install_bioc RUVSeq erccdashboard pathview
-    - sudo R -e 'library(devtools);install_github("arcolombo/artemis")'
-    - sudo R -e 'library(devtools);install_github("arcolombo/artemisData")'
+
+bioc_packages: 
+    - BiocInstaller
+    - xml2
+    - rversions
+    - ensembldb
+    - rtracklayer
+    - Biobase
+    - Biostrings
+    - GenomicRanges
+    - OrganismDbi
+    - Rsamtools
+    - rhdf5
+    - matrixStats
+    - GenomicFeatures 
+    - Matrix 
+    - KEGGREST
+    - rmarkdown
+    - roxygen2
+    - knitr
+    - RUVSeq
+    - erccdashboard 
+    - pathview
+   
+r_github_packages:
+    - arcolombo/artemis
+    - arcolombo/artemisData
+    - arcolombo/TxDbLite
 script:
     - sudo R -e 'library(rmarkdown);library(artemis);library(artemisData);render("./vignettes/artemis.Rmd")' 
-    - sudo R -e 'library(rmarkdown); render("./vignettes/geneWiseAnalysis.Rmd")' 
+    - sudo R -e 'library(rmarkdown); render("./vignettes/geneWiseAnalysis.Rmd")'    
     - sudo R -e 'library(rmarkdown); render("./vignettes/pcaPlot.Rmd")'
 after_failure:
     - sudo ./travis-tool.sh dump_logs
