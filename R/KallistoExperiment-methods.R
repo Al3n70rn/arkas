@@ -1,7 +1,6 @@
 #' @describeIn KallistoExperiment 
 #'
 #' Retrieve the estimated count matrix from a KallistoExperiment. 
-#'
 #' @export
 setMethod("counts", "KallistoExperiment",
           function (object) return(assays(object)$est_counts))
@@ -10,7 +9,6 @@ setMethod("counts", "KallistoExperiment",
 setGeneric("covariates", function(object) standardGeneric("covariates"))
 setGeneric("covariates<-", 
            function(object, value) standardGeneric("covariates<-"))
-
 #' @describeIn KallistoExperiment 
 #'
 #' Retrieve the sample covariates from a KallistoExperiment. 
@@ -18,7 +16,6 @@ setGeneric("covariates<-",
 #' @export
 setMethod("covariates", "KallistoExperiment",
           function (object) return(colData(object)))
-
 #' @describeIn KallistoExperiment 
 #'
 #' Retrieve the sample covariates from a KallistoExperiment. 
@@ -30,7 +27,6 @@ setMethod("pData", "KallistoExperiment",
 #' @describeIn KallistoExperiment 
 #'
 #' Assign the sample covariates for a KallistoExperiment. 
-#'
 #' @export
 setReplaceMethod("covariates", "KallistoExperiment",
                  function (object, value) {
@@ -57,7 +53,6 @@ setReplaceMethod("pData", c("KallistoExperiment", "DataFrame"),
 ## set in GenomicFeatures, which we have to import anyways 
 ## setGeneric("features", function(object) standardGeneric("features"))
 setGeneric("features<-", function(object, value) standardGeneric("features<-"))
-
 #' @describeIn KallistoExperiment 
 #'
 #' Retrieve the per-row annotations for a KallistoExperiment. 
@@ -67,8 +62,7 @@ setMethod("features", "KallistoExperiment", function (x) rowRanges(x))
 
 #' @describeIn KallistoExperiment 
 #'
-#' Assign per-row annotations to a KallistoExperiment. 
-#'
+#' Assign per-row annotations to a KallistoExperiment.
 #' @export
 setReplaceMethod("features", c("KallistoExperiment", "ANY"),
                 function(object, value) {
@@ -85,7 +79,6 @@ setGeneric("eff_length", function(object) standardGeneric("eff_length"))
 #' @describeIn KallistoExperiment 
 #'
 #' Retrieve the matrix of effective transcript lengths from a KallistoExperiment
-#'
 #' @export
 setMethod("eff_length", "KallistoExperiment",
           function (object) return(assays(object)$eff_length))

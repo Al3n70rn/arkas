@@ -1,0 +1,63 @@
+---
+title: "Artemis: Repetitive Elements Quantification In Much Less Time"
+author:  "Timothy J. Triche, Jr, Anthony R. Colombo, Harold Pimentel"
+runtime: shiny
+output:
+    html_document:
+      toc: true
+      number_sections: true
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+---
+
+#Workflow Diagram
+the work flow for artemis is giving by the following diagram.  
+
+```{r message=FALSE}
+
+library(DiagrammeR)
+library(pipeR)
+library(htmltools)
+library(exportwidget)
+
+tagList(
+grViz("
+   digraph dot {
+
+   graph [layout = dot,
+          rankdir=TB,
+          nodesep= .5]
+   node [shape = circle,
+         style = filled,
+         color= grey,
+         fontname='Arial',
+         fontsize=12,
+         label= '',
+         width=1]
+
+   node [fillcolor = bisque]
+    RawFasta[label='Raw.Fasta'] RawFastq[label='Raw.Fastq']
+
+   node [fillcolor = lightblue]
+   IndexedKallistoReference[label='Kallisto.Ref.Index'] KallistoOutput[label='Kallisto.Output'] KallistoExperiment[label='KallistoExp'] AnnotatedKallistoExperiment[label='Annotated.KallistoExp']
+
+   node [fillcolor = Tan]
+    TxDbLiteDB[label='TxDbLite']
+
+ node [fillcolor = orange]
+   DiffExpression[label='Differential Expr']
+
+  edge [color = grey]
+   RawFasta -> {TxDbLiteDB}[label='ensDbLite,repDbLite']
+   RawFasta -> {IndexedKallistoReference}[label='indexKallisto']
+   RawFastq -> {KallistoOutput}[label='runKallisto']
+   IndexedKallistoReference -> {KallistoOutput}[label='runKallisto']
+   KallistoOutput -> {KallistoExperiment}[label='mergeKallisto']
+   KallistoExperiment -> {AnnotatedKallistoExperiment}[label='annotateFeatures']
+   TxDbLiteDB -> {AnnotatedKallistoExperiment}[label='annotateFeatures']
+   AnnotatedKallistoExperiment -> {DiffExpression}[label='geneWiseAnalysis']
+  }",
+   width=400,
+    height=1200)
+,export_widget ( )
+) %>>% html_print(viewer = utils::browseURL ) 
+```

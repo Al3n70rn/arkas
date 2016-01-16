@@ -5,15 +5,14 @@
 #' @param fastaTxDbLite   boolean: should we try to annotate new FASTAs? (yes)
 #' @param collapse        string to name multi-FASTA indices ("_mergedWith_")
 #' @param kmer            integer, integer 3-31 of kmer size,default 31 
-#'
+#' @param makeUnique boolean, true will auto-correct existing dupes flexible
 #' @import tools
 #' @import TxDbLite
 #' @import Rsamtools
 #' 
 #' @export
 indexKallisto <- function(fastaFiles, fastaPath, fastaTxDbLite=TRUE, 
-                          collapse="_mergedWith_", kmer=31,...) { 
-
+                          collapse="_mergedWith_", kmer=31,makeUnique=TRUE) { 
   oldwd <- getwd()
   setwd(fastaPath)
   message(paste0("kmer length size: ",kmer))
@@ -29,36 +28,44 @@ indexKallisto <- function(fastaFiles, fastaPath, fastaTxDbLite=TRUE,
   if (!file.exists(indexPath)) {
 
     ## Check the FASTA files for duplicate seqnames:
-    dupes <- findDupes(fastaFiles)
-    if (!is.null(dupes) && 
-        !(is(dupes, "data.frame") && sum(dupes$duplicates) == 0)) {
-      duplicatedSeqnames <- unique(dupes$seqname)
-      message("There are duplicated sequence names in your FASTA files:")
-      for (seqname in duplicatedSeqnames) { 
-        dupeFastas <- dupes[dupes$seqname == seqname, "fastaFile"]
-        id <- "" 
-        if (all(dupes[dupes$seqname == seqname, "allIdentical"])) { 
-          id <- " (all of the nucleotide sequences are identical)"
-        }
-        message(seqname, id, ":")
-        for (fasta in dupeFastas) {
-          message("  appears in ", fasta)
-        }
-      }
-      message("You need to fix this, otherwise the output will choke Sleuth.")
-      stop("Please re-run index creation after you have fixed any duplicates.")
-    }
+    dupes <- findDupes(fastaFiles) #dupes$duplicates contains 0 or name of dupe
 
-    ## No dupes, proceed...
-    command <- paste(c("kallisto index -i", indexName, fastaFiles," -k ",kmer),
-                     collapse=" ")
+        if(all(dupes$duplicates!=0)  ){ #there exist dupes
+    lengthDupes<-sapply(dupes,function(x) length(x)) #length of entire list
+     
+      if ( makeUnique==TRUE) {#correct dupes
+      message("auto-correcting dupes found...")
+      command <- paste(c("kallisto index -i", indexName, fastaFiles," -k ",kmer," --make-unique"),collapse=" ")
+    retval <- system(command=command)
+   setwd(oldwd)
+
+    } ##run with the --make-unique command 
+
+   if( makeUnique==FALSE) {
+      command <- paste(c("kallisto index -i", indexName, fastaFiles," -k ",kmer),collapse=" ")
     retval <- system(command=command)
     setwd(oldwd)
+    }#there exist dupes
+
+}#there exist dupes and autoCorrect True
+
+
+    if(all(dupes$duplicates==0) ){
+        if(makeUnique==TRUE || makeUnique==FALSE) { 
+     lengthDupes<-length(dupes) #empty list length = 0
+     command <- paste(c("kallisto index -i", indexName, fastaFiles," -k ",kmer),collapse=" ")
+    retval <- system(command=command)
+    setwd(oldwd)
+      }
+   }#no dupes exist
+
     if (retval == 0) {
       return(res)
     } else { 
-      stop("Index generation failed.")
-    }
+      message("Index generation failed ... defaulting to --make-unique")
+         command <- paste(c("kallisto index -i", indexName, fastaFiles," -k ",kmer," --make-unique"),collapse=" ")
+    retval <- system(command=command)
+       }
 
     if (fastaTxDbLite) {
       for (fastaFile in fastaFiles) { 

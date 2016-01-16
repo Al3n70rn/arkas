@@ -5,7 +5,7 @@
 \title{index transcriptome/transcriptomes}
 \usage{
 indexKallisto(fastaFiles, fastaPath, fastaTxDbLite = TRUE,
-  collapse = "_mergedWith_", kmer = 31, ...)
+  collapse = "_mergedWith_", kmer = 31, makeUnique = TRUE)
 }
 \arguments{
 \item{fastaFiles}{a character string or vector of FASTA transcriptomes}
@@ -17,6 +17,8 @@ indexKallisto(fastaFiles, fastaPath, fastaTxDbLite = TRUE,
 \item{collapse}{string to name multi-FASTA indices ("_mergedWith_")}
 
 \item{kmer}{integer, integer 3-31 of kmer size,default 31}
+
+\item{makeUnique}{boolean, true will auto-correct existing dupes flexible}
 }
 \description{
 index transcriptome/transcriptomes
