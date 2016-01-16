@@ -76,7 +76,15 @@ bioc_packages:
     - RUVSeq
     - erccdashboard 
     - pathview
-   
+    - qusage
+    - jsonlite
+    - GenomeInfoDb
+    - limma
+    - parallel
+    - tools
+    - biomaRt
+    - edgeR
+    - ggplot2 
 r_github_packages:
     - arcolombo/artemis
     - arcolombo/artemisData
