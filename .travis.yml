@@ -48,6 +48,8 @@ apt_packages:
 before_install:
     - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
     - chmod 755 ./travis-tool.sh
+    - sudo apt-get update && sudo apt-get --yes install curl cmake zlibc zlib1g-dev
+    - sudo apt-get update && sudo apt-get install -y libhdf5-dev
     - cwd=$(pwd) && sudo mkdir ./KallistoSource && cd ./KallistoSource && sudo git clone https://github.com/pachterlab/kallisto.git && cd ./kallisto && sudo mkdir ./build && cd ./build && sudo cmake .. && sudo make && sudo make install && cd $cwd
     - sudo apt-get update
 
