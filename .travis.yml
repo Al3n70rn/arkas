@@ -20,24 +20,36 @@ env:
 r_github_packages:
     - hadley/devtools
 
+apt_packages:
+   - gcc-4.6-base
+   - cpp-4.6 
+   - libgomp1
+   - libquadmath0
+   - libc6-dev
+   - build-essential 
+   - zlib1g-dev 
+   - libc6-dev 
+   - libcurl4-openssl-dev 
+   - libxml2-dev
+   - curl 
+   - cmake 
+   - zlibc 
+   - zlib1g-dev
+   - libhdf5-dev
+   - git
+   - pandoc
+   - texlive-latex-base
+   - texlive-fonts-recommended
+   - texlive-fonts-extra
+   - texlive-latex-extra
+   - libcurl4-openssl-dev
+   - libxml2-dev
+
 before_install:
     - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
     - chmod 755 ./travis-tool.sh
-    - sudo apt-get --yes install gcc-4.6-base cpp-4.6 libgomp1 libquadmath0 libc6-dev build-essential zlib1g-dev libc6-dev libcurl4-openssl-dev libxml2-dev
-    - sudo apt-get update && sudo apt-get --yes install curl cmake zlibc zlib1g-dev
-    - sudo apt-get update && sudo apt-get install -y libhdf5-dev
-    - sudo apt-get install -y git
-    - sudo apt-get install -y pandoc
     - cwd=$(pwd) && sudo mkdir ./KallistoSource && cd ./KallistoSource && sudo git clone https://github.com/pachterlab/kallisto.git && cd ./kallisto && sudo mkdir ./build && cd ./build && sudo cmake .. && sudo make && sudo make install && cd $cwd
-    - sudo echo "deb http://cran.stat.ucla.edu/bin/linux/ubuntu trusty/" >> sudo /etc/apt/sources.list
-    - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
-    - sudo add-apt-repository ppa:marutter/rdev
-    - sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get install -y r-base && sudo apt-get install -y r-base-dev && sudo apt-get update
-    - sudo apt-get install -y texlive-latex-base
-    - sudo apt-get install -y texlive-fonts-recommended
-    - sudo apt-get install -y texlive-fonts-extra
-    - sudo apt-get install -y texlive-latex-extra
-    - sudo apt-get update 
+    - sudo apt-get update
 
 bioc_packages: 
     - BiocInstaller
