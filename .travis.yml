@@ -3,7 +3,7 @@
 # See README.md for instructions, or for more configuration options,
 # see the wiki:
 #   https://github.com/craigcitro/r-travis/wiki
-# for the moment it is pulling and testing arcolombo ~ master for the tests.  after the checks complete we must change to ramsinghLab ~ master
+#  checking now from ramsinghLab ~ master
 
 language: 
     - r
@@ -94,9 +94,9 @@ bioc_packages:
     - SummarizedExperiment
     - beeswarm 
 r_github_packages:
-    - arcolombo/TxDbLite
-    - arcolombo/artemis
-    - arcolombo/artemisData
+    - RamsinghLab/TxDbLite
+    - RamsinghLab/artemis
+    - RamsinghLab/artemisData
     
 script:
     - sudo R -e 'library(rmarkdown);library(artemis);library(artemisData);render("./vignettes/artemis.Rmd")' 
