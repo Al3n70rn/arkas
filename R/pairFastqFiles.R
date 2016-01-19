@@ -24,7 +24,6 @@ pairFastqFiles <- function(path=".",
 
   # parse the filenames to sense of them
   # this tries Illumina AND SRA standards
-  browser()
   fragments <- .parseFastqNames(allFiles, 
                                 extension=extension, 
                                 readPrefix=readPrefix,
