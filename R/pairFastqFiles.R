@@ -24,12 +24,12 @@ pairFastqFiles <- function(path=".",
 
   # parse the filenames to sense of them
   # this tries Illumina AND SRA standards
-  fragments <- .parseFastqNames(allFiles, 
-                                extension=extension, 
-                                readPrefix=readPrefix,
-                                lanePrefix=lanePrefix,
-                                splitChar=splitChar,
-                                ...) 
+  fragments <- parseFastqNames(allFiles, 
+                               extension=extension, 
+                               readPrefix=readPrefix,
+                               lanePrefix=lanePrefix,
+                               splitChar=splitChar,
+                               ...) 
 
   # now try to actually pair them
   pairedFiles <- .findPairings(fragments)
@@ -51,59 +51,12 @@ pairFastqFiles <- function(path=".",
   return(withPaths)
 }
 
-#' parseFastqNames may be worth breaking out and exporting
-.parseFastqNames <- function(allFiles, 
-                             extension="\\.fastq\\.gz", 
-                             readPrefix="R",
-                             lanePrefix="L",
-                             splitChar="_", 
-                             ...) { # {{{
-
-  allFiles <- basename(allFiles)
-  allStubs <- sub(extension, "", allFiles)
-  str2vec <- function(x) strsplit(x, splitChar)[[1]]
-  fragments <- as.data.frame(do.call(rbind, lapply(allStubs, str2vec)))
-  prefixes <- lapply(fragments, function(x) unique(substr(x, 1, 1)))
-  fragments$filename <- allFiles
-
-  if (readPrefix %in% prefixes && lanePrefix %in% prefixes) {
-
-    # first readPrefix match going right-to-left is Illumina read (1 or 2)
-    readColumn <- rev(which(prefixes == readPrefix))[1]
-    names(fragments)[readColumn] <- "Read" 
-
-    # first lanePrefix match going right-to-left is Illumina lane 
-    laneColumn <- rev(which(prefixes == lanePrefix))[1]
-    names(fragments)[laneColumn] <- "Lane" 
-    if (length(unique(fragments$Lane)) > 1) {
-      message("You seem to have multiple lanes of data for this sample...?!")
-    }
-
-    # first column should be sample stub 
-    if (names(fragments)[1] %in% c("Read", "Lane")) {
-      message("Cannot figure out what the sample names are... bypassing...") 
-    } 
-    names(fragments)[1] <- "Stub"
-
-  } else { 
-  
-    # It's probably SRA data, via ENA or some similar repository
-    readColumn <- rev(which(!is.na(lapply(prefixes, as.numeric))))[1]
-    names(fragments)[readColumn] <- "Read" 
-
-    if (names(fragments)[1] == "Read") {
-      message("Cannot figure out what the sample names are... bypassing...") 
-    } else {
-      names(fragments)[1] <- "Stub"
-    }
-
-  }
-
-  return(fragments[, c("Stub","Read","filename")])
-
-} # }}}
-
+#' @describeIn pairFastqFiles
+#
 #' helper function to try and weed through various possible extensions 
+#'
+#' @return a data.frame of paired FASTQ filenames 
+#'
 .findPairings <- function(fragments, ...) { # {{{ 
   stopifnot("Read" %in% names(fragments))
   as.character(do.call(rbind, split(fragments$filename, fragments$Read)))

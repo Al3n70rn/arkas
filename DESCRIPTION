@@ -1,7 +1,7 @@
 Package: artemis
 Type: Package
 Title: A package that complements Kallisto for quick, informative *seq analysis
-Version: 0.42.7
+Version: 0.42.9
 Date: 2016-01-22
 Author: Tim Triche, Jr., Anthony Colombo, Harold Pimentel
 Depends:
@@ -23,10 +23,13 @@ Imports:
     Matrix,
     KEGGREST
 Suggests:
-    roxygen2,
     knitr,
+    roxygen2,
     EnsDbLite.Hsapiens.80,
+    EnsDbLite.Hsapiens.83,
     RepDbLite.Hsapiens.2005,
+    RepDbLite.Hsapiens.2012,
+    MitxDbLite.Hsapiens.2,
     simpleSampleSearch 
 VignetteBuilder: knitr
 Maintainer: Tim Triche, Jr. <tim.triche@gmail.com>

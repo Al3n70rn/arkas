@@ -3,7 +3,7 @@
 #' 
 #' @param kexp          a kexp
 #' @param level         at what level has the data been summarized? (guess)
-#' @param what          what data structure shall we return? (GRanges)
+#' @param what          what data structure to return? (KallistoExperiment)
 #'
 #' @return              a GRanges or a KallistoExperiment, depending on `what`
 #'
@@ -12,7 +12,7 @@
 #' @export
 annotateFeatures <- function(kexp, 
                              level=c(NA, "gene", "transcript"), 
-                             what=c("GRanges","KallistoExperiment"), 
+                             what=c("KallistoExperiment","GRanges"), 
                              ...) { 
 
   what <- match.arg(what)
@@ -39,11 +39,12 @@ annotateFeatures <- function(kexp,
       feats <- c(feats, annots[annotated])
     }
   }
-  feats <- feats[rownames(kexp)] 
-  if (what == "KallistoExperiment") {
-    features(kexp) <- feats
-    return(kexp)
+  if (length(feats) == 0) {
+    message("No annotations could be found and applied to your data.")
   } else { 
-    return(feats)
+    feats <- feats[rownames(kexp)] 
+    features(kexp) <- feats
   }
+  if (what == "KallistoExperiment") return(kexp)
+  if (what == "GRanges") return(features(kexp))
 }

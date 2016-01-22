@@ -1,4 +1,4 @@
-#' QC plots of ERCC spike-in controls (FIXME: automate RUVSeq normalization?)
+#' QC plots of ERCC spike-in controls (not exported at the moment)
 #'
 #' @param kexp            something that behaves like a KallistoExperiment 
 #' 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/erccAnalysis.R
 \name{erccAnalysis}
 \alias{erccAnalysis}
-\title{QC plots of ERCC spike-in controls (FIXME: automate RUVSeq normalization?)}
+\title{QC plots of ERCC spike-in controls (not exported at the moment)}
 \usage{
 erccAnalysis(kexp, ...)
 }
@@ -10,6 +10,6 @@ erccAnalysis(kexp, ...)
 \item{kexp}{something that behaves like a KallistoExperiment}
 }
 \description{
-QC plots of ERCC spike-in controls (FIXME: automate RUVSeq normalization?)
+QC plots of ERCC spike-in controls (not exported at the moment)
 }
 
