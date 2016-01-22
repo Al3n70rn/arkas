@@ -3,7 +3,7 @@
 #' 
 #' @param kexp          a kexp
 #' @param level         at what level has the data been summarized? (guess)
-#' @param what          what data structure shall we return (KallistoExperiment)
+#' @param what          what data structure shall we return? (GRanges)
 #'
 #' @return              a GRanges or a KallistoExperiment, depending on `what`
 #'
@@ -12,7 +12,7 @@
 #' @export
 annotateFeatures <- function(kexp, 
                              level=c(NA, "gene", "transcript"), 
-                             what=c("KallistoExperiment", "GRanges"), 
+                             what=c("GRanges","KallistoExperiment"), 
                              ...) { 
 
   what <- match.arg(what)

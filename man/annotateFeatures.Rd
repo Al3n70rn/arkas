@@ -6,14 +6,14 @@
 this is becoming the default dispatcher for almost all annotation}
 \usage{
 annotateFeatures(kexp, level = c(NA, "gene", "transcript"),
-  what = c("KallistoExperiment", "GRanges"), ...)
+  what = c("GRanges", "KallistoExperiment"), ...)
 }
 \arguments{
 \item{kexp}{a kexp}
 
 \item{level}{at what level has the data been summarized? (guess)}
 
-\item{what}{what data structure shall we return (KallistoExperiment)}
+\item{what}{what data structure shall we return? (GRanges)}
 }
 \value{
 a GRanges or a KallistoExperiment, depending on `what`

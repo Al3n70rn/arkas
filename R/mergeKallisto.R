@@ -90,7 +90,7 @@ mergeKallisto <- function(outputDirs=NULL,
   colnames(kexp) <- kexp$ID
   if(!is.null(transcriptomes) && annotate == TRUE) {
     feats <- features(kexp)
-    mapped <- annotateFeatures(kexp)
+    mapped <- annotateFeatures(kexp, level="transcript", what="GRanges") 
     feats[names(mapped)] <- mapped
     features(kexp) <- feats
   }
