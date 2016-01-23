@@ -15,6 +15,7 @@
 #' @param lengthDev   integer, length std used only for single end quantification
 #' @param collapse    string to name multi-FASTA indices ("_mergedWith_")
 #' @param extension   string,  to pass the extension into pairFastqFiles()
+#' @param tarBall     boolean, gzip the output folder directory
 #' @export
 runKallisto <- function(sampleDir, 
                         indexName=NULL, 
@@ -30,7 +31,8 @@ runKallisto <- function(sampleDir,
                         lengthMean=150,
                         lengthDev=0.001,
                         collapse="_mergedWith_",
-                        extension=".fastq.gz", 
+                        extension=".fastq.gz",
+                        tarBall=FALSE, 
                         ...) {
 
   if (is.null(indexName) && is.null(fastaFiles)) {
@@ -77,11 +79,16 @@ runKallisto <- function(sampleDir,
   retval <- system(command)
   res <- list(command=command, outputPath=outputPath, bootstraps=bootstraps)
   if (retval == 0 && file.exists(paste0(outputDir, "/abundance.h5"))) {
+     
+    if(tarBall){
+    system(paste0("tar -zcvf ", outputPath,"/",sampleDir,".tar.gz -C ",outputPath," ",sampleDir))
+    
+    }#gzip
+    
     return(res)
   } else { 
     stop(paste("Quantification failed; command",command,"did not produce bam file"))
   }
-   
 
 
 }#}}} main 
