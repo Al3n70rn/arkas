@@ -85,8 +85,6 @@ FastaFiles <- c( "ERCC.fa", ## spike-in controls
 indexName <- indexKallisto(fastaFiles=FastaFiles, fastaPath=FastaPath)$indexName
 indexName  #prints the full index Name
 Xtension<-"_*"
-indexName <- indexKallisto(fastaFiles=FastaFiles, fastaPath=FastaPath)$indexName
-indexName  #prints the full index Name
 
 library(parallel)
 results <- lapply(samples, 
