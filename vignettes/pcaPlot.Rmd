@@ -1,5 +1,5 @@
 ---
-title: "Artemis: Repetitive Elements Quantification In Much Less Time: PCA Plotting"
+title: "Arkas: Repetitive Elements Quantification In Much Less Time: PCA Plotting"
 author:  "Timothy J. Triche, Jr, Anthony R. Colombo, Harold Pimentel"
 output:
     pdf_document:
@@ -11,19 +11,19 @@ date: "`r format(Sys.time(), '%d %B, %Y')`"
 #Introduction
 Principal component analysis are eigenvalues which solves an equation involving expression assay data, an eigenvector of the expression assay associated with an eigenvalue.  The eigenvectors of the assay represent coordinates of a linear transformation of data where the variables are uncorrelated.
 
-##Loading artemisData For Preparation
+##Loading arkasData For Preparation
 The PCA plotting supports the assays of a given KallistoExperiment, but also can plot any matrix class data. The matrix of expression values is cast into a data.frame using pcaGGFrame.R.  The inputs are the assay data, the first component of interest (first-sixth), the second component of interest (first-sixth), and the assay type i.e. cpm, tpm, length ,etc.  
 the plot is called using pcaPlot(dataFrame).  For this vignette, we randomly choose two integers 1-4, and output the PCA plot of the randomly selected principal components of interest.
 
 ```{r}
-library(artemis)
-library(artemisData)
-jsonFile <- system.file("extdata", "NS.JSON", package="artemis")
+library(arkas)
+library(arkasData)
+jsonFile <- system.file("extdata", "NS.JSON", package="arkas")
 appSession <- fetchAppSession(jsonFile) ## autofill APPSESSION in paths
 
 ## samples <- c("n1","n2","n4","s1","s2","s4") ## set by appSession
 names(appSession$samples) <- appSession$samples ##
- appSession$outputPath <- system.file("extdata", "", package="artemisData")
+ appSession$outputPath <- system.file("extdata", "", package="arkasData")
   kexp <- mergeKallisto(appSession$samples, 
                       outputPath=appSession$outputPath)
 

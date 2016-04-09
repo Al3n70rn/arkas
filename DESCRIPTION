@@ -1,8 +1,8 @@
-Package: artemis
+Package: arkas
 Type: Package
 Title: A package that complements Kallisto for quick, informative *seq analysis
-Version: 0.42.9
-Date: 2016-01-22
+Version: 0.43.0
+Date: 2016-04-09
 Author: Tim Triche, Jr., Anthony Colombo, Harold Pimentel
 Depends:
     parallel,

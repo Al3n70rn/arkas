@@ -25,7 +25,7 @@ Using limma we construct a contrast matrix and plot the topTable using two diffe
 The coefficients of the design model are the parameters estimated resulting in the t statistic which is the group-parameter-means-across-groups divided by the variance-within-groups.  
 
 ```{r}
-suppressPackageStartupMessages(library(artemis))
+suppressPackageStartupMessages(library(arkas))
 setwd("/home/anthonycolombo/Documents/CD34_output")
 load("bnSession.RData")
 bnSession$samples  #shows only bulk and normal
@@ -91,7 +91,7 @@ We first analyzed the Normal and Senescent samples as a two group comparison wit
 The results should that when comparing the Bulk to Normal, without any conservative filtering, and ignoring the apriori percentages, returned an overlap of 49% which is poor; meaning that the N.v.B covers Normal returned from N.v.S 49%; we expected much higher  70%++ because bulk and normal are similar, although normal was sorted and these normal cells were identified as SA-Beta-GAL-Negative, whereas bulk was not sorted and negative.
 
 ```{r} 
-suppressPackageStartupMessages(library(artemis))
+suppressPackageStartupMessages(library(arkas))
 load("/home/anthonycolombo/Documents/CD34_output/nsSession.RData")
 #normal and senescent only
 nsSession$samples
@@ -320,7 +320,7 @@ dev.off()
 The residual plots shows the differences between the observed data, and the estimated parameters fit to the data, thus showing an error parameter corresponding to the differences.  The following plot compares of the voomed data showing the log CPM transformed-RNA-Seq data used in the linear model and the fitted parameters derived from the transformed counts.  
 
 ```{r}
-suppressPackageStartupMessages(library(artemis))
+suppressPackageStartupMessages(library(arkas))
 load("/home/anthonycolombo/Documents/CD34_output/gwaBN.RData")
 library(limma)
 #the design
@@ -436,11 +436,11 @@ We conclude that for Normal versus bulk design modeling, adjusting the percent n
 
 # Senescent and Prior Adjusted Bulk Comparisons
  We turn our attention to modeling the biological data that adjusts for the percent senescence comparing Bulk as 95% normal, and Bulk with 5% Senescence, compared with pure senescent samples.
-  Previously we analyzed Normal and Senescent without the Bulk data included, and derived a gene list using Artemis with roughly 1600 top genes.  We now investigate the two group comparison between Senescent and Bulk using prior percent senescence and examine the overlap between the top D.E.G. found from modeling senescent samples in N.v.S sorted data set.
+  Previously we analyzed Normal and Senescent without the Bulk data included, and derived a gene list using Arkas with roughly 1600 top genes.  We now investigate the two group comparison between Senescent and Bulk using prior percent senescence and examine the overlap between the top D.E.G. found from modeling senescent samples in N.v.S sorted data set.
 
 
 ```{r}
-suppressPackageStartupMessages(library(artemis))
+suppressPackageStartupMessages(library(arkas))
 load("/home/anthonycolombo/Documents/CD34_output/bulkS.RData")
 library(VennDiagram)
 #load the bulk and Senescent kexp

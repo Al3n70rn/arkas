@@ -22,77 +22,44 @@ We have used Kallisto to quantify ERCC spike-in, ENSEMBL coding, ENSEMBL noncodi
 allow for inspection of uncertainty in estimates at transcript or gene level). 
 First we need to read in the results from quantifying each of the matched pairs.
 
-<<<<<<< HEAD
+
 ```{r}
-=======
-<<<<<<< HEAD
-```{r}
-=======
-```R
->>>>>>> 94c0f14f5ea52080585cded760336cb649a44b98
->>>>>>> travis
-suppressPackageStartupMessages(library(artemisData))
-outputPath <- system.file("extdata", "", package="artemisData")
+suppressPackageStartupMessages(library(arkasData))
+outputPath <- system.file("extdata", "", package="arkasData")
 samples <- list.files(outputPath, pattern="^[ns][124]$")
 covs <- data.frame(outputDir=samples, 
                    row.names=samples)
 NS <- mergeKallisto(covariates=covs, 
                     outputPath=outputPath) 
-<<<<<<< HEAD
+
 show(NS) 
 NS <- annotateFeatures(NS) # loads TxDbLite libs
 
-=======
-<<<<<<< HEAD
-show(NS) 
-NS <- annotateFeatures(NS) # loads TxDbLite libs
-
-=======
-show(NS)                   
->>>>>>> 94c0f14f5ea52080585cded760336cb649a44b98
->>>>>>> travis
 ```
 
 Next we need to indicate which sample is from which subject, and which fraction.
 We also need to annotate the transcripts against their ENSEMBL gene IDs, because
 we will sum the abundances of the transcripts to get the abundance of each gene.
 
-<<<<<<< HEAD
-```{r}
 
-=======
-<<<<<<< HEAD
 ```{r}
-
-=======
-```
 NS <- annotateFeatures(NS) # loads TxDbLite libs
->>>>>>> 94c0f14f5ea52080585cded760336cb649a44b98
->>>>>>> travis
-
 # Sample names are [condition][subject], e.g. s1 or n4
 NS$senescent <- as.factor(substr(colnames(NS), 1, 1))
 NS$subject <- as.factor(substr(colnames(NS), 2, 2))
 NS_design <- with(as(colData(NS), "data.frame"), 
                   model.matrix(~ senescent + subject))
-<<<<<<< HEAD
-```
-=======
-<<<<<<< HEAD
-```
-=======
 
->>>>>>> 94c0f14f5ea52080585cded760336cb649a44b98
->>>>>>> travis
+```
 ## limma/voom
 
-limma/voom analysis (Law et al. 2014) is built into artemis as its own function.
+limma/voom analysis (Law et al. 2014) is built into arkas as its own function.
 It would be nice to use RUVseq for normalization, but at the moment, we don't...
 It would also be nice to use B-values (essentially, odds ratios) for ranking. We
 may make this the default in the future, as it's far more sensible than pvalues.
 In any event, a little convenience function retrieves our hits at each p cutoff.
 
-```R
+```{r}
 res <- fitBundles(NS, design=NS_design)
 voomResults <- res$fit
 
@@ -111,7 +78,7 @@ The authors of edgeR recommend filtering out genes with very low counts, and
 collapseBundles() enforces it by default (minimum 1 read in at least 1 sample).
 The authors also recommend computing and plotting their dispersion estimates. 
 
-```R
+```{r}
 library(edgeR)
 geneCounts <- collapseBundles(NS, bundleID="gene_id")
 d <- DGEList(counts=geneCounts, group=NS$senescent)
@@ -125,7 +92,7 @@ plotBCV(d)
 The robust dispersion estimate seems to help a great deal (although it's slow).
 We will use the same approach and cutoffs to get edgeR hits as for limma/voom.
 
-```R
+```{r}
 fit <- glmFit(d, NS_design)
 edgeResults <- glmLRT(fit, coef=2)
 
@@ -155,7 +122,7 @@ course any attempt to suggest that priors should exist from the corpus of 300+
 years of scientific endeavor tends to face resistance from the hidebound. And 
 there's always the minor issue of the marginalization paradox for Bayesians...)
 
-```R
+```{r}
 library(VennDiagram)
 getVenn <- function(voom, edgeR) {
   grid.newpage()
@@ -168,19 +135,19 @@ getVenn <- function(voom, edgeR) {
 
 At p <= 0.1, we get:
 
-```R
+```{r}
 getVenn(voom_fdr01, edgeR_fdr01)
 ```
 
 At p <= 0.05, we get:
 
-```R
+```{r}
 getVenn(voom_fdr005, edgeR_fdr005)
 ```
 
 And at p <= 0.01, we get:
 
-```R
+```{r}
 getVenn(voom_fdr001, edgeR_fdr001)
 ```
 
@@ -189,7 +156,7 @@ effect sizes (for example, at least one of the bundles has a B-value or Bayes
 odds ratio of 22.06, which is enormous).  What is going on here?  Let's see.
 First let us look at some of these huge B-values:
 
-```R 
+```{r}
 topVoom <- topTable(voomResults, n=nrow(NS), coef=2)
 voomOnly_fdr001 <- setdiff(voom_fdr001, edgeR_fdr001)
 topVoom[voomOnly_fdr001, "B"]
@@ -198,7 +165,7 @@ topVoom[voomOnly_fdr001, "B"]
 At least the first 9 of these should show up via any reasonable method, IFF 
 they make sense.  
 
-```R
+```{r}
 
 geneTpms <- collapseTpm(NS, bundleID="gene_id")
 # geneCounts is already assembled 
@@ -225,7 +192,7 @@ for (ensg in hugeDiffs) getBeeswarm(ensg, mat=geneTpms)
 
 Conversely, what does edgeR favor?
 
-```R
+```{r}
 topEdgeR <- topTags(edgeResults, n=nrow(NS))
 edgeOnly_fdr001 <- setdiff(edgeR_fdr001, voom_fdr001)
 topEdgeR[edgeOnly_fdr001, "LR"]
@@ -233,7 +200,7 @@ topEdgeR[edgeOnly_fdr001, "LR"]
 
 Well, those are some big likelihood ratios.  Let's plot them.
 
-```R
+```{r}
 moreHugeDiffs <- edgeOnly_fdr001[1:9]
 
 # plot 'em: counts
@@ -253,7 +220,7 @@ analysis.  But it seems pretty clear that each has strengths and weaknesses.
 
 We might want to look at a few of these in Sleuth.  Let's do that:
 
-```R 
+```{r}
 
 # see ?withSleuth
 library(sleuth)
