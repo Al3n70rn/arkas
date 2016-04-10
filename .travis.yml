@@ -106,7 +106,7 @@ bioc_packages:
 r_github_packages:
     - RamsinghLab/TxDbLite_arkas
     - RamsinghLab/arkas_staging
-    - RamsinghLab/arkasData
+    - RamsinghLab/arkasData_staging
     
 script:
     - sudo R -e 'library(rmarkdown);library(arkas);library(arkasData);render("./vignettes/arkas.Rmd")' 
