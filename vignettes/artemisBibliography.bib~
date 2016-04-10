@@ -1,8 +1,0 @@
-@ARTICLE {li09,
-    author  = { Li,Bo},
-    title   = {RNA-Seq Gene Expression Estimation with Read Mapping Uncertainty},
-    journal = {Journals Bioinformatics. Oxford Journal},
-    year    = {2009},
-    volume  = {9},
-    month   = {Dec}
-}
