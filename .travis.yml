@@ -94,12 +94,12 @@ bioc_packages:
     - SummarizedExperiment
     - beeswarm 
 r_github_packages:
-    - RamsinghLab/TxDbLite
-    - RamsinghLab/artemis
-    - RamsinghLab/artemisData
+    - arcolombo/TxDbLite
+    - arcolombo/arkas
+    - arcolombo/arkasData
     
 script:
-    - sudo R -e 'library(rmarkdown);library(artemis);library(artemisData);render("./vignettes/artemis.Rmd")' 
+    - sudo R -e 'library(rmarkdown);library(arkas);library(arkasData);render("./vignettes/arkas.Rmd")' 
     - sudo R -e 'library(rmarkdown); render("./vignettes/geneWiseAnalysis.Rmd")'    
     - sudo R -e 'library(rmarkdown); render("./vignettes/pcaPlot.Rmd")'
 after_failure:

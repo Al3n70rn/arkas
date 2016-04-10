@@ -76,7 +76,7 @@ mergeKallisto <- function(outputDirs=NULL,
       transcriptomes <- c(unknown=attr(res[[1]], "fastaFiles"))
     }
   }
-  data(unannotatedTranscript, package="artemis")
+  data(unannotatedTranscript, package="arkas")
   rowdat <- rep(unannotatedTranscript, nrow(asys$est_counts))
   names(rowdat) <- rownames(asys$est_counts)
   kexp <- KallistoExperiment(est_counts=asys$est_counts,
