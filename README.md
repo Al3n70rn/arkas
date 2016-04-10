@@ -9,7 +9,7 @@ and various other sorts of related malarkey (run the demo!).
 ```R
 suppressPackageStartupMessages(library(artemisData))
 ## this assumes Kallisto is in ~/bin/
-demo("example", package="artemis")
+demo("example", package="arkas")
 ```
 
 ![repeat expression](demo/example.png "Plot generated from example code")    
