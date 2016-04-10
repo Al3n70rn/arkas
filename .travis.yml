@@ -47,61 +47,37 @@ apt_packages:
    - texlive-latex-extra
    - libcurl4-openssl-dev
    - libxml2-dev
-  
+   - samtools
 before_install:
     - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
     - chmod 755 ./travis-tool.sh
     - sudo apt-get --yes install curl cmake zlibc zlib1g-dev
     - sudo apt-get install -y libhdf5-dev
     - cwd=$(pwd) && sudo mkdir ./KallistoSource && cd ./KallistoSource && sudo git clone https://github.com/pachterlab/kallisto.git && cd ./kallisto && sudo mkdir ./build && cd ./build && sudo cmake .. && sudo make && sudo make install && cd $cwd
-  
+    - sudo R -e 'source("http://bioconductor.org/biocLite.R"); biocLite("BiocInstaller")'
+    - sudo R -e 'library(BiocInstaller);biocLite(c("rtracklayer","XML","biomaRt","RCurl"),ask=FALSE)'
+    - sudo R -e 'library(BiocInstaller);biocLite(c("parallel","jsonlite","qusage","GenomeInfoDb","limma","Biobase","SummarizedExperiment","SPIA","EnrichmentBrowser","clusterProfiler","rhdf5","matrixStats","GenomicRanges","GenomicFeatures","Matrix","KEGGREST","beeswarm","tools","graphite","roxygen2","knitr"),ask=FALSE )'
+     - sudo R -e 'library(BiocInstaller);biocLite(c("Homo.sapiens","Mus.musculus","RUVSeq","erccdashboard"),ask=FALSE)'
+     - sudo  R -e 'library(BiocInstaller);biocLite(c("DBI","RSQLite","ensembldb","rtracklayer","stringdist","Biostrings","OrganismDbi","Rsamtools", "qusage"),ask=FALSE)'
+ 
 bioc_packages: 
-    - BiocInstaller
     - xml2
     - rversions
     - rtracklayer
     - XML
     - RCurl
-    - AnnotationDbi
-    - biomaRt
     - annotate
     - genefilter
     - RColorBrewer
     - geneplotter
     - bitops
     - BiocParallel
-    - Rsamtools
     - httr
     - png 
     - parallel 
     - jsonlite
-    - qusage
     - GenomeInfoDb
-    - limma
-    - Biobase 
-    - SummarizedExperiment
-    - SPIA
-    - EnrichmentBrowser
-    - clusterProfiler
-    - rhdf5
-    - matrixStats
-    - GenomicRanges
-    - GenomicFeatures
     - Matrix
-    - KEGGREST
-    - beeswarm 
-    - tools
-    - graphite
-    - roxygen2
-    - knitr
-    - Homo.sapiens
-    - Mus.musculus
-    - RUVSeq
-    - errdashboard
-        
-
-    
-   
     - Biostrings
     - BiocParallel
     - bitops
@@ -115,41 +91,18 @@ bioc_packages:
     - ShortRead
     - RSQLite
     - EDASeq
-    - GenomicRanges
     - OrganismDbi
-    - Rsamtools
-    - rhdf5
-    - matrixStats
-    - GenomicFeatures
-    - AnnotationDbi
-    - annotate
-    - genefilter
-    - RColorBrewer
     - geneplotter
-    - Matrix 
-    - KEGGREST
     - rmarkdown
-    - roxygen2
-    - knitr
-    - RUVSeq
-    - erccdashboard 
     - pathview
-    - qusage
     - jsonlite
-    - GenomeInfoDb
-    - limma
-    - parallel
-    - tools
-    - biomaRt
     - edgeR
     - ggplot2
     - DBI
-    - RSQLite
     - ensembldb
-    - rtracklayer
     - stringdist
-    - SummarizedExperiment
-    - beeswarm 
+   
+    
 r_github_packages:
     - arcolombo/TxDbLite
     - arcolombo/arkas
