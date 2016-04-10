@@ -33,7 +33,7 @@ apt_packages:
    - zlib1g-dev 
    - libc6-dev 
    - libcurl4-openssl-dev 
-   - libxml2-dev
+   - r-cran-xml
    - curl 
    - cmake 
    - zlibc 
@@ -47,7 +47,7 @@ apt_packages:
    - texlive-latex-extra
    - libcurl4-openssl-dev
    - libxml2-dev
-
+  
 before_install:
     - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
     - chmod 755 ./travis-tool.sh
@@ -59,16 +59,73 @@ bioc_packages:
     - BiocInstaller
     - xml2
     - rversions
-    - ensembldb
     - rtracklayer
-    - Biobase
+    - XML
+    - RCurl
+    - AnnotationDbi
+    - biomaRt
+    - annotate
+    - genefilter
+    - RColorBrewer
+    - geneplotter
+    - bitops
+    - BiocParallel
+    - Rsamtools
+    - httr
+    - png 
+    - parallel 
+    - jsonlite
+    - qusage
+    - GenomeInfoDb
+    - limma
+    - Biobase 
+    - SummarizedExperiment
+    - SPIA
+    - EnrichmentBrowser
+    - clusterProfiler
+    - rhdf5
+    - matrixStats
+    - GenomicRanges
+    - GenomicFeatures
+    - Matrix
+    - KEGGREST
+    - beeswarm 
+    - tools
+    - graphite
+    - roxygen2
+    - knitr
+    - Homo.sapiens
+    - Mus.musculus
+    - RUVSeq
+    - errdashboard
+        
+
+    
+   
     - Biostrings
+    - BiocParallel
+    - bitops
+    - httr
+    - png
+    - locfit
+    - org.Hs.eg.db
+    - latticeExtra
+    - hwriter
+    - GenomicAlignments
+    - ShortRead
+    - RSQLite
+    - EDASeq
     - GenomicRanges
     - OrganismDbi
     - Rsamtools
     - rhdf5
     - matrixStats
-    - GenomicFeatures 
+    - GenomicFeatures
+    - AnnotationDbi
+    - annotate
+    - genefilter
+    - RColorBrewer
+    - geneplotter
     - Matrix 
     - KEGGREST
     - rmarkdown
