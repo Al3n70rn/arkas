@@ -103,9 +103,9 @@ bioc_packages:
     - stringdist
 
 r_github_packages:
-    - arcolombo/TxDbLite
-    - arcolombo/arkas
-    - arcolombo/arkasData
+    - RamsinghLab/TxDbLite
+    - RamsinghLab/arkas
+    - RamsinghLab/arkasData
     
 script:
     - sudo R -e 'library(rmarkdown);library(arkas);library(arkasData);render("./vignettes/arkas.Rmd")' 
