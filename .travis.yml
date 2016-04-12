@@ -101,8 +101,7 @@ bioc_packages:
     - DBI
     - ensembldb
     - stringdist
-   
-    
+
 r_github_packages:
     - arcolombo/TxDbLite
     - arcolombo/arkas
