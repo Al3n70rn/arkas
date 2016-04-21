@@ -42,7 +42,7 @@ annotateFeatures <- function(kexp,
   if (length(feats) == 0) {
     message("No annotations could be found and applied to your data.")
   } else { 
-     if(length(feats) > length(rownames(kexp))){
+     if(length(feats) >= length(rownames(kexp))){
      feats <- feats[rownames(kexp)] 
     features(kexp) <- feats
     }
