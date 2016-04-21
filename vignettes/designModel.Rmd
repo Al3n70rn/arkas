@@ -2,7 +2,7 @@
 title: "Bulk, Normal, and Senescent Expression Modeling"
 author:  "Anthony R. Colombo, Timothy Triche Jr., Kwasi Connor, Dr. Giridharan Ramsingh"
 output:
-    pdf_document:
+    html_document:
       toc: true
       number_sections: true
 date: "`r format(Sys.time(), '%d %B, %Y')`"
