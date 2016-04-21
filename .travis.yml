@@ -10,7 +10,7 @@ language:
     - c
 bioc_required: true
 
-#pandoc: true
+pandoc: true
 
 
 sudo: required
@@ -58,14 +58,14 @@ before_install:
     - sudo R -e 'library(BiocInstaller);biocLite(c("rtracklayer","XML","biomaRt","RCurl"),ask=FALSE)'
     - sudo R -e 'library(BiocInstaller);biocLite(c("parallel","jsonlite","qusage","GenomeInfoDb","limma","Biobase","SummarizedExperiment","SPIA","EnrichmentBrowser","clusterProfiler","rhdf5","matrixStats","GenomicRanges","GenomicFeatures","Matrix","KEGGREST","beeswarm","tools","graphite","roxygen2","knitr"),ask=FALSE )'
      - sudo R -e 'library(BiocInstaller);biocLite(c("Homo.sapiens","Mus.musculus","RUVSeq","erccdashboard"),ask=FALSE)'
-     - sudo  R -e 'library(BiocInstaller);biocLite(c("DBI","RSQLite","ensembldb","rtracklayer","stringdist","Biostrings","OrganismDbi","Rsamtools", "qusage"),ask=FALSE)'
+     - sudo  R -e 'library(BiocInstaller);biocLite(c("DBI","RSQLite","ensembldb","rtracklayer","stringdist","Biostrings","OrganismDbi","Rsamtools"),ask=FALSE)'
  
 bioc_packages: 
     - xml2
     - rversions
-    - rtracklayer
-    - XML
-    - RCurl
+  #  - rtracklayer
+#    - XML
+ #   - RCurl
     - annotate
     - genefilter
     - RColorBrewer
@@ -74,33 +74,28 @@ bioc_packages:
     - BiocParallel
     - httr
     - png 
-    - parallel 
-    - jsonlite
-    - GenomeInfoDb
-    - Matrix
-    - Biostrings
-    - BiocParallel
+  #  - parallel 
+   # - jsonlite
+   # - GenomeInfoDb
+  #  - Matrix
+  #  - Biostrings
     - bitops
-    - httr
-    - png
     - locfit
     - org.Hs.eg.db
     - latticeExtra
     - hwriter
     - GenomicAlignments
     - ShortRead
-    - RSQLite
+   # - RSQLite
     - EDASeq
-    - OrganismDbi
-    - geneplotter
+   # - OrganismDbi
     - rmarkdown
     - pathview
-    - jsonlite
     - edgeR
     - ggplot2
-    - DBI
+   # - DBI
     - ensembldb
-    - stringdist
+   # - stringdist
 
 r_github_packages:
     - arcolombo/TxDbLite
@@ -110,7 +105,7 @@ r_github_packages:
 script:
     - sudo R -e 'library(rmarkdown);library(arkas);library(arkasData);render("./vignettes/arkas.Rmd")' 
     - sudo R -e 'library(rmarkdown); render("./vignettes/geneWiseAnalysis.Rmd")'    
-    - sudo R -e 'library(rmarkdown); render("./vignettes/pcaPlot.Rmd")'
+   # - sudo R -e 'library(rmarkdown); render("./vignettes/pcaPlot.Rmd")'
 after_failure:
     - sudo ./travis-tool.sh dump_logs
 
