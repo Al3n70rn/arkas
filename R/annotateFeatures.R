@@ -42,8 +42,13 @@ annotateFeatures <- function(kexp,
   if (length(feats) == 0) {
     message("No annotations could be found and applied to your data.")
   } else { 
-    feats <- feats[rownames(kexp)] 
+     if(length(feats) > length(rownames(kexp))){
+     feats <- feats[rownames(kexp)] 
     features(kexp) <- feats
+    }
+    if(length(rownames(kexp)) > length(feats)) {
+     features(kexp)[names(feats)]<-feats
+    }
   }
   if (what == "KallistoExperiment") return(kexp)
   if (what == "GRanges") return(features(kexp))

@@ -1,14 +1,14 @@
-suppressPackageStartupMessages(library(artemis))
+suppressPackageStartupMessages(library(arkas))
 
-jsonFile <- system.file("extdata", "NS.JSON", package="artemis")
+jsonFile <- system.file("extdata", "NS.JSON", package="arkas")
 appSession <- fetchAppSession(jsonFile) ## autofill APPSESSION in paths
 
 ## samples <- c("n1","n2","n4","s1","s2","s4") ## set by appSession
 names(appSession$samples) <- appSession$samples ## so column names get set 
 
-if (require(artemisData)) {
+if (require(arkasData)) {
 
-  appSession$outputPath <- system.file("extdata", "", package="artemisData")
+  appSession$outputPath <- system.file("extdata", "", package="arkasData")
   NS <- mergeKallisto(appSession$samples, 
                       outputPath=appSession$outputPath)
 
