@@ -19,7 +19,7 @@ geneWiseAnalysis(kexp, design = NULL, how = c("cpm", "tpm"),
 
 \item{read.cutoff}{minimum read coverage (estimated) for a gene bundle}
 
-\item{species}{which species? (Homo.sapiens; FIX: get from TxDbLite)}
+\item{species}{which species? (Homo.sapiens, Mus.musculus are two currently supported}
 
 \item{fitOnly}{exit after fitting the EBayes linear model?  (FALSE)}
 
