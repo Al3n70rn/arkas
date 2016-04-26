@@ -9,7 +9,7 @@
 #' @export 
 #' @return return a list object with RUVg normalization
 
-ruvNormalization<-function(kexp, k=1,spikeIns=TRUE, inSilico=NULL,normalized.cutoff=1 ,byLevel=c("tx_id","gene_id")  ){
+ruvNormalization<-function(kexp, k=1,spikeIns=TRUE, p.cutoff=1, inSilico=NULL,normalized.cutoff=1 ,byLevel=c("tx_id","gene_id")  ){
 
 if(class(kexp)!="KallistoExperiment"){
 message("I'm afraid you did not input a KallistoExperiment object, this mission is very important Dave and I can't let you jeopardize it...")
@@ -48,7 +48,7 @@ if (spikeIns =="FALSE") {
          message("performing gene-wise-analysis...")
                     GWA<-geneWiseAnalysis(kexp,design=design,
                        how="cpm",
-                       p.cutoff=0.05,
+                       p.cutoff=p.cutoff,
                        fold.cutoff=1,
                        read.cutoff=1)
          bottomPercentile<-round(0.10*nrow(GWA$limmaWithMeta))
@@ -63,13 +63,15 @@ if (spikeIns =="FALSE") {
         #need to collapseTranscripts             
       TWA<-transcriptWiseAnalysis(kexp,
                        design=design,
-                       p.cutoff=0.05,
+                       p.cutoff=p.cutoff,
                        fold.cutoff=1,
                        read.cutoff=1)  
-         bottomPercentile<-round(0.10*nrow(TWA$limmaWithMeta))
-         idx<-rev(order(TWA$limmaWithMeta$P.Value))
-         derived.inSilico<-rownames(TWA$limmaWithMeta[idx,])[1:bottomPercentile]
-         ruvOutput<-RUVg(exprs,derived.inSilico,k=k)
+         bottomPercentile<-round(0.10*nrow(TWA$top))
+         idx<-rev(order(TWA$top$P.Value))
+         derived.inSilico<-rownames(TWA$top[idx,])[1:bottomPercentile]
+         trnxExprs<-collapseTranscripts(kexp,read.cutoff=read.cutoff)
+         trnxExprs<-round(trnxExprs)
+         ruvOutput<-RUVg(trnxExprs,derived.inSilico,k=k)
 
 
 
