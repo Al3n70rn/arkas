@@ -2,7 +2,7 @@
 #' @param kexp kallisto Experiment object or something along its line
 #' @param k integer, this is the k value for number of unwanted variance
 #' @param spikeIns  boolean, as to whether inSilico or ERCC are used.
-#' @param inSilico for when spikeIns is flagged as FALSE, inSilcio must be a vector names of in silico genes which are constant across samples apriori. housekeeping genes will do fine.  the insilico vector can be derived here if it is unknown by taking the bottom quartile of significant genes after running a raw DE analysis.
+#' @param inSilico for when spikeIns is flagged as FALSE, inSilcio must be a vector names of in silico genes which are constant across samples apriori. housekeeping genes will do fine.  the insilico vector can be derived here if it is unknown by taking the bottom quartile, bottom 10 percent ranked by P.Value, of significant genes after running a raw DE analysis.
 #' @param normalized.cutoff , integer here we employ a read cutoff that filters out any rows where the rowSums falls under this category.  
 #' @param byLevel a string character which must match the names of the meta-columns of the features(kexp), this collapses the count data by this feature term, and performs filtering
 #' @import RUVSeq
@@ -37,16 +37,45 @@ if (spikeIns =="FALSE") {
  #need to allow for user input in silico house keeping controls.
    #inSilico must be a character vector
   if(is.null(inSilico)=="TRUE") {
-   message("I'm afraid I did not detect an vector of in silico negative controls, attemptiing to discern them, ... checking for design matrix in your kexp ")
+   message("I'm afraid I did not detect a vector of in silico negative controls, attemptiing to discern them, ... checking for design matrix in your kexp ")
    if(is.null(metadata(kexp)$design)=="TRUE") {
     stop("please enter in silico vector, or add a design matrix to metadata(kexp)$design. ")
     }
     if(is.null(metadata(kexp)$design)=="FALSE") {
      message("I found a design matrix, performing differential expression analysis, to determine in silinco negative control...")
         #perform DE
-        
+        if(byLevel=="gene_id") {
+         message("performing gene-wise-analysis...")
+                    GWA<-geneWiseAnalysis(NS,design=design,
+                       how="cpm",
+                       p.cutoff=0.05,
+                       fold.cutoff=1,
+                       read.cutoff=1)
+         bottomPercentile<-round(0.10*nrow(GWA$limmaWithMeta))
+         idx<-rev(order(GWA$limmaWithMeta$P.Value))
+         derived.inSilico<-rownames(GWA$limmaWithMeta[idx,])[1:bottomPercentile]
+         ruvOutput<-RUVg(exprs,derived.inSilico,k=k)
 
-    }
+ 
+           }
+        if(byLevel=="tx_id"){
+         message("performing transcript-wise-analysis...")
+        #need to collapseTranscripts             
+      TWA<-transcriptWiseAnalysis(NS,design=design,
+                       how="cpm",
+                       p.cutoff=0.05,
+                       fold.cutoff=1,
+                       read.cutoff=1)   
+         bottomPercentile<-round(0.10*nrow(TWA$limmaWithMeta))
+         idx<-rev(order(TWA$limmaWithMeta$P.Value))
+         derived.inSilico<-rownames(TWA$limmaWithMeta[idx,])[1:bottomPercentile]
+         ruvOutput<-RUVg(exprs,derived.inSilico,k=k)
+
+
+
+        }
+    
+     }#design matrix found
   
    }
    if(is.null(inSilico)=="FALSE") {
