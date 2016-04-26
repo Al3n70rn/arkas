@@ -14,7 +14,7 @@
 #'
 #' @export
 transcriptWiseAnalysis <- function(kexp, design, p.cutoff=0.05, fold.cutoff=1, 
-                                   coef=2, tx_biotype=NULL, gene_biotype=NULL,
+                                   coef=2,read.cutoff=1,tx_biotype=NULL, gene_biotype=NULL,
                                    biotype_class=NULL, ...){ 
 
   ## this is really only meant for a KallistoExperiment
@@ -25,7 +25,11 @@ transcriptWiseAnalysis <- function(kexp, design, p.cutoff=0.05, fold.cutoff=1,
   
   if (all(sapply(c(tx_biotype, gene_biotype, biotype_class), is.null))) {
     res <- fitTranscripts(kexp, design, read.cutoff)
-    top <- topTable(fit, coef=coef, p=p.cutoff, n=nrow(assay))
+    res$top <- with(res, topTable(fit, coef=2, p=p.cutoff, n=nrow(kexp)))
+    res$top <- res$top[ abs(res$top$logFC) >= fold.cutoff, ] ## per SEQC
+    topTranscripts <- rownames(res$top)
+    res$topTranscipts <- topTranscripts
+
   } else {
     keep <- seq_len(nrow(kexp))
     if (!is.null(biotype_class)) {
@@ -38,10 +42,16 @@ transcriptWiseAnalysis <- function(kexp, design, p.cutoff=0.05, fold.cutoff=1,
       keep <- intersect(keep, which(mcols(kexp)$tx_biotype == tx_biotype))
     }
     res <- fitTranscripts(kexp[keep, ], design, read.cutoff)
-    top <- topTable(fit, coef=coef, p=p.cutoff, n=length(keep))
+    res$top <- with(res, topTable(fit, coef=2, p=p.cutoff, n=nrow(kexp[keep,])))
+    res$top <- res$top[ abs(res$top$logFC) >= fold.cutoff, ] ## per SEQC
+    topTranscripts <- rownames(res$top)
+    res$topTranscipts <- topTranscripts
+
+    
+
+
   }
  
-  res$top <- top[ abs(top$logFC) >= fold.cutoff, ] ## per SEQC recommendations
   res$biotype_class <- biotype_class
   res$gene_biotype <- gene_biotype
   res$tx_biotype <- tx_biotype

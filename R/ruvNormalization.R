@@ -61,11 +61,11 @@ if (spikeIns =="FALSE") {
         if(byLevel=="tx_id"){
          message("performing transcript-wise-analysis...")
         #need to collapseTranscripts             
-      TWA<-transcriptWiseAnalysis(NS,design=design,
-                       how="cpm",
+      TWA<-transcriptWiseAnalysis(NS,
+                       design=design,
                        p.cutoff=0.05,
                        fold.cutoff=1,
-                       read.cutoff=1)   
+                       read.cutoff=1)  
          bottomPercentile<-round(0.10*nrow(TWA$limmaWithMeta))
          idx<-rev(order(TWA$limmaWithMeta$P.Value))
          derived.inSilico<-rownames(TWA$limmaWithMeta[idx,])[1:bottomPercentile]
