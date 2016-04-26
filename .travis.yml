@@ -5,6 +5,7 @@
 #   https://github.com/craigcitro/r-travis/wiki
 #  checking now from ramsinghLab ~ master
 
+# this tests the gwa and arkas, where arkas.Rmd runs through the demo (merging, and plotting a heatmap of counts)
 language: 
     - r
     - c
@@ -61,40 +62,22 @@ before_install:
      - sudo  R -e 'library(BiocInstaller);biocLite(c("DBI","RSQLite","ensembldb","rtracklayer","stringdist","Biostrings","OrganismDbi","Rsamtools"),ask=FALSE)'
  
 bioc_packages: 
-    - xml2
     - rversions
-  #  - rtracklayer
-#    - XML
- #   - RCurl
     - annotate
     - genefilter
     - RColorBrewer
     - geneplotter
     - BiocParallel
-    - httr
-    - png 
-  #  - parallel 
-   # - jsonlite
-   # - GenomeInfoDb
-  #  - Matrix
-  #  - Biostrings
     - bitops
-    - locfit
-   # - org.Hs.eg.db
     - latticeExtra
     - hwriter
     - GenomicAlignments
     - ShortRead
-   # - RSQLite
     - EDASeq
-   # - OrganismDbi
     - rmarkdown
     - pathview
     - edgeR
     - ggplot2
-   # - DBI
-   # - ensembldb
-   # - stringdist
 
 r_github_packages:
     - arcolombo/TxDbLite
