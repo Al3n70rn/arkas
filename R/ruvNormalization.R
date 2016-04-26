@@ -46,7 +46,7 @@ if (spikeIns =="FALSE") {
         #perform DE
         if(byLevel=="gene_id") {
          message("performing gene-wise-analysis...")
-                    GWA<-geneWiseAnalysis(NS,design=design,
+                    GWA<-geneWiseAnalysis(kexp,design=design,
                        how="cpm",
                        p.cutoff=0.05,
                        fold.cutoff=1,
@@ -61,7 +61,7 @@ if (spikeIns =="FALSE") {
         if(byLevel=="tx_id"){
          message("performing transcript-wise-analysis...")
         #need to collapseTranscripts             
-      TWA<-transcriptWiseAnalysis(NS,
+      TWA<-transcriptWiseAnalysis(kexp,
                        design=design,
                        p.cutoff=0.05,
                        fold.cutoff=1,

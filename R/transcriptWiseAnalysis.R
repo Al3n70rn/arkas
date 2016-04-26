@@ -5,6 +5,7 @@
 #' @param p.cutoff    where to set the p-value cutoff for plots, etc. (0.05)
 #' @param fold.cutoff where to set the log2-FC cutoff for plots, etc. (1 == 2x)
 #' @param coef        which column of the design matrix to test on (2nd)
+#' @param read.cutoff a cutoff to filter reads below across samples
 #' @param tx_biotype  optionally restrict to one or more tx_biotype classes 
 #' @param gene_biotype optionally restrict to one or more gene_biotype classes 
 #' @param biotype_class optionally restrict to one or more biotype_class ...es
@@ -28,7 +29,7 @@ transcriptWiseAnalysis <- function(kexp, design, p.cutoff=0.05, fold.cutoff=1,
     res$top <- with(res, topTable(fit, coef=2, p=p.cutoff, n=nrow(kexp)))
     res$top <- res$top[ abs(res$top$logFC) >= fold.cutoff, ] ## per SEQC
     topTranscripts <- rownames(res$top)
-    res$topTranscipts <- topTranscripts
+    res$topTranscripts <- topTranscripts
 
   } else {
     keep <- seq_len(nrow(kexp))
@@ -45,7 +46,7 @@ transcriptWiseAnalysis <- function(kexp, design, p.cutoff=0.05, fold.cutoff=1,
     res$top <- with(res, topTable(fit, coef=2, p=p.cutoff, n=nrow(kexp[keep,])))
     res$top <- res$top[ abs(res$top$logFC) >= fold.cutoff, ] ## per SEQC
     topTranscripts <- rownames(res$top)
-    res$topTranscipts <- topTranscripts
+    res$topTranscripts <- topTranscripts
 
     
 
