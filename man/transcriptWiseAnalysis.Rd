@@ -5,7 +5,7 @@
 \title{Analysis of raw transcript abundance estimates.}
 \usage{
 transcriptWiseAnalysis(kexp, design, p.cutoff = 0.05, fold.cutoff = 1,
-  coef = 2, tx_biotype = NULL, gene_biotype = NULL,
+  coef = 2, read.cutoff = 1, tx_biotype = NULL, gene_biotype = NULL,
   biotype_class = NULL, ...)
 }
 \arguments{
@@ -18,6 +18,8 @@ transcriptWiseAnalysis(kexp, design, p.cutoff = 0.05, fold.cutoff = 1,
 \item{fold.cutoff}{where to set the log2-FC cutoff for plots, etc. (1 == 2x)}
 
 \item{coef}{which column of the design matrix to test on (2nd)}
+
+\item{read.cutoff}{a cutoff to filter reads below across samples}
 
 \item{tx_biotype}{optionally restrict to one or more tx_biotype classes}
 
