@@ -36,7 +36,7 @@ FLOWCELLINDEX=`echo $HEADER | cut -f2 -d:`
 #echo "Flow:" $FLOWCELLINDEX
 #echo "Sample Key:" $SAMPLENAME
 
-
-#echo "Rename: " $SAMPLERENAME'_S'$SAMPLENUMBER'_L00'$LANE'_R'$READ'_001.fastq'
-
 mv $1 $SAMPLERENAME'_S'$SAMPLENUMBER'_L00'$LANE'_R'$READ'_001.fastq.gz'
+
+echo "renaming to : " $SAMPLERENAME"_S"$SAMPLENUMBER"_L00"$LANE"_R"$READ"_001.fastq.gz"
+
