@@ -50,8 +50,14 @@ annotateFeatures <- function(kexp,
   if (length(feats) == 0) {
     message("No annotations could be found and applied to your data.")
   } else { 
-    feats <- feats[rownames(kexp)] 
-    features(kexp) <- feats
+    if (!all(rownames(kexp) %in% names(feats))) {
+      missingRows <- which(!rownames(kexp) %in% names(feats))
+      message(length(missingRows), " features lack any annotations.")
+      message("Leaving the metadata columns for the unannotated rows as-is.") 
+      feats <- c(feats, rowRanges(kexp)[missingRows])
+    }
+    stopifnot(all(rownames(kexp) %in% names(feats)))
+    features(kexp) <- feats[rownames(kexp)]
   }
   if (what == "KallistoExperiment") return(kexp)
   if (what == "GRanges") return(features(kexp))
