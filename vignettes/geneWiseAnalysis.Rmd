@@ -2,7 +2,7 @@
 title: "Arkas: Raw Reads To Pathway Analsyes In Much Less Time"
 author:  "Timothy J. Triche, Jr, Anthony R. Colombo, Harold Pimentel"
 output: 
-    pdf_document:
+    html_document:
       toc: true
       number_sections: true
 date: "`r format(Sys.time(), '%d %B, %Y')`"
@@ -37,7 +37,7 @@ Arkas supports various levels of analysis, namely transcript-level or gene-level
 ## The Measure Depends On The Level
    Not all transcripts have the same function homology.  Most folks agree that genes are made up by transcripts defined by the transcripts' coordinate location on the genome.  However there are transcipt isoforms in DNMT3A and WT1 that have radically different biological function depending on the transcript isoform that is present.  The problem with conducting *only* a gene level analysis is that many genes can have the same total gene level total quantified counts; however the biological mechanisms for the same "gene" can vary greatly by a single transcript isoform.
  
-```{r message=FALSE}
+```
 suppressWarnings(suppressPackageStartupMessages(library(arkas)))    
 suppressPackageStartupMessages(library(arkasData))       
 jsonFile <- system.file("extdata", "NS.JSON", package="arkas")
@@ -54,7 +54,7 @@ NS <- mergeKallisto(appSession$samples,
 ##Creating The Design Matrix
 In order to analyze bundle-aggregated transcripts defined as "genes", we create a design matrix which controls for individual effects and contrasts treatment effects across individual subjects.  
 
-```{r}
+```
 NS$subject <- factor(substr(colnames(NS), 2, 2))
 NS$treatment <- substr(colnames(NS), 1, 1) == "s"
 NS$ID <- NULL
@@ -81,52 +81,14 @@ names(appSession$samples) <- appSession$samples
 appSession$outputPath <- system.file("extdata", package="arkasData")
 fastaPath<-system.file("extdata","fasta",package="arkasData")
 appSession$fastaPath<-fastaPath
-cd<-appSession$fastaPath
-setwd(paste0(appSession$fastaPath,"/","tmp"))
-NS <- mergeKallisto(appSession$samples,
-                      outputPath=appSession$outputPath)
 
-fastaTx<-c("ERCC.fa.gz","Homo_sapiens.GRCh38.81.cdna.all.fa.gz","Homo_sapiens.RepBase.20_05.merged.fa")
-erccDb<-erccDbLiteFromFasta(paste0(appSession$fastaPath,"/tmp/","ERCC.fa.gz"))
-erccPkg<-makeErccDbLitePkg(erccDb,destDir=paste0(appSession$fastaPath,"/","tmp"))
-#Create a Ensembl Annotation Db with cdna and ncrna
-lapply(fastaTx,function(x) findDupes(x))
-ensDb<-ensDbLiteFromFasta("Homo_sapiens.GRCh38.81.cdna.all.fa.gz")
-ensPkg<-makeEnsDbLitePkg(ensDb,destDir=paste0(appSession$fastaPath,"/","tmp"))
-repDb<-repDbLiteFromFasta("Homo_sapiens.RepBase.20_05.merged.fa")
-repPkg<-makeRepDbLitePkg(repDb,destDir=paste0(appSession$fastaPath,"/","tmp"))
-ErccDbLite(erccDb)
-EnsDbLite(ensDb)
-RepDbLite(repDb)
-transcripts(ErccDbLite(erccDb))
-transcripts(EnsDbLite(ensDb))
-transcripts(RepDbLite(repDb))
-
-files<-dir(paste0(appSession$fastaPath,"/tmp"))[!dir(paste0(appSession$fastaPath,"/tmp")) %in% fastaTx]
-
-lapply(files,function(x) system(paste0("rm -r ",x)))
-
-```
-
-# Annotating Merged KallistoExperiment Containers
-   Arkas has a function "annotateFeatures.R" which annotates ERCC, Ensembl, and RepBase databases for species Homo-Sapiens, Mus-musculus, and Rattus norvegicus.  The method "annotateFeatures.R" annotates the merged KallistoExperiment against every TxDbLite library simulatenously. These annotation databases are defined as 'lite' because they do not store exonic or intronic coordinates.
-```{r}
-suppressPackageStartupMessages(library(arkas))
-library(arkasData)
-suppressPackageStartupMessages(library(TxDbLite))
-samples<-c("n1","n2","n4","s1","s2","s4")
 pathBase<-system.file("extdata",package="arkasData")
-merged <- mergeKallisto(samples, outputPath=pathBase)
-libraryPath<-system.file("extdata","Libraries",package="arkasData")
-command<-paste0("sudo R CMD INSTALL ",libraryPath,"/",dir(libraryPath))
-lapply(command,function(x) system(x))
-merged<-annotateFeatures(merged, level="transcript") #annotate features using transcriptomes
-NS<-suppressWarnings(annotateFeatures(NS,level="transcript"))
+load(paste0(pathBase,"/annotatedKexp/NS.RData")) #pre-annotated
 NS$subject <- factor(substr(colnames(NS), 2, 2))
 NS$treatment <- substr(colnames(NS), 1, 1) == "s"
 NS$ID <- NULL
 design <- with(as(colData(NS), "data.frame"),
-                  model.matrix( ~ treatment + subject ))
+                  model.matrix( ~ subject+treatment ))
 rownames(design) <- colnames(NS)
 metadata(NS)$design <- design
 #returns a KallistoExperiment at the gene level
@@ -135,10 +97,17 @@ GWA<-geneWiseAnalysis(NS,design=design,
                        p.cutoff=0.05,
                        fold.cutoff=1,
                        read.cutoff=1,
-                       species="Homo.sapiens")
+                       species="Homo.sapiens",
+                        fitOnly="TRUE")
 
-head(GWA$limmaWithMeta,n=20)
+head(GWA$topGenes,n=20)
 ```
+
+
+# Annotating Merged KallistoExperiment Containers
+   Arkas has a function "annotateFeatures.R" which annotates ERCC, Ensembl, and RepBase databases for species Homo-Sapiens, Mus-musculus, and Rattus norvegicus.  The method "annotateFeatures.R" annotates the merged KallistoExperiment against every TxDbLite library simulatenously. These annotation databases are defined as 'lite' because they do not store exonic or intronic coordinates.
+
+
 #Gene Wise Analysis
  Gene wise analysis collapses transcripts into groups related to specific ensembl "gene" Ids.  The package TxDbLite parses the Ensembl, or RepBase transcript fasta files and stores the respective gene id's associated with the given transcript documented in the transcript fasta header.  Arkas' method for gene wise analysis calls "collapseBundles.R" which then calculates the aggregated total counts of transcripts for each unique gene id association.  Thus the "gene" count is defined as the sum of all quantified transcripts associated with a specific gene identifier.  
 

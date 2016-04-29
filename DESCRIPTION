@@ -21,7 +21,8 @@ Imports:
     GenomicRanges,
     GenomicFeatures,
     Matrix,
-    KEGGREST
+    KEGGREST,
+    nat.utils
 Suggests:
     knitr,
     roxygen2,

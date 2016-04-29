@@ -6,7 +6,7 @@
 #' @param fold.cutoff where to set the log2-FC cutoff for plots, etc. (1==2x)
 #' @param read.cutoff minimum read coverage (estimated) for a gene bundle 
 #' @param topheat     how many bundles to include in cluster heatmaps? (100)
-#' @param species     which species? (Homo.sapiens; FIX: get from TxDbLite)
+#' @param species     which species? (Homo.sapiens, Mus.musculus are two currently supported
 #' @param fitOnly     exit after fitting the EBayes linear model?  (FALSE)
 #' 
 #' @import edgeR 

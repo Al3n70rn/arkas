@@ -59,6 +59,7 @@ annotateFeatures <- function(kexp,
     }
     stopifnot(all(rownames(kexp) %in% names(feats)))
     rowRanges(kexp) <- feats[rownames(kexp)]
+
   }
   if (what == "KallistoExperiment") return(kexp)
   if (what == "GRanges") return(features(kexp))

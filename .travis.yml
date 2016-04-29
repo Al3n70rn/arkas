@@ -5,6 +5,7 @@
 #   https://github.com/craigcitro/r-travis/wiki
 #  checking now from ramsinghLab ~ master
 
+# this tests the gwa and arkas, where arkas.Rmd runs through the demo (merging, and plotting a heatmap of counts)
 language: 
     - r
     - c
@@ -40,11 +41,11 @@ apt_packages:
    - zlib1g-dev
    - libhdf5-dev
    - git
-  # - pandoc
-  # - texlive-latex-base
-  # - texlive-fonts-recommended
-  # - texlive-fonts-extra
-  # - texlive-latex-extra
+#   - pandoc
+#   - texlive-latex-base
+#   - texlive-fonts-recommended
+#   - texlive-fonts-extra
+#   - texlive-latex-extra
    - libcurl4-openssl-dev
    - libxml2-dev
    - samtools
@@ -56,43 +57,40 @@ before_install:
     - cwd=$(pwd) && sudo mkdir ./KallistoSource && cd ./KallistoSource && sudo git clone https://github.com/pachterlab/kallisto.git && cd ./kallisto && sudo mkdir ./build && cd ./build && sudo cmake .. && sudo make && sudo make install && cd $cwd
     - sudo R -e 'source("http://bioconductor.org/biocLite.R"); biocLite("BiocInstaller")'
     - sudo R -e 'library(BiocInstaller);biocLite(c("rtracklayer","XML","biomaRt","RCurl"),ask=FALSE)'
-    - sudo R -e 'library(BiocInstaller);biocLite(c("parallel","jsonlite","qusage","GenomeInfoDb","limma","Biobase","SummarizedExperiment","SPIA","EnrichmentBrowser","clusterProfiler","rhdf5","matrixStats","GenomicRanges","GenomicFeatures","Matrix","KEGGREST","beeswarm","tools","graphite","roxygen2","knitr"),ask=FALSE )'
+    - sudo R -e 'library(BiocInstaller);biocLite(c("org.Hs.eg.db","org.Mm.eg.db","parallel","jsonlite","qusage","GenomeInfoDb","limma","Biobase","SummarizedExperiment","SPIA","EnrichmentBrowser","clusterProfiler","rhdf5","matrixStats","GenomicRanges","GenomicFeatures","Matrix","KEGGREST","beeswarm","tools","graphite","roxygen2","knitr"),ask=FALSE )'
      - sudo R -e 'library(BiocInstaller);biocLite(c("Homo.sapiens","Mus.musculus","RUVSeq","erccdashboard"),ask=FALSE)'
      - sudo  R -e 'library(BiocInstaller);biocLite(c("DBI","RSQLite","ensembldb","stringdist","Biostrings","OrganismDbi","Rsamtools", "rmarkdown"),ask=FALSE)'
+
  
+
 bioc_packages: 
-    #- xml2
-    #- rversions
-    #- rtracklayer
-    #- XML
-    #- RCurl
-    #- annotate
-    #- genefilter
-    #- RColorBrewer
-    #- geneplotter
-    #- bitops
-    #- BiocParallel
-    #- httr
-    #- png 
-    #- latticeExtra
-    #- hwriter
-    #- GenomicAlignments
-    #- ShortRead
-    #- geneplotter
-    #- edgeR
-    #- ggplot2
-    
-   
-    
+   # - rversions
+   # - annotate
+   # - genefilter
+   # - RColorBrewer
+   # - geneplotter
+   # - BiocParallel
+   # - bitops
+   # - latticeExtra
+   # - hwriter
+   # - GenomicAlignments
+   # - ShortRead
+   # - EDASeq
+   # - rmarkdown
+   # - pathview
+   # - edgeR
+   # - ggplot2
+
+
 r_github_packages:
-    - RamsinghLab/TxDbLite
-    - RamsinghLab/arkas
-    - RamsinghLab/arkasData
+    - arcolombo/TxDbLite
+    - arcolombo/arkas
+    - arcolombo/arkasData
     
 script:
     - sudo R -e 'library(rmarkdown);library(arkas);library(arkasData);render("./vignettes/arkas.Rmd")' 
     - sudo R -e 'library(rmarkdown); render("./vignettes/geneWiseAnalysis.Rmd")'    
-#    - sudo R -e 'library(rmarkdown); render("./vignettes/pcaPlot.Rmd")'
+
 after_failure:
     - sudo ./travis-tool.sh dump_logs
 
