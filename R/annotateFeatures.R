@@ -40,11 +40,12 @@ annotateFeatures <- function(kexp,
     if (!require(txome, character.only=TRUE)) {
       message("Please install the annotation package ", txome, ".")
     } else {
+      message("Annotating transcripts from ", txome, "...")
       annots <- switch(level, 
                        gene=genes(get(txome)),
                        transcript=transcripts(get(txome)))
       annotated <- intersect(rownames(kexp), names(annots))
-      feats <- c(feats, annots[annotated])
+      feats <- suppressWarnings(c(feats, annots[annotated]))
     }
   }
   if (length(feats) == 0) {
@@ -54,10 +55,10 @@ annotateFeatures <- function(kexp,
       missingRows <- which(!rownames(kexp) %in% names(feats))
       message(length(missingRows), " features lack any annotations.")
       message("Leaving the metadata columns for the unannotated rows as-is.") 
-      feats <- c(feats, rowRanges(kexp)[missingRows])
+      feats <- suppressWarnings(c(feats, rowRanges(kexp)[missingRows]))
     }
     stopifnot(all(rownames(kexp) %in% names(feats)))
-    features(kexp) <- feats[rownames(kexp)]
+    rowRanges(kexp) <- feats[rownames(kexp)]
   }
   if (what == "KallistoExperiment") return(kexp)
   if (what == "GRanges") return(features(kexp))
