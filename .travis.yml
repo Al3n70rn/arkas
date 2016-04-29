@@ -59,7 +59,7 @@ before_install:
     - sudo R -e 'library(BiocInstaller);biocLite(c("rtracklayer","XML","biomaRt","RCurl"),ask=FALSE)'
     - sudo R -e 'library(BiocInstaller);biocLite(c("org.Hs.eg.db","org.Mm.eg.db","parallel","jsonlite","qusage","GenomeInfoDb","limma","Biobase","SummarizedExperiment","SPIA","EnrichmentBrowser","clusterProfiler","rhdf5","matrixStats","GenomicRanges","GenomicFeatures","Matrix","KEGGREST","beeswarm","tools","graphite","roxygen2","knitr"),ask=FALSE )'
      - sudo R -e 'library(BiocInstaller);biocLite(c("Homo.sapiens","Mus.musculus","RUVSeq","erccdashboard"),ask=FALSE)'
-     - sudo  R -e 'library(BiocInstaller);biocLite(c("DBI","RSQLite","ensembldb","stringdist","Biostrings","OrganismDbi","Rsamtools", "rmarkdown","EDASeq"),ask=FALSE)'
+     - sudo  R -e 'library(BiocInstaller);biocLite(c("DBI","RSQLite","ensembldb","stringdist","Biostrings","OrganismDbi","Rsamtools", "rmarkdown","EDASeq","pathview"),ask=FALSE)'
  
 bioc_packages: 
    # - rversions
