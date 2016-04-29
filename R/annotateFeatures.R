@@ -26,6 +26,14 @@ annotateFeatures <- function(kexp,
     level <- ifelse(any(grepl(gxpre, rownames(kexp))), "gene", "transcript")
   }
 
+  # annoying ENSEMBL quirk
+  if (any(grepl("\\.", rownames(kexp)))) {
+    message("Normalizing ENSEMBL transcript names (by removing .XYZ suffix)...")
+    toFix <- grepl("^ENS", rownames(kexp))
+    rownames(kexp)[toFix] <- sapply(sapply(rownames(kexp)[toFix], 
+                                           strsplit, "\\."), `[`, 1)
+  }
+
   # bizarre bug, bizarre fix  
   feats <- GRanges()
   for (txome in txomes) {
