@@ -79,6 +79,7 @@ bioc_packages:
    # - edgeR
    # - ggplot2
 
+
 r_github_packages:
     - arcolombo/TxDbLite
     - arcolombo/arkas
@@ -87,7 +88,7 @@ r_github_packages:
 script:
     - sudo R -e 'library(rmarkdown);library(arkas);library(arkasData);render("./vignettes/arkas.Rmd")' 
     - sudo R -e 'library(rmarkdown); render("./vignettes/geneWiseAnalysis.Rmd")'    
-   # - sudo R -e 'library(rmarkdown); render("./vignettes/pcaPlot.Rmd")'
+
 after_failure:
     - sudo ./travis-tool.sh dump_logs
 
