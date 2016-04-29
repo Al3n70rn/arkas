@@ -26,24 +26,39 @@ annotateFeatures <- function(kexp,
     level <- ifelse(any(grepl(gxpre, rownames(kexp))), "gene", "transcript")
   }
 
+  # annoying ENSEMBL quirk
+  if (any(grepl("\\.", rownames(kexp)))) {
+    message("Normalizing ENSEMBL transcript names (by removing .XYZ suffix)...")
+    toFix <- grepl("^ENS", rownames(kexp))
+    rownames(kexp)[toFix] <- sapply(sapply(rownames(kexp)[toFix], 
+                                           strsplit, "\\."), `[`, 1)
+  }
+
   # bizarre bug, bizarre fix  
   feats <- GRanges()
   for (txome in txomes) {
     if (!require(txome, character.only=TRUE)) {
       message("Please install the annotation package ", txome, ".")
     } else {
+      message("Annotating transcripts from ", txome, "...")
       annots <- switch(level, 
                        gene=genes(get(txome)),
                        transcript=transcripts(get(txome)))
       annotated <- intersect(rownames(kexp), names(annots))
-      feats <- c(feats, annots[annotated])
+      feats <- suppressWarnings(c(feats, annots[annotated]))
     }
   }
   if (length(feats) == 0) {
     message("No annotations could be found and applied to your data.")
   } else { 
-    feats <- feats[rownames(kexp)] 
-    features(kexp) <- feats
+    if (!all(rownames(kexp) %in% names(feats))) {
+      missingRows <- which(!rownames(kexp) %in% names(feats))
+      message(length(missingRows), " features lack any annotations.")
+      message("Leaving the metadata columns for the unannotated rows as-is.") 
+      feats <- suppressWarnings(c(feats, rowRanges(kexp)[missingRows]))
+    }
+    stopifnot(all(rownames(kexp) %in% names(feats)))
+    rowRanges(kexp) <- feats[rownames(kexp)]
   }
   if (what == "KallistoExperiment") return(kexp)
   if (what == "GRanges") return(features(kexp))
