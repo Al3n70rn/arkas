@@ -37,8 +37,6 @@ setMethod("features", "SummarizedExperiment0",
 #'
 #' @return the object, perhaps with updated feature annotations
 #'
-#' @importFrom GenomicRanges rowRanges
-#'
 #' @export
 setReplaceMethod("features", c("RangedSummarizedExperiment", "ANY"), 
                  function(object, value) {

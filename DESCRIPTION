@@ -1,8 +1,8 @@
 Package: arkas
 Type: Package
 Title: A package that complements Kallisto for quick, informative *seq analysis
-Version: 0.43.2
-Date: 2016-04-10
+Version: 0.43.4
+Date: 2016-04-28
 Author: Tim Triche, Jr., Anthony Colombo, Harold Pimentel
 Depends:
     parallel,
