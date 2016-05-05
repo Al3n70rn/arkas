@@ -44,9 +44,9 @@ mergeKallisto <- function(outputDirs=NULL,
   names(targets) <- outputDirs
 
   if (parallel == TRUE) { 
-    res <- mclapply(targets, fetchKallisto)
+    res <- mclapply(targets, fetchKallisto, transcriptomes=transcriptomes)
   } else {
-    res <- lapply(targets, fetchKallisto)
+    res <- lapply(targets, fetchKallisto, transcriptomes=transcriptomes)
   }
  
   ## check and make sure all the results came from the same Kallisto version,
