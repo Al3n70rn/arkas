@@ -1,4 +1,4 @@
-#' RUVSeq methods allow for proper normalization by using a GLM to find the linear space of unwanted variance; it uses factor analysis to find the span of unwanted variance using ERCC expression negative controls, or in silico negative controls.  the advantage is that it does not assume a constant global normalization correction for constant assumed technical noise.  RUVg instead determines the linear space where the negative controls span. note that normalized counts should a 
+#' RUVSeq methods allow for proper normalization by using a GLM to find the linear space of unwanted variance; it uses factor analysis to find the span of unwanted variance using ERCC expression negative controls, or in silico negative controls.  the advantage is that it does not assume a constant global normalization correction for constant assumed technical noise.  RUVg instead determines the linear space where the negative controls span. 
 #' @param kexp kallisto Experiment object or something along its line
 #' @param k integer, this is the k value for number of unwanted variance
 #' @param spikeIns  boolean, as to whether inSilico or ERCC are used.
