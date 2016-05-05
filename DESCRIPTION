@@ -1,8 +1,8 @@
 Package: arkas
 Type: Package
 Title: A package that complements Kallisto for quick, informative *seq analysis
-Version: 0.43.4
-Date: 2016-04-28
+Version: 0.43.5
+Date: 2016-05-05
 Author: Tim Triche, Jr., Anthony Colombo, Harold Pimentel
 Depends:
     parallel,
@@ -20,9 +20,9 @@ Imports:
     matrixStats,
     GenomicRanges,
     GenomicFeatures,
-    Matrix,
-    KEGGREST,
-    nat.utils
+    SummarizedExperiment,
+    nat.utils,
+    Matrix
 Suggests:
     knitr,
     roxygen2,
@@ -34,16 +34,14 @@ Suggests:
     simpleSampleSearch 
 VignetteBuilder: knitr
 Maintainer: Tim Triche, Jr. <tim.triche@gmail.com>
-Description: Arkas was the hunting companion of Kallisto.  This package wraps
-    various aspects of workflow automation (assembling transcriptomes,
-    hashing indices after they have been built, checking versions, and
-    generally avoiding annoyance factors) useful in the day-to-day
-    operation of a transcriptome aligner or pseudoaligner.
+Description: This package wraps various aspects of workflow automation 
+    (assembling transcriptomes, hashing indices after they have been built, 
+    checking versions, and generally avoiding annoyance factors) useful in 
+    the day-to-day operation of a transcriptome pseudoaligner/quantifier.
     Tools for data extraction and (progressive) annotation of combined
     or individual transcriptomes, quality control and normalization
     (ERCC control plots and RUVSeq normalization), interpretation
     (gene-level, transcript-level, pathway- and network-level output),
-    guidelines for validation (sample size estimation by simulation),
     and interactions with cloud computing services such as BaseSpace
     are loosely coupled within the default package workflow.
     Please be aware that, while Arkas is licensed under the GPL,
@@ -58,7 +56,5 @@ Description: Arkas was the hunting companion of Kallisto.  This package wraps
     Arkas' annotation functions, in particular, can greatly ease data
     integration, as when comparing in-house results to those of major
     genome and transcriptome sequencing projects such as TCGA and ICGC.
-    Sample size estimates and pathway analyses are similarly decoupled
-    from the underlying source of transcript abundance estimates.
 License: GPL (>= 2)
 RoxygenNote: 5.0.1

@@ -5,7 +5,8 @@
 \title{Merge multiple Kallisto results, yielding a KallistoExperiment.}
 \usage{
 mergeKallisto(outputDirs = NULL, outputPath = ".", covariates = NULL,
-  annotate = FALSE, collapse = "_mergedWith_", parallel = TRUE, ...)
+  annotate = FALSE, collapse = "_mergedWith_", transcriptomes = NULL,
+  parallel = TRUE, ...)
 }
 \arguments{
 \item{outputDirs}{character: directories holding Kallisto results (NULL)}
@@ -14,9 +15,11 @@ mergeKallisto(outputDirs = NULL, outputPath = ".", covariates = NULL,
 
 \item{covariates}{data.frame or DataFrame: per-sample covariates (NULL)}
 
-\item{annotate}{boolean: automatically annotate the transcripts? (FALSE)}
+\item{annotate}{boolean: auto-annotate the transcripts? (FALSE)}
 
 \item{collapse}{string: collapsing string for indices ("_mergedWith_")}
+
+\item{transcriptomes}{string: collapsing string for indices ("_mergedWith_")}
 
 \item{parallel}{boolean: try to run the merge in parallel? (TRUE)}
 }

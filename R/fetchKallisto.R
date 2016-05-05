@@ -3,6 +3,7 @@
 #' @param sampleDir       character string: the path to h5/json files 
 #' @param h5file          character string: the file to read
 #' @param collapse        string: collapsing string for indices ("_mergedWith_")
+#' @param transcriptomes  string: if this is not NULL, many checks are skipped.
 #'
 #' @import rhdf5 
 #' @import Matrix
@@ -14,6 +15,7 @@
 fetchKallisto <- function(sampleDir=".", 
                           h5file="abundance.h5", 
                           collapse="_mergedWith_", 
+                          transcriptomes=NULL,
                           ...){
 
   hdf5 <- paste0(path.expand(sampleDir), .Platform$file.sep, h5file) 
@@ -46,14 +48,16 @@ fetchKallisto <- function(sampleDir=".",
                                 c("est_counts", "eff_length")))
   }
 
-  runinfo <- .extractRuninfo(hdf5, collapse=collapse, ...)
+  runinfo <- .extractRuninfo(hdf5, 
+                             collapse=collapse, 
+                             transcriptomes=transcriptomes)
   for (i in names(runinfo)) attr(res, i) <- runinfo[[i]]
   return(res)
 
 }
 
 #' @import TxDbLite
-.extractRuninfo <- function(hdf5, collapse="_mergedWith_") { # {{{
+.extractRuninfo <- function(hdf5, collapse, transcriptomes=NULL) { # {{{
 
   aux <- h5read(hdf5, "/aux")
   dims <- lapply(aux, dim)
@@ -61,7 +65,7 @@ fetchKallisto <- function(sampleDir=".",
   callinfo <- runinfo$call
   indexname <- extractIndexName(callinfo) 
 
-  if (!grepl(collapse, callinfo)) {
+  if (!grepl(collapse, callinfo)) { # {{{
     ## sometimes we can split even without a proper collapsing string
     ## requires a bit of ingenuity and a certain disdain for elegance
     collapse <- "_" ## fallback...
@@ -91,8 +95,14 @@ fetchKallisto <- function(sampleDir=".",
     index <- sub(".fa", "", sub(".idx", "", sub(".kidx", "", indexname)))
     runinfo$fastaFiles <- strsplit(index, collapse)[[1]]
   }
-  runinfo$transcriptomes <- 
-    unlist(unique(sapply(runinfo$fastaFiles, getTxDbLiteName)))
+
+  if (is.null(transcriptomes)) {
+    runinfo$transcriptomes <- 
+      unlist(unique(sapply(runinfo$fastaFiles, getTxDbLiteName)))
+  } else {
+    runinfo$transcriptomes <- transcriptomes
+  }
+
   runinfo$biascorrected <- any(grepl("--bias", callinfo))
   return(runinfo)
 
