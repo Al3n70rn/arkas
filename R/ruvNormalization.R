@@ -5,15 +5,17 @@
 #' @param inSilico for when spikeIns is flagged as FALSE, inSilcio must be a vector names of in silico genes which are constant across samples apriori. housekeeping genes will do fine.  the insilico vector can be derived here if it is unknown by taking the bottom quartile, bottom 10 percent ranked by P.Value, of significant genes after running a raw DE analysis.
 #' @param normalized.cutoff , integer here we employ a read cutoff that filters out any rows where the rowSums falls under this category.  
 #' @param byLevel a string character which must match the names of the meta-columns of the features(kexp), this collapses the count data by this feature term, and performs filtering
-#' @importFrom RUVSeq RUVg
+#' @param species character for either Homo.sapiens or Mus.musculus, this is required for gene wise analysis if there is no inSilico vector input.
+#' @import RUVSeq
 #' @export 
 #' @return return a list object with RUVg normalization
 
-ruvNormalization<-function(kexp, k=1,spikeIns=TRUE, p.cutoff=1, inSilico=NULL,normalized.cutoff=1 ,byLevel=c("tx_id","gene_id")  ){
+ruvNormalization<-function(kexp, k=1,spikeIns=TRUE, p.cutoff=1, inSilico=NULL,normalized.cutoff=1 ,byLevel="gene_id"  ) {
 
 if(class(kexp)!="KallistoExperiment"){
 message("I'm afraid you did not input a KallistoExperiment object, this mission is very important Dave and I can't let you jeopardize it...")
   }
+
 
 collapseLevel <- match.arg(byLevel, c("tx_id", "gene_id"))
 collapsedKexp<- collapseBundles(kexp,bundleID=collapseLevel,read.cutoff=normalized.cutoff)  #returns a kexp with collapsed level, by trnx or by gene id
@@ -46,14 +48,15 @@ if (spikeIns =="FALSE") {
         #perform DE
         if(byLevel=="gene_id") {
          message("performing gene-wise-analysis...")
-                    GWA<-geneWiseAnalysis(kexp,design=design,
+                    GWA<-geneWiseAnalysis(kexp,design=metadata(kexp)$design,
                        how="cpm",
                        p.cutoff=p.cutoff,
                        fold.cutoff=1,
-                       read.cutoff=1)
-         bottomPercentile<-round(0.10*nrow(GWA$limmaWithMeta))
-         idx<-rev(order(GWA$limmaWithMeta$P.Value))
-         derived.inSilico<-rownames(GWA$limmaWithMeta[idx,])[1:bottomPercentile]
+                       read.cutoff=1,
+                       fitOnly=TRUE)
+         bottomPercentile<-round(0.10*nrow(GWA$top))
+         idx<-rev(order(GWA$top$adj.P.Val))
+         derived.inSilico<-rownames(GWA$top[idx,])[1:bottomPercentile]
          ruvOutput<-RUVg(exprs,derived.inSilico,k=k)
 
  
@@ -62,14 +65,14 @@ if (spikeIns =="FALSE") {
          message("performing transcript-wise-analysis...")
         #need to collapseTranscripts             
       TWA<-transcriptWiseAnalysis(kexp,
-                       design=design,
+                       design=metadata(kexp)$design,
                        p.cutoff=p.cutoff,
                        fold.cutoff=1,
                        read.cutoff=1)  
          bottomPercentile<-round(0.10*nrow(TWA$top))
          idx<-rev(order(TWA$top$P.Value))
          derived.inSilico<-rownames(TWA$top[idx,])[1:bottomPercentile]
-         trnxExprs<-collapseTranscripts(kexp,read.cutoff=read.cutoff)
+         trnxExprs<-collapseTranscripts(kexp,read.cutoff=normalized.cutoff)
          trnxExprs<-round(trnxExprs)
          ruvOutput<-RUVg(trnxExprs,derived.inSilico,k=k)
 
