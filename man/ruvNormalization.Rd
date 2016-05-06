@@ -2,21 +2,21 @@
 % Please edit documentation in R/ruvNormalization.R
 \name{ruvNormalization}
 \alias{ruvNormalization}
-\title{RUVSeq methods allow for proper normalization by using a GLM to find the linear space of unwanted variance; it uses factor analysis to find the span of unwanted variance using ERCC expression negative controls, or in silico negative controls.  the advantage is that it does not assume a constant global normalization correction for constant assumed technical noise.  RUVg instead determines the linear space where the negative controls span. note that normalized counts should a}
+\title{RUVSeq methods allow for proper normalization by using a GLM to find the linear space of unwanted variance; it uses factor analysis to find the span of unwanted variance using ERCC expression negative controls, or in silico negative controls.  the advantage is that it does not assume a constant global normalization correction for constant assumed technical noise.  RUVg instead determines the linear space where the negative controls span.}
 \usage{
-ruvNormalization(kexp, k = 1, spikeIns = TRUE, p.cutoff = 1,
-  inSilico = NULL, normalized.cutoff = 1, byLevel = c("tx_id", "gene_id"))
+ruvNormalization(kexp, k = 1, spikeIns = FALSE, p.cutoff = 1,
+  inSilico = NULL, read.cutoff = 1, byLevel = c("gene_id", "tx_id"))
 }
 \arguments{
 \item{kexp}{kallisto Experiment object or something along its line}
 
 \item{k}{integer, this is the k value for number of unwanted variance}
 
-\item{spikeIns}{boolean, as to whether inSilico or ERCC are used.}
+\item{spikeIns}{boolean, whether ERCC spike-ins are to be used (FALSE)}
 
 \item{inSilico}{for when spikeIns is flagged as FALSE, inSilcio must be a vector names of in silico genes which are constant across samples apriori. housekeeping genes will do fine.  the insilico vector can be derived here if it is unknown by taking the bottom quartile, bottom 10 percent ranked by P.Value, of significant genes after running a raw DE analysis.}
 
-\item{normalized.cutoff}{, integer here we employ a read cutoff that filters out any rows where the rowSums falls under this category.}
+\item{read.cutoff}{, integer here we employ a read cutoff that filters out any rows where the rowSums falls under this category.}
 
 \item{byLevel}{a string character which must match the names of the meta-columns of the features(kexp), this collapses the count data by this feature term, and performs filtering}
 }
@@ -24,6 +24,6 @@ ruvNormalization(kexp, k = 1, spikeIns = TRUE, p.cutoff = 1,
 return a list object with RUVg normalization
 }
 \description{
-RUVSeq methods allow for proper normalization by using a GLM to find the linear space of unwanted variance; it uses factor analysis to find the span of unwanted variance using ERCC expression negative controls, or in silico negative controls.  the advantage is that it does not assume a constant global normalization correction for constant assumed technical noise.  RUVg instead determines the linear space where the negative controls span. note that normalized counts should a
+RUVSeq methods allow for proper normalization by using a GLM to find the linear space of unwanted variance; it uses factor analysis to find the span of unwanted variance using ERCC expression negative controls, or in silico negative controls.  the advantage is that it does not assume a constant global normalization correction for constant assumed technical noise.  RUVg instead determines the linear space where the negative controls span.
 }
 
