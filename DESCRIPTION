@@ -27,11 +27,8 @@ Imports:
 Suggests:
     knitr,
     roxygen2,
-    EnsDbLite.Hsapiens.80,
     EnsDbLite.Hsapiens.83,
-    RepDbLite.Hsapiens.2005,
     RepDbLite.Hsapiens.2012,
-    MitxDbLite.Hsapiens.2,
     simpleSampleSearch 
 VignetteBuilder: knitr
 Maintainer: Tim Triche, Jr. <tim.triche@gmail.com>
