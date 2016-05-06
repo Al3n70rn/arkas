@@ -14,8 +14,7 @@ Depends:
     TxDbLite,
     SummarizedExperiment,
     beeswarm,
-    tools,
-    RUVSeq
+    tools
 Imports:
     rhdf5,
     matrixStats,
@@ -23,7 +22,8 @@ Imports:
     GenomicFeatures,
     SummarizedExperiment,
     nat.utils,
-    Matrix
+    Matrix,
+    RUVSeq
 Suggests:
     knitr,
     roxygen2,
