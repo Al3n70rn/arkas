@@ -5,7 +5,7 @@
 \title{fetch one sample's worth of Kallisto estimates, perhaps with bootstraps}
 \usage{
 fetchKallisto(sampleDir = ".", h5file = "abundance.h5",
-  collapse = "_mergedWith_", ...)
+  collapse = "_mergedWith_", transcriptomes = NULL, ...)
 }
 \arguments{
 \item{sampleDir}{character string: the path to h5/json files}
@@ -13,6 +13,8 @@ fetchKallisto(sampleDir = ".", h5file = "abundance.h5",
 \item{h5file}{character string: the file to read}
 
 \item{collapse}{string: collapsing string for indices ("_mergedWith_")}
+
+\item{transcriptomes}{string: if this is not NULL, many checks are skipped.}
 }
 \description{
 fetch one sample's worth of Kallisto estimates, perhaps with bootstraps

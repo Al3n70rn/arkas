@@ -10,12 +10,13 @@
 #'
 #' FIXME: automatically determine which transcriptomes were used (in process!)
 #'
-#' @param outputDirs    character: directories holding Kallisto results (NULL)
-#' @param outputPath    character: base path to the outputDirs (default is .)
-#' @param covariates    data.frame or DataFrame: per-sample covariates (NULL)
-#' @param annotate      boolean: automatically annotate the transcripts? (FALSE)
-#' @param collapse      string: collapsing string for indices ("_mergedWith_")
-#' @param parallel      boolean: try to run the merge in parallel? (TRUE)
+#' @param outputDirs      character: directories holding Kallisto results (NULL)
+#' @param outputPath      character: base path to the outputDirs (default is .)
+#' @param covariates      data.frame or DataFrame: per-sample covariates (NULL)
+#' @param annotate        boolean: auto-annotate the transcripts? (FALSE)
+#' @param collapse        string: collapsing string for indices ("_mergedWith_")
+#' @param transcriptomes  string: collapsing string for indices ("_mergedWith_")
+#' @param parallel        boolean: try to run the merge in parallel? (TRUE)
 #'
 #' @export
 mergeKallisto <- function(outputDirs=NULL,
@@ -23,6 +24,7 @@ mergeKallisto <- function(outputDirs=NULL,
                           covariates=NULL,
                           annotate=FALSE, 
                           collapse="_mergedWith_",
+                          transcriptomes=NULL,
                           parallel=TRUE,
                           ...) { 
 
@@ -42,9 +44,9 @@ mergeKallisto <- function(outputDirs=NULL,
   names(targets) <- outputDirs
 
   if (parallel == TRUE) { 
-    res <- mclapply(targets, fetchKallisto)
+    res <- mclapply(targets, fetchKallisto, transcriptomes=transcriptomes)
   } else {
-    res <- lapply(targets, fetchKallisto)
+    res <- lapply(targets, fetchKallisto, transcriptomes=transcriptomes)
   }
  
   ## check and make sure all the results came from the same Kallisto version,
@@ -64,18 +66,24 @@ mergeKallisto <- function(outputDirs=NULL,
   stopifnot(identical(colnames(asys[[1]]), colnames(asys[[2]])))
   coldat <- DataFrame(ID=outputDirs)
   rownames(coldat) <- coldat$ID
- 
+
   ktxs <- sapply(res, .extractTranscriptomeFromCall)
   if (length(unique(ktxs)) > 1) {
     print(table(ktxs))
     stop("Your runs are against different transcriptomes! Aborting merge.")
-  } else {
+  } 
+ 
+  # infer txomes if not provided 
+  if (is.null(transcriptomes)) {
     message("Setting transcriptome automatically from Kallisto call string.")
     transcriptomes <- attr(res[[1]], "transcriptomes")
     if (is.null(transcriptomes)) {
       transcriptomes <- c(unknown=attr(res[[1]], "fastaFiles"))
     }
-  }
+  } else {
+    message("Transcriptomes set from provided argument:")
+    message(paste(transcriptomes, collapse=", "))
+  } 
   data(unannotatedTranscript, package="arkas")
   rowdat <- rep(unannotatedTranscript, nrow(asys$est_counts))
   names(rowdat) <- rownames(asys$est_counts)
