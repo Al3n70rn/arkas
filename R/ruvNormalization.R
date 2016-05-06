@@ -13,7 +13,7 @@
 ruvNormalization<-function(kexp, k=1,spikeIns=TRUE, p.cutoff=1, inSilico=NULL,normalized.cutoff=1 ,byLevel="gene_id"  ) {
 
 if(class(kexp)!="KallistoExperiment"){
-message("I'm afraid you did not input a KallistoExperiment object, this mission is very important Dave and I can't let you jeopardize it...")
+message("I'm afraid you did not input a KallistoExperiment object .")
   }
 
 
@@ -39,12 +39,12 @@ if (spikeIns =="FALSE") {
  #need to allow for user input in silico house keeping controls.
    #inSilico must be a character vector
   if(is.null(inSilico)=="TRUE") {
-   message("I'm afraid I did not detect a vector of in silico negative controls, attemptiing to discern them, ... checking for design matrix in your kexp ")
+   message("I'm afraid I did not detect a vector of in silico negative controls, ... checking for design matrix in your kexp ")
    if(is.null(metadata(kexp)$design)=="TRUE") {
     stop("please enter in silico vector, or add a design matrix to metadata(kexp)$design. ")
     }
     if(is.null(metadata(kexp)$design)=="FALSE") {
-     message("I found a design matrix, performing differential expression analysis, to determine in silinco negative control...")
+     message("I found a design matrix, determining in silinco negative control...")
         #perform DE
         if(byLevel=="gene_id") {
          message("performing gene-wise-analysis...")
