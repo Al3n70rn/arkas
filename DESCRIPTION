@@ -14,7 +14,8 @@ Depends:
     TxDbLite,
     SummarizedExperiment,
     beeswarm,
-    tools
+    tools,
+    RUVSeq
 Imports:
     rhdf5,
     matrixStats,

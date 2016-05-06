@@ -2,10 +2,10 @@
 % Please edit documentation in R/ruvNormalization.R
 \name{ruvNormalization}
 \alias{ruvNormalization}
-\title{RUVSeq methods allow for proper normalization by using a GLM to find the linear space of unwanted variance; it uses factor analysis to find the span of unwanted variance using ERCC expression negative controls, or in silico negative controls.  the advantage is that it does not assume a constant global normalization correction for constant assumed technical noise.  RUVg instead determines the linear space where the negative controls span. note that normalized counts should a}
+\title{RUVSeq methods allow for proper normalization by using a GLM to find the linear space of unwanted variance; it uses factor analysis to find the span of unwanted variance using ERCC expression negative controls, or in silico negative controls.  the advantage is that it does not assume a constant global normalization correction for constant assumed technical noise.  RUVg instead determines the linear space where the negative controls span.}
 \usage{
 ruvNormalization(kexp, k = 1, spikeIns = TRUE, p.cutoff = 1,
-  inSilico = NULL, normalized.cutoff = 1, byLevel = c("tx_id", "gene_id"))
+  inSilico = NULL, normalized.cutoff = 1, byLevel = "gene_id")
 }
 \arguments{
 \item{kexp}{kallisto Experiment object or something along its line}
@@ -19,11 +19,13 @@ ruvNormalization(kexp, k = 1, spikeIns = TRUE, p.cutoff = 1,
 \item{normalized.cutoff}{, integer here we employ a read cutoff that filters out any rows where the rowSums falls under this category.}
 
 \item{byLevel}{a string character which must match the names of the meta-columns of the features(kexp), this collapses the count data by this feature term, and performs filtering}
+
+\item{species}{character for either Homo.sapiens or Mus.musculus, this is required for gene wise analysis if there is no inSilico vector input.}
 }
 \value{
 return a list object with RUVg normalization
 }
 \description{
-RUVSeq methods allow for proper normalization by using a GLM to find the linear space of unwanted variance; it uses factor analysis to find the span of unwanted variance using ERCC expression negative controls, or in silico negative controls.  the advantage is that it does not assume a constant global normalization correction for constant assumed technical noise.  RUVg instead determines the linear space where the negative controls span. note that normalized counts should a
+RUVSeq methods allow for proper normalization by using a GLM to find the linear space of unwanted variance; it uses factor analysis to find the span of unwanted variance using ERCC expression negative controls, or in silico negative controls.  the advantage is that it does not assume a constant global normalization correction for constant assumed technical noise.  RUVg instead determines the linear space where the negative controls span.
 }
 
