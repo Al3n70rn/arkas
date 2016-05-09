@@ -9,6 +9,9 @@ erccAnalysis(kexp, ...)
 \arguments{
 \item{kexp}{something that behaves like a KallistoExperiment}
 }
+\value{
+returns plots and images of ercc analysis
+}
 \description{
 QC plots of ERCC spike-in controls (not exported at the moment)
 }
