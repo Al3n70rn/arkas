@@ -4,16 +4,14 @@
 #' 
 #' @import erccdashboard
 #' @import RUVSeq 
+#' @export
+#' @return returns plots and images of ercc analysis
 erccAnalysis <- function(kexp, ...) {
 
   data(ERCC_annotated)
   ERCC_counts <- counts(kexp)[ grep("ERCC", rownames(kexp)), ] 
   if (nrow(ERCC_counts) < 1) stop("You do not seem to have any ERCC controls.")
 
-  ## FIXME: plot the ERCC controls for each sample
-  ## FIXME: remind the user that RUVg on ERCCs >> raw data >> ERCC-regressed
- 
-  stop("ERCC QC is not yet finished (but needs to be, after de-crufting it)")
 
   #this analysis works for n X 7 data frame:  
   options(width=60, continue = "  ")

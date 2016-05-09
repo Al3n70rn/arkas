@@ -92,7 +92,7 @@ geneWiseAnalysis <- function(kexp, design=NULL, how=c("cpm","tpm"),
     speciesSymbol<-"hgnc_symbol"  #hugo nomenclature human only 
          message("finding entrez IDs of top ensembl genes...")
          convertedEntrezID<-getBM(filters="ensembl_gene_id",
-                    attributes=c("ensembl_gene_id","entrezgene",speciesSymbol),
+                    attributes=c("ensembl_gene_id","entrezgene",speciesSymbol,"description"),
                     values=resValues, #fitBundles ensembl Gene Ids
                     mart=speciesMart)
 
@@ -103,7 +103,7 @@ geneWiseAnalysis <- function(kexp, design=NULL, how=c("cpm","tpm"),
    speciesSymbol<-"mgi_symbol"
         message("finding entrez IDs of top ensembl genes...")
         convertedEntrezID<-getBM(filters="ensembl_gene_id",
-                    attributes=c("ensembl_gene_id","entrezgene",speciesSymbol),
+                    attributes=c("ensembl_gene_id","entrezgene",speciesSymbol,"description"),
                     values=resValues, #fitBundles ensembl Gene Ids
                     mart=speciesMart)
         }#mouse
@@ -112,7 +112,7 @@ geneWiseAnalysis <- function(kexp, design=NULL, how=c("cpm","tpm"),
     speciesSymbol<-"mgi_symbol"  # mgi supports rat and mouse http://www.informatics.jax.org/mgihome/nomen/gene.shtml
        message("finding entrez IDs of top ensembl genes...")
       convertedEntrezID<-getBM(filters="ensembl_gene_id",
-                    attributes=c("ensembl_gene_id","entrezgene",speciesSymbol),
+                    attributes=c("ensembl_gene_id","entrezgene",speciesSymbol,"description"),
                     values=resValues, #fitBundles ensembl Gene Ids
                     mart=speciesMart)
       }#rat
@@ -133,23 +133,24 @@ geneWiseAnalysis <- function(kexp, design=NULL, how=c("cpm","tpm"),
   limmad <- cbind(limmad,
                   converted[, grep("entrezgene",colnames(converted))],
                   converted[, grep("_symbol",colnames(converted))], 
-                  converted[, grep("ensembl_gene_id",colnames(converted))])
+                  converted[, grep("ensembl_gene_id",colnames(converted))],
+                  converted[, grep("description",colnames(converted))] )
   colnames(limmad)[7]<-"entrez_id"
-  colnames(limmad)[8]<-"gene_name"
+  colnames(limmad)[8]<-"Gene.symbol" #supporting Advaita
   colnames(limmad)[9]<-"ensembl_id"
-
+  colnames(limmad)[10]<-"Gene.title" #supporting Advaita
   #grab the meta data matching the ensembl gene ids from limma
   Index <- mcols(features(kexp))$gene_id %in% limmad[,9] 
   newFeatures <- mcols(features(kexp))[Index,]
-  Features<-newFeatures[c(4,8:9)]
+  Features<-newFeatures[c(4,8:9)] #grabbing gene_id, gene_biotype and biotype_class
   uniqueFeatures<-Features[!duplicated(Features$gene_id),]
-  limmad[,10]<-NA
   limmad[,11]<-NA
-  colnames(limmad)[c(10:11)]<-c("gene_biotype","biotype_class")
+  limmad[,12]<-NA
+  colnames(limmad)[c(11:12)]<-c("gene_biotype","biotype_class")
 
   for(i in 1:nrow(limmad)) { # cbind biotype class to limma results
     indx <- which(rownames(limmad) == uniqueFeatures$gene_id[i])
-    limmad[indx,c(10:11)] <- cbind(uniqueFeatures$gene_biotype[i],
+    limmad[indx,c(11:12)] <- cbind(uniqueFeatures$gene_biotype[i],
                                    uniqueFeatures$biotype_class[i])
   }
 
