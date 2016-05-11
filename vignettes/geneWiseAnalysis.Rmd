@@ -72,6 +72,7 @@ In order to run gene-wise analysis, Arkas requires that the merged KallistoExper
   Library Annotations are built using TxDbLite; these annotation databases allow for lite annotations parsing gene names, bio-types and family type from reference fastas from ERCC, Ensembl, or RepBase.  Currently exonic, intronic, or other coordinate dependent information is not included in TxDbLite.   The supplemental package arkasData stores the ready-to-load annotation libraries under /extdata/Libraries directory.  For demonstration, we build the libraries under the arkasData/extdata/fasta/tmp directory.
 
 ```{r}
+library(SummarizedExperiment)
 suppressPackageStartupMessages(library(TxDbLite))
 suppressWarnings(suppressPackageStartupMessages(library(arkas)))
 suppressPackageStartupMessages(library(arkasData))
