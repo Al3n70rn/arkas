@@ -62,7 +62,8 @@ geneWiseAnalysis <- function(kexp, design=NULL, how=c("cpm","tpm"),
   # commonName is important
   res$entrezID <- .convertEntrezID(res$topGenes,commonName)
   # grab all the entrez IDs that are not NA
-  converted <- res$entrezID[which(!is.na(res$entrezID[,which(colnames(res$entrezID) == "entrezgene")]) == TRUE),]
+#  converted <- res$entrezID[which(!is.na(res$entrezID[,which(colnames(res$entrezID) == "entrezgene")]) == TRUE),]
+   converted<-res$entrezID
   entrezVector <- as.vector(converted[,which(colnames(res$entrezID) == "entrezgene")])
 
   # grab all the ensembl associated with the non-NA entrez
