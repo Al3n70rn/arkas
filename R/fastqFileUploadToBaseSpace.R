@@ -2,14 +2,27 @@
 #' @param illuminafastqPath  a fastq path to illumina standard fastq files with illumina header and naming conventions
 #' @param illuminafastqFile  fastq files with illumina headers and naming conventions
 #' @param basespaceProject   character string of the basespace project name, this must exist on basespace 
+#' @param recipe  character single or multi, how many samples ot upload, multi will be for vector of fastqFiles. if single one fastq file will be uploaded to basespace in its own project; if multi then the entire directory contents will be uploaded.
 #' @return nothing, a successful indication that the files were uploaded to basespace
+#' @examples fastqFileUploadToBaseSpace(illuminafastqPath,RNA-123456-1-N_S1_L002_R1_001.fastq.gz,basespaceProject)
 #' @export
 
-fastqFileUploadToBaseSpace<-function(illuminafastqPath, illuminafastqFile, basespaceProject) {
+fastqFileUploadToBaseSpace<-function(illuminafastqPath, illuminafastqFile, basespaceProject, recipe="multi") {
 
+recipe<-match.arg(recipe,c("single","multi"))
+
+if(recipe=="single") {
 sraSingleUpload<-system.file("bin","sraSingleFastqBaseSpaceUpload.sh", package="arkas")
-
 command<-paste0(sraSingleUpload," ",basespaceProject," ","upload"," ",illuminafastqPath," ",illuminafastqFile)
-
 system(command)
 }
+
+if(recipe=="multi"){
+sraMultiUpload<-system.file("bin","sraMultiFastqUploadToBaseSpace.sh", package="arkas")
+command<-paste0(sraMultiUpload," ",basespaceProject," ","upload"," ",illuminafastqPath," ",illuminafastqFile)
+system(command)
+}
+
+
+}#{{{main
+

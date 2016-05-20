@@ -4,8 +4,9 @@
 #' @param fastqFile a vector of sample files downloaded from SRA to convert to illumina std
 #' @param fastqReadNumber  integer 1, or 2, this is the read number that will be written in the fastq file, for SRAdb defaults to 1, but we give the option to have 1 or 2 here.
 #' @importFrom nat.utils is.gzip
+#' @return a integer defining success or failure
 sraFastqHeaderToIlluminaStandard<-function(headerFormat=c("SRA","Normal"), fastqPath,fastqFile, sraOutputDir, fastqReadNumber=1  ) {
-
+#this function is not exported, and sraFastqHeaderToIlluminaStandard handles
 hFormatted <- match.arg(headerFormat, c("SRA", "Normal"))
 
 
