@@ -16,7 +16,7 @@ for samplename in $(ls $3 | grep "*_001.fastq.gz" | cut -d_ -f1 | sort -u) ; do 
 
 elif [ "$2" == "upload" ]
 then
-for samplename in $(ls *.fastq.gz | cut -d_ -f1 | sort -u) ; do echo "working at ${samplename}" ; bs upload sample -p "$1" ${samplename}*.fastq.gz ; done
+for samplename in $(ls $3 | grep "*_001.fastq.gz" | cut -d_ -f1 | sort -u) ; do echo "working at ${samplename}" ; bs upload sample -p "$1" ${samplename}*.fastq.gz ; done
 
 else
 echo "the second parameter of this function must be exactly 'dryRun' or 'upload' where dryRun validates, and upload will execute."

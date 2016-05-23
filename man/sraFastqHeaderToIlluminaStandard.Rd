@@ -28,6 +28,8 @@ sraFastqHeaderToIlluminaStandard(headerFormat = c("SRA", "Normal"), fastqPath,
 \item{fastqReadNumber}{integer 1, or 2, this is the read number that will be written in the fastq file, for SRAdb defaults to 1, but we give the option to have 1 or 2 here.}
 }
 \value{
+a integer defining success or failure
+
 a fastq file with illumina naming and header convention
 }
 \description{
