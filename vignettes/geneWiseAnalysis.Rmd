@@ -73,6 +73,7 @@ In order to run gene-wise analysis, Arkas requires that the merged KallistoExper
 
 ```{r}
 library(SummarizedExperiment)
+library(GenomicRanges)
 suppressPackageStartupMessages(library(TxDbLite))
 suppressWarnings(suppressPackageStartupMessages(library(arkas)))
 suppressPackageStartupMessages(library(arkasData))
