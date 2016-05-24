@@ -28,7 +28,6 @@ Suggests:
     knitr,
     roxygen2,
     EnsDbLite.Hsapiens.83,
-    RepDbLite.Hsapiens.2005,
     RepDbLite.Hsapiens.2012
 VignetteBuilder: knitr
 Maintainer: Tim Triche, Jr. <tim.triche@gmail.com>
