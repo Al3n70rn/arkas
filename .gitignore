@@ -15,3 +15,4 @@
 /..Rcheck
 /..bfg-report
 /*.bsfs.json
+/.travis.yml
