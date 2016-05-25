@@ -2,15 +2,5 @@
 ^\.Rproj\.user$
 ^.*\.Rproj$
 ^\.travis\.yml$
-<<<<<<< HEAD
-^\.travis\.yml$
 ^installDependencies\.sh$
 ^travis-tool\.sh$
-=======
-<<<<<<< HEAD
-^\.travis\.yml$
-^installDependencies\.sh$
-^travis-tool\.sh$
-=======
->>>>>>> 94c0f14f5ea52080585cded760336cb649a44b98
->>>>>>> travis
