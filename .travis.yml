@@ -84,11 +84,11 @@ bioc_packages:
 
 r_github_packages:
 
-    - arcolombo/TxDbLite
+    - RamsinghLab/TxDbLite
     - arcolombo/RepDbLite.Hsapiens.2012
     - arcolombo/EnsDbLite.Hsapiens.83
-    - arcolombo/arkas
-    - arcolombo/arkasData
+    - RamsinghLab/arkas
+    - RamsinghLab/arkasData
     
 script:
     - sudo R -e 'library(rmarkdown);library(arkas);library(arkasData);render("./vignettes/arkas.Rmd")' 
