@@ -57,9 +57,9 @@ before_install:
     - cwd=$(pwd) && sudo mkdir ./KallistoSource && cd ./KallistoSource && sudo git clone https://github.com/pachterlab/kallisto.git && cd ./kallisto && sudo mkdir ./build && cd ./build && sudo cmake .. && sudo make && sudo make install && cd $cwd
     - sudo R -e 'source("http://bioconductor.org/biocLite.R"); biocLite("BiocInstaller")'
     - sudo R -e 'library(BiocInstaller);biocLite(c("rtracklayer","XML","biomaRt","RCurl"),ask=FALSE)'
-    - sudo R -e 'library(BiocInstaller);biocLite(c("org.Hs.eg.db","org.Mm.eg.db","parallel","jsonlite","qusage","GenomeInfoDb","limma","Biobase","SummarizedExperiment","SPIA","EnrichmentBrowser","clusterProfiler","rhdf5","matrixStats","GenomicRanges","GenomicFeatures","Matrix","KEGGREST","beeswarm","tools","graphite","roxygen2","knitr"),ask=FALSE )'
+    - sudo R -e 'library(BiocInstaller);biocLite(c("org.Hs.eg.db","org.Mm.eg.db","parallel","jsonlite","qusage","GenomeInfoDb","limma","Biobase","SummarizedExperiment","rhdf5","matrixStats","GenomicRanges","GenomicFeatures","GRanglesList","Matrix","beeswarm","tools","graphite","roxygen2","knitr"),ask=FALSE )'
      - sudo R -e 'library(BiocInstaller);biocLite(c("Homo.sapiens","Mus.musculus","RUVSeq","erccdashboard"),ask=FALSE)'
-     - sudo  R -e 'library(BiocInstaller);biocLite(c("DBI","RSQLite","ensembldb","stringdist","Biostrings","OrganismDbi","Rsamtools", "rmarkdown"),ask=FALSE)'
+     - sudo  R -e 'library(BiocInstaller);biocLite(c("DBI","RSQLite","ensembldb","stringdist","Biostrings","OrganismDbi","Rsamtools", "rmarkdown","nat.utils"),ask=FALSE)'
 
  
 
@@ -83,17 +83,16 @@ bioc_packages:
 
 
 r_github_packages:
-    - RamsinghLab/TxDbLite
+
+    - arcolombo/TxDbLite
     - arcolombo/RepDbLite.Hsapiens.2012
     - arcolombo/EnsDbLite.Hsapiens.83
-    - RamsinghLab/arkas
-    - RamsinghLab/arkasData
-
+    - arcolombo/arkas
+    - arcolombo/arkasData
     
 script:
     - sudo R -e 'library(rmarkdown);library(arkas);library(arkasData);render("./vignettes/arkas.Rmd")' 
-  #  - sudo R -e 'library(rmarkdown); render("./vignettes/geneWiseAnalysis.Rmd")'    
-
+#    - sudo R -e 'library(rmarkdown); render("./vignettes/geneWiseAnalysis.Rmd")'    
 after_failure:
     - sudo ./travis-tool.sh dump_logs
 

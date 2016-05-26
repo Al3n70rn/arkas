@@ -22,7 +22,8 @@ Imports:
     GenomicFeatures,
     SummarizedExperiment,
     nat.utils,
-    Matrix
+    Matrix,
+    RUVSeq
 Suggests:
     knitr,
     roxygen2,

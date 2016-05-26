@@ -1,0 +1,74 @@
+---
+title: "Arkas: Reactome Enrichment Analysis In Much Less Time "
+author:  "Timothy J. Triche, Jr, Anthony R. Colombo, Harold Pimentel"
+output: 
+    html_document:
+      toc: true
+      number_sections: true
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+---
+
+
+#SpeedSage enrichment analysis
+speedSage is an armadillo client package which runs enrichment analysis.
+
+#gene level enrichment for mouse model
+```{r}
+library(speedSage)
+library(TxDbLite)
+library(arkas)
+
+load("~/Documents/singleCell/CEL-SEQ_Grun Et Al/SC.RData")
+SC<-annotateFeatures(SC,"transcript")
+coll<-collapseBundles(SC,"gene_id")
+colnames(coll)[1:8]<-"t0"
+ colnames(coll)[9:16]<-"t1"
+ contrast<-"t1-t0"
+
+mp<-mapToReactome(rownames(coll),"gene","Mus musculus",84)
+recSet<-reactomeSets("Mus musculus","gene",mp)
+
+qt<-qusageArm(coll,colnames(coll),contrast,recSet,n.points=2^10)
+p.vals<-pdf.pVal(qt)
+q.vals<-p.adjust(p.vals,method="fdr")
+qsTable(qt,number=10)
+plot(qt)
+#need to have the label be the hyper link
+
+#need to have a plot where the table is present , with links, or the plot itself has links.
+
+
+```
+
+
+```
+#fix me--- follow their vignette.. first follow qusage vignette for multi sets.
+
+load("~/Documents/speedSage-data/qus.RData")
+MSIG.geneSets<-read.gmt("~/Documents/speedSage-data/c2.cp.kegg.v5.1.symbols.gmt")
+eset<-exprs(qus)
+colnames(eset)<-c(rep("t0",134),rep("t1",134))
+labels<-c(rep("t0",134),rep("t1",134))
+contrast<-"t1-t0"
+
+qs.results<-qusageArm(eset,labels,contrast,MSIG.geneSets)
+qsTable(qs.results,number=10)
+
+
+plot(qs.results)
+#######qusageArm works 
+```
+
+
+
+#basespace work flow
+So the first steps for the basespace work flow are 
+0) import the data
+1) RUV normalize ,  plot and show the unwanted variance data
+2) import multiple appresults and mergeKallisto
+3) annotate kallisto against a default library set
+4) TWA and GWA report and plot topTable
+5) ReacomteSets into speedSage, hyperlink plots.
+
+note-  the analysis calls are done in rmarkdown, with the raw outputs returned.
+Advaita support is also needed.

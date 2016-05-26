@@ -47,15 +47,18 @@ transcriptWiseAnalysis <- function(kexp, design, p.cutoff=0.05, fold.cutoff=1,
     res$top <- res$top[ abs(res$top$logFC) >= fold.cutoff, ] ## per SEQC
     topTranscripts <- rownames(res$top)
     res$topTranscripts <- topTranscripts
-
-    
-
-
-  }
+    }
  
   res$biotype_class <- biotype_class
   res$gene_biotype <- gene_biotype
   res$tx_biotype <- tx_biotype
-  return(res)
+
+#FIX ME: add the gene association to each transcript
+  res$limmaWithMeta<-cbind(res$top,features(kexp)[rownames(res$top)]$gene_name,features(kexp)[rownames(res$top)]$gene_id )
+  colnames(res$limmaWithMeta)[ncol(res$top)+1]<-"gene.name"
+  colnames(res$limmaWithMeta)[ncol(res$top)+2]<-"gene.id"
+
+ return(res)
+
 
 }

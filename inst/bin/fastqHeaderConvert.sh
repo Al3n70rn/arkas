@@ -44,5 +44,5 @@ else
 fi
 #usage is as follows 
 
-# ~/Documents/Atac-Seq/master_scripts/fastqHeaderConvert.sh SRR3173882.sra.fastq.gz | ~/Documents/Atac-Seq/master_scripts/fastqConvert2.sh | ~/Documents/Atac-Seq/master_scripts/fastqConvert3.sh > test.fastq
+# ~/Documents/Atac-Seq/master_scripts/fastqHeaderConvert.sh SRR3173882.sra.fastq.gz (read number 1 or 2)  | ~/Documents/Atac-Seq/master_scripts/fastqConvert2.sh | ~/Documents/Atac-Seq/master_scripts/fastqConvert3.sh > test.fastq
 

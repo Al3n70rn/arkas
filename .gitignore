@@ -16,3 +16,4 @@
 /..bfg-report
 /*.bsfs.json
 /.travis.yml
+.travis*

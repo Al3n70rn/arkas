@@ -27,7 +27,7 @@ ruvNormalization <- function(kexp, k=1, spikeIns=FALSE, p.cutoff=1,
 
   if(spikeIns == "TRUE") {
 
-    # {{{
+    #{{{
     spikes <- rownames(exprs)[grep("^ERCC",rownames(exprs))] #grabbing ERCCs
     if(length(spikes) == 0) {
       stop("ERCC spike-ins were not found... please try again..")
