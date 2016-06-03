@@ -165,7 +165,7 @@ topVoom[voomOnly_fdr001, "B"]
 At least the first 9 of these should show up via any reasonable method, IFF 
 they make sense.  
 
-```{r}
+```{r, fig.height=9, fig.width=7}
 
 geneTpms <- collapseTpm(NS, bundleID="gene_id")
 # geneCounts is already assembled 
@@ -200,7 +200,7 @@ topEdgeR[edgeOnly_fdr001, "LR"]
 
 Well, those are some big likelihood ratios.  Let's plot them.
 
-```{r}
+```{r, fig.height=9, fig.width=7}
 moreHugeDiffs <- edgeOnly_fdr001[1:9]
 
 # plot 'em: counts
@@ -231,15 +231,18 @@ kal_dirs <- paste(base_dir, sample_id, sep=.Platform$file.sep)
 covs <- data.frame(sample=sample_id,
                    condition=NS$senescent,
                    subject=NS$subject)
+df<-data.frame(covs,path=kal_dirs,stringsAsFactors=FALSE)
 
 t2g <- mcols(NS)[, c("tx_id","gene_id","tx_biotype","gene_biotype","gene_name")]
 names(t2g) <- c("target_id", "ens_gene", "transcript_biotype", 
                 "gene_biotype", "ext_gene")
 t2g <- as(t2g, "data.frame")
-so <- sleuth_prep(kal_dirs, covs, ~ condition + subject, target_mapping = t2g)
-so <- sleuth_fit(so)
-so <- sleuth_test(so, which_beta = 'conditions')
+#so <- sleuth_prep(kal_dirs,covs  ~ condition + subject, target_mapping = t2g) outdated...
+so <- sleuth_prep(df, ~ condition + subject, target_mapping = t2g)
 
+so <- sleuth_fit(so)
+#so <- sleuth_test(so, which_beta = 'conditions')
+so<-sleuth_wt(so, 'conditions') 
 # not run:
 # sleuth_live(so)
 ```
