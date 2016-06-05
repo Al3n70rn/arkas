@@ -30,3 +30,12 @@ rwa<-repeatWiseAnalysis(NN,design=NN_design,how="cpm",species="Homo.sapiens",adj
  Repeat elements usually have low signal, so testing safe exit would be useful here.
 
 the MDS data set had 0 DE returned from rwa.  FIX ME::: add an empty unit test
+The mds data will return 0 DE for repeat level analyses, and is a great example of flexible FDR searching.
+Here users can input any adjust method, and it will run until it finds the selected fdr procedure or the next conservative one. 
+```{r}
+
+load(""/home/arcolombo/Documents/MDS-RNA-Seq/MDS-arkas-files/sampleDir/mdsKexp.RData")
+design<-metadata(mdsKexp)$design
+ rwa<-repeatWiseAnalysis(mdsKexp,design=design,how="cpm",species="Homo.sapiens",adjustBy="holm")
+
+

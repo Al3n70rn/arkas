@@ -52,15 +52,15 @@ repeatWiseAnalysis <- function(kexp, design=NULL, how=c("cpm","tpm"),
   initialRank<-ranked[which(ranked$type==adjustBy),2]
  
   res <- fitRepeats(kexp, design)
-  message(paste0("fitting using FDR: ",adjustBy))
   while( initialRank <=4 ) {
-
- res$top <- with(res, topTable(fit, coef=2, p=p.cutoff,adjust.method=adjustBy, n=nrow(kexp)))
+   message(paste0("fitting using FDR: ",adjustBy))
+  res$top <- with(res, topTable(fit, coef=2, p=p.cutoff,adjust.method=adjustBy, n=nrow(kexp)))
 
       if(nrow(res$top)==0){
-       intialRank=initialRank + 1
+        message(paste0("no DE found for using FDR: ",adjustBy))
+       initialRank<-initialRank + 1
        adjustBy<-as.character(ranked$type[initialRank])
-       }
+        }
       else{
       message(paste0("found ", nrow(res$top), " DE genes using FDR procedure ", as.character(ranked$type[initialRank]) ))
      initialRank<-5 #break the loop at first instance
