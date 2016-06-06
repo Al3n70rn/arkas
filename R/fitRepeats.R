@@ -4,13 +4,13 @@
 #' @import edgeR
 #' @return a limma list of linear model statistics
 #' @export 
-fitRepeats<-function(kexp,design...){
+fitRepeats<-function(kexp,design,...){
 
     rps<-list()
     idx<-which(features(kexp)$biotype_class=="repeat")
-    repFeatures<-features(annotatedKexp)[idx]
+    repFeatures<-features(kexp)[idx]
     repeatNames<-as.character(seqnames(repFeatures))
-    tt<-rownames(counts(annotatedKexp)) %in% repeatNames
+    tt<-rownames(counts(kexp)) %in% repeatNames
     repKexp<-counts(kexp)[tt,]
     rge<-DGEList(counts=repKexp)
     rge<-calcNormFactors(rge)

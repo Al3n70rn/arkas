@@ -5,10 +5,9 @@
 #' @param p.cutoff    where to set the p-value cutoff for plots, etc. (0.05)
 #' @param fold.cutoff where to set the log2-FC cutoff for plots, etc. (1==2x)
 #' @param read.cutoff minimum read coverage (estimated) for a gene bundle 
-#' @param topheat     how many bundles to include in cluster heatmaps? (100)
 #' @param species     which species? (Homo.sapiens, Mus.musculus are two currently supported
 #' @param fitOnly     exit after fitting the EBayes linear model?  (FALSE)
-#' 
+#' @param adjustBy    character none, BH,BY, or holm for FDR procedures 
 #' @import edgeR 
 #' @import limma
 #' @import biomaRt
@@ -26,7 +25,7 @@
 geneWiseAnalysis <- function(kexp, design=NULL, how=c("cpm","tpm"), 
                              p.cutoff=0.05, fold.cutoff=1, read.cutoff=1, 
                              species=c("Homo.sapiens", "Mus.musculus"),
-                             fitOnly=FALSE, ...) { 
+                             fitOnly=FALSE, adjustBy="holm") { 
 
   ## this is really only meant for a KallistoExperiment
   if (!is(kexp, "KallistoExperiment")) {
@@ -47,11 +46,33 @@ geneWiseAnalysis <- function(kexp, design=NULL, how=c("cpm","tpm"),
   commonName <- switch(species, 
                        Mus.musculus="mouse", 
                        Homo.sapiens="human")
+  adjustBy<-match.arg(adjustBy, c("none","BH","BY","holm"))
+  choices<- c("holm", "BY", "BH","none") 
+  ranked<-data.frame(type=choices,rank=c(1,2,3,4))
   message("Fitting bundles...")
-  ## default to ensembl gene id (not entrez)
+  initialRank<-ranked[which(ranked$type==adjustBy),2]
+ 
   res <- fitBundles(kexp, design, read.cutoff=read.cutoff)
-  res$top <- with(res, topTable(fit, coef=2, p=p.cutoff, n=nrow(kexp)))
-  res$top <- res$top[ abs(res$top$logFC) >= fold.cutoff, ] ## per SEQC
+  message(paste0("fitting using FDR: ",adjustBy))
+  while( initialRank <=4 ) {
+     #for loop for each ranked, starting with rank =1 for holm, and continues until first non-empty instance.
+  #  if user input is not holm  it finds the rank and continues until first non-zero instance j+1 <= 4
+     res$top <- with(res, topTable(fit, coef=2, p=p.cutoff,adjust.method=adjustBy, n=nrow(kexp)))
+
+      if(nrow(res$top)==0){
+       intialRank=initialRank + 1
+       adjustBy<-as.character(ranked$type[initialRank])
+       }
+      else{ 
+      message(paste0("found ", nrow(res$top), " DE genes using FDR procedure ", as.character(ranked$type[initialRank]) )) 
+     initialRank<-5 #break the loop at first instance
+       }
+    }
+  if(nrow(res$top)==0) {
+   stop("Did not detect differential expressed genes from the input, please check the input quality and try again.") 
+     } 
+ 
+ res$top <- res$top[ abs(res$top$logFC) >= fold.cutoff, ] ## per SEQC
   topGenes <- rownames(res$top)
   res$topGenes <- topGenes
 
